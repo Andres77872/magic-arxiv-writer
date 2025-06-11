@@ -1,9 +1,8 @@
 /* Root container to fill viewport and center content */
 #root {
   width: 100%;
-  max-width: 1200px;
+  max-width: 100%;
   height: 100vh;
-  margin: 0 auto;
   padding: var(--padding-lg);
   box-sizing: border-box;
 }
@@ -25,6 +24,7 @@
   display: flex;
   gap: var(--gap-lg);
   align-items: stretch;
+  height: 100%;
 }
 
 /* Responsive: stack sections on smaller screens */
@@ -124,4 +124,11 @@
 .markdown-body {
   flex: 1;
   overflow: auto;
+}
+
+/* Reduce root padding on very small screens for better responsiveness */
+@media (max-width: var(--container-small-screen-breakpoint)) {
+  #root {
+    padding: var(--padding-medium);
+  }
 }
