@@ -12,6 +12,15 @@ interface ChatSectionProps {
     onUpdateMarkdown: (content: string) => void;
 }
 
+interface NodeExecution {
+    node_id: string;
+    node_class: string;
+    start_time: number;
+    end_time: number;
+    execution_time: number;
+    status: 'running' | 'completed';
+}
+
 export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState('');
@@ -24,6 +33,7 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
             totalTime: number;
             startTime: number;
             isStreaming: boolean;
+            nodeExecutions: NodeExecution[];
         }[]
     >([]);
     const chatHistoryRef = useRef<HTMLDivElement>(null);
@@ -68,6 +78,7 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
                 totalTime: 0,
                 startTime: tFetchStart,
                 isStreaming: true,
+                nodeExecutions: [],
             },
         ]);
 
@@ -137,6 +148,32 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
                     }
                     try {
                         const parsed = JSON.parse(data);
+                        const meta = parsed.extras?.meta;
+                        if (meta) {
+                            setMetricsHistory((m) => {
+                                const newMetrics = [...m];
+                                const execs = newMetrics[metricsIndex].nodeExecutions.slice();
+                                const idxNode = execs.findIndex((n) => n.node_id === meta.node_id);
+                                const entry = {
+                                    node_id: meta.node_id,
+                                    node_class: meta.node_class,
+                                    start_time: meta.start_time,
+                                    end_time: meta.end_time,
+                                    execution_time: meta.execution_time,
+                                    status: meta.execution_time && meta.execution_time > 0 ? 'completed' : 'running',
+                                };
+                                if (idxNode === -1) {
+                                    execs.push(entry);
+                                } else {
+                                    execs[idxNode] = entry;
+                                }
+                                newMetrics[metricsIndex] = {
+                                    ...newMetrics[metricsIndex],
+                                    nodeExecutions: execs,
+                                };
+                                return newMetrics;
+                            });
+                        }
                         const content = parsed.choices[0].delta.content;
                         if (content) {
                             if (processTime === null && firstByteTime !== null) {
@@ -222,6 +259,23 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
                             {turn.assistant && (
                                 <div className="chat-message assistant">
                                     {turn.assistant.content.slice(-360)}
+                                    {metricsHistory[idx]?.nodeExecutions.length > 0 && (
+                                        <div className="node-feedback">
+                                            <details>
+                                                <summary>Node execution details</summary>
+                                                <ul>
+                                                    {metricsHistory[idx].nodeExecutions.map((node) => (
+                                                        <li key={node.node_id}>
+                                                            <strong>{node.node_class}</strong> ({node.node_id}):{' '}
+                                                            {node.status === 'running'
+                                                                ? 'Running...'
+                                                                : `${node.execution_time.toFixed(2)}s`}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </details>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

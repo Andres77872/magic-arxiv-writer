@@ -201,3 +201,29 @@
     padding: var(--padding-medium);
   }
 }
+
+/* Node execution feedback under assistant messages */
+.node-feedback {
+  margin-top: var(--margin-xs);
+}
+.node-feedback details {
+  background-color: var(--background-color-secondary);
+  border: var(--border-standard);
+  border-radius: var(--border-radius-small);
+  padding: var(--padding-xs);
+}
+.node-feedback summary {
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  outline: none;
+}
+.node-feedback ul {
+  margin: var(--margin-xs) 0 0 var(--margin-sm);
+  padding: 0;
+  list-style: disc inside;
+}
+.node-feedback li {
+  font-size: var(--font-size-xs);
+  color: var(--text-color-secondary);
+  margin-bottom: var(--margin-xxs);
+}
