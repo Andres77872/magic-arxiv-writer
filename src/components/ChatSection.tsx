@@ -39,6 +39,14 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
     inputRef.current?.focus();
   }, []);
 
+  useEffect(() => {
+    const textarea = inputRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [input]);
+
   const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
     const instruction = input.trim();
