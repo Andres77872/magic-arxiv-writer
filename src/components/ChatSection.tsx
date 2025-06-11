@@ -16,12 +16,17 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
   const [input, setInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const chatHistoryRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (chatHistoryRef.current) {
       chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
     }
   }, [chatHistory]);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
@@ -105,31 +110,49 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
           }
         }
       }
-    } finally {
-      setIsGenerating(false);
-    }
+  } finally {
+    setIsGenerating(false);
+    inputRef.current?.focus();
+  }
   };
+
+  // Group messages into user/assistant turns
+  type ChatTurn = { user: ChatMessage; assistant?: ChatMessage };
+  const turns: ChatTurn[] = [];
+  for (let i = 0; i < chatHistory.length; i++) {
+    if (chatHistory[i].role === 'user') {
+      const userMsg = chatHistory[i];
+      let assistantMsg: ChatMessage | undefined;
+      if (i + 1 < chatHistory.length && chatHistory[i + 1].role === 'assistant') {
+        assistantMsg = chatHistory[i + 1];
+        i++;
+      }
+      turns.push({ user: userMsg, assistant: assistantMsg });
+    }
+  }
 
   return (
     <div className="chat-section">
       <div className="panel-header">Chat</div>
       <div className="chat-history" ref={chatHistoryRef}>
-        {chatHistory.length === 0 ? (
+        {turns.length === 0 ? (
           <div className="empty-placeholder">Type a message to begin...</div>
         ) : (
-          chatHistory.map((m, i) => {
-            const display =
-              m.content.length > 150 ? `…${m.content.slice(-150)}` : m.content;
-            return (
-              <div key={i} className={`chat-message ${m.role}`}>
-                {display}
-              </div>
-            );
-          })
+          turns.map((turn, idx) => (
+            <div key={idx} className="chat-turn">
+              <div className="chat-message user">{turn.user.content}</div>
+              {turn.assistant && (
+                <div className="chat-message assistant">
+                  {turn.assistant.content.slice(-150)}
+                </div>
+              )}
+            </div>
+          ))
         )}
       </div>
       <form onSubmit={handleSubmit} className="chat-input">
         <textarea
+          ref={inputRef}
           rows={2}
           placeholder="Ask for changes (e.g. improve grammar, add conclusion)"
           value={input}

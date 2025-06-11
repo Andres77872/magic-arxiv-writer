@@ -58,13 +58,18 @@
   border-radius: var(--border-radius-medium);
   background-color: var(--background-color-secondary);
   overflow: hidden;
+  gap: var(--gap-medium);
   min-width: 0;
+}
+
+/* Remove extra bottom margin on panel-header inside chat-section */
+.chat-section .panel-header {
+  margin-bottom: 0;
 }
 
 .chat-history {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: var(--margin-medium);
   scroll-behavior: smooth;
 }
 
@@ -99,7 +104,7 @@
 .chat-input {
   display: flex;
   gap: var(--gap-sm);
-  margin-top: var(--margin-medium);
+  align-items: flex-end;
 }
 
 .chat-input textarea {
@@ -107,11 +112,22 @@
   resize: vertical;
 }
 
-/* Placeholder when chat history is empty */ 
-.empty-placeholder {
+/* Center empty chat placeholder within history pane */
+.chat-history .empty-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
   text-align: center;
   color: var(--text-color-secondary);
-  padding: var(--padding-small) 0;
+  padding: 0;
+}
+
+/* Wrap each user/assistant pair as a conversation turn */
+.chat-history .chat-turn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
 }
 
 /* Panel headers for chat and preview */ 
