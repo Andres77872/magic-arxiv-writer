@@ -1,5 +1,10 @@
 @import './css/variables/index.css';
 
+/* Apply border-box sizing globally to avoid oversize due to padding/border */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* Global typography, layout, and smoothing */
 body {
   font-family: var(--font-family-base);
