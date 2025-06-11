@@ -2,100 +2,96 @@
 
 /* Apply border-box sizing globally to avoid oversize due to padding/border */
 *, *::before, *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 /* Global typography, layout, and smoothing */
 body {
-  font-family: var(--font-family-base);
-  line-height: var(--line-height-normal);
-  font-weight: var(--font-weight-normal);
+    font-family: var(--font-family-base);
+    line-height: var(--line-height-normal);
+    font-weight: var(--font-weight-normal);
 
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
 
-  color-scheme: light dark;
+    color-scheme: light dark;
 }
 
 * {
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Global link styles */
 a {
-  color: var(--accent-color);
-  font-weight: var(--font-weight-medium);
-  text-decoration: none;
-  transition: var(--transition-colors);
+    color: var(--accent-color);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    transition: var(--transition-colors);
 }
 
 a:hover {
-  color: var(--accent-color-hover);
+    color: var(--accent-color-hover);
 }
 
 /* Global button styles */
 button {
-  background-color: var(--button-background-color);
-  color: var(--button-text-color);
-  border: var(--button-border);
-  border-top-color: var(--button-border-top-color);
-  border-radius: var(--border-radius-small);
-  padding: var(--button-padding-vertical) var(--button-padding-horizontal);
-  font-size: var(--button-font-size);
-  font-weight: var(--button-font-weight);
-  font-family: inherit;
-  cursor: pointer;
-  transition: var(--transition-colors);
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    border: var(--button-border);
+    border-top-color: var(--button-border-top-color);
+    border-radius: var(--border-radius-small);
+    padding: var(--button-padding-vertical) var(--button-padding-horizontal);
+    font-size: var(--button-font-size);
+    font-weight: var(--button-font-weight);
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--transition-colors);
 }
 
 button:hover {
-  background-color: var(--button-background-color-hover);
-  box-shadow: var(--button-box-shadow-hover);
+    background-color: var(--button-background-color-hover);
+    box-shadow: var(--button-box-shadow-hover);
 }
 
 button:active {
-  background-color: var(--button-background-color-active);
+    background-color: var(--button-background-color-active);
 }
 
 button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 /* Global input/textarea styles */
-input,
-textarea {
-  background-color: var(--input-background-color);
-  color: var(--input-text-color);
-  border: var(--input-border);
-  border-radius: var(--border-radius-small);
-  padding: var(--padding-small);
-  font-family: inherit;
-  font-size: var(--font-size-md);
-  transition: var(--transition-colors), var(--transition-standard);
+input {
+    background-color: var(--input-background-color);
+    color: var(--input-text-color);
+    border: var(--input-border);
+    border-radius: var(--border-radius-small);
+    padding: var(--padding-small);
+    font-family: inherit;
+    font-size: var(--font-size-md);
+    transition: var(--transition-colors), var(--transition-standard);
 }
 
-input:hover,
-textarea:hover {
-  background-color: var(--input-background-color-hover);
-  box-shadow: var(--input-box-shadow-hover);
+input:hover {
+    background-color: var(--input-background-color-hover);
+    box-shadow: var(--input-box-shadow-hover);
 }
 
-input:focus,
-textarea:focus {
-  background-color: var(--input-background-color-focus);
-  border: var(--input-border-focus);
-  outline: var(--focus-outline);
-  box-shadow: var(--input-box-shadow-focus);
+input:focus {
+    background-color: var(--input-background-color-focus);
+    border: var(--input-border-focus);
+    outline: var(--focus-outline);
+    box-shadow: var(--input-box-shadow-focus);
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: var(--input-placeholder-color);
+input::placeholder {
+    color: var(--input-placeholder-color);
 }

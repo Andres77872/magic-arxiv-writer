@@ -163,9 +163,9 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
                                     status: meta.execution_time && meta.execution_time > 0 ? 'completed' : 'running',
                                 };
                                 if (idxNode === -1) {
-                                    execs.push(entry);
+                                    execs.push(entry as NodeExecution);
                                 } else {
-                                    execs[idxNode] = entry;
+                                    execs[idxNode] = entry as NodeExecution;
                                 }
                                 newMetrics[metricsIndex] = {
                                     ...newMetrics[metricsIndex],
