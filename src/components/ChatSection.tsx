@@ -38,6 +38,7 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
         }[]
     >([]);
     const chatHistoryRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
         if (chatHistoryRef.current) {
@@ -272,6 +273,7 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
                 )}
             </div>
             <ChatInput
+                ref={inputRef}
                 value={input}
                 onChange={setInput}
                 onSubmit={handleSubmit}

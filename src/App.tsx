@@ -17,7 +17,6 @@ function App() {
                     <MDEditor
                         value={markdown}
                         onChange={(value = '') => setMarkdown(value)}
-                        placeholder="Start writing your document..."
                         preview="edit"
                         commands={getCommands()}
                         extraCommands={getExtraCommands()}
