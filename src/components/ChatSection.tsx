@@ -1,6 +1,7 @@
-import type {ChangeEvent, FormEvent, KeyboardEvent} from 'react';
+import type {FormEvent} from 'react';
 import {useEffect, useRef, useState} from 'react';
 import {ChatTimer} from './ChatTimer';
+import {ChatInput} from './ChatInput';
 
 interface ChatMessage {
     role: 'user' | 'assistant';
@@ -37,7 +38,6 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
         }[]
     >([]);
     const chatHistoryRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
         if (chatHistoryRef.current) {
@@ -45,17 +45,6 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
         }
     }, [chatHistory]);
 
-    useEffect(() => {
-        inputRef.current?.focus();
-    }, []);
-
-    useEffect(() => {
-        const textarea = inputRef.current;
-        if (textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = `${textarea.scrollHeight}px`;
-        }
-    }, [input]);
 
     const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
@@ -282,25 +271,13 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
                     ))
                 )}
             </div>
-            <form onSubmit={handleSubmit} className="chat-input">
-        <textarea
-            ref={inputRef}
-            rows={2}
-            placeholder="Ask for changes (e.g. improve grammar, add conclusion)"
-            value={input}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}
-            onKeyDown={(e: KeyboardEvent<HTMLTextAreaElement>) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit();
-                }
-            }}
-            disabled={isGenerating}
-        />
-                <button type="submit" disabled={isGenerating || !input.trim()}>
-                    {isGenerating ? 'Generating...' : 'Send'}
-                </button>
-            </form>
+            <ChatInput
+                value={input}
+                onChange={setInput}
+                onSubmit={handleSubmit}
+                disabled={isGenerating}
+                isLoading={isGenerating}
+            />
         </div>
     );
 }

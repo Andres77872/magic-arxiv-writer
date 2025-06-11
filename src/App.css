@@ -1,40 +1,40 @@
-.chat-input textarea:focus {
-  outline: none;
-  border-color: var(--accent-color);
-  background-color: var(--input-background-color-focus);
-}
+	.chat-input:focus-within {
+	  box-shadow: var(--box-shadow-focus);
+	}
 
-.chat-input textarea::placeholder {
-  color: var(--input-placeholder-color);
-}
+	.chat-input textarea:focus {
+	  outline: none;
+	  background-color: var(--input-background-color-focus);
+	  border-color: var(--accent-color);
+	  box-shadow: var(--box-shadow-focus);
+	}
+	.chat-input textarea::placeholder {
+	  color: var(--input-placeholder-color);
+	}
 
-.chat-input button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--button-padding-vertical) var(--button-padding-horizontal);
-  background-color: var(--accent-color);
-  color: var(--button-text-color);
-  border: var(--button-border);
-  border-radius: var(--border-radius-small);
-  font-size: var(--button-font-size);
-  font-weight: var(--button-font-weight);
-  cursor: pointer;
-  transition: var(--transition-colors), var(--button-box-shadow-hover);
-}
-
-.chat-input button:hover:not(:disabled) {
-  background-color: var(--button-background-color-hover);
-}
-
-.chat-input button:active:not(:disabled) {
-  background-color: var(--button-background-color-active);
-}
-
-.chat-input button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+	.chat-input button {
+	  display: inline-flex;
+	  align-items: center;
+	  justify-content: center;
+	  padding: var(--button-padding-vertical) var(--button-padding-horizontal);
+	  background-color: var(--accent-color);
+	  color: var(--button-text-color);
+	  border: none;
+	  border-radius: var(--border-radius-small);
+	  cursor: pointer;
+	  transition: background-color var(--transition-colors), box-shadow var(--transition-colors);
+	}
+	.chat-input button:hover:not(:disabled) {
+	  background-color: var(--accent-color-hover);
+	  box-shadow: var(--box-shadow-hover);
+	}
+	.chat-input button:active:not(:disabled) {
+	  background-color: var(--accent-color-muted);
+	}
+	.chat-input button:disabled {
+	  opacity: 0.6;
+	  cursor: not-allowed;
+	}
 /* Root container to fill viewport and center content */
 #root {
   width: 100%;
@@ -43,18 +43,6 @@
   padding: var(--padding-lg);
   box-sizing: border-box;
   overflow: hidden;
-}
-.header {
-  display: flex;
-  align-items: center;
-  gap: var(--header-item-gap);
-  margin-bottom: var(--margin-lg);
-  padding: var(--header-padding-vertical) var(--header-padding-horizontal);
-  background-color: var(--background-color-header);
-  box-shadow: var(--box-shadow);
-  position: sticky;
-  top: 0;
-  z-index: var(--drawer-z-index);
 }
 
 .main {
@@ -160,24 +148,28 @@
 
 .chat-input {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: var(--gap-sm);
-  padding-top: var(--padding-sm);
-  border-top: var(--border-standard);
-  margin-top: var(--margin-sm);
+  padding: var(--padding-sm) var(--padding-md);
+  background-color: var(--background-color-secondary);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius-medium) var(--border-radius-medium) 0 0;
+  transition: box-shadow var(--transition-standard);
 }
 
 .chat-input textarea {
   flex: 1;
-  padding: var(--padding-small);
-  background-color: var(--input-background-color);
-  color: var(--input-text-color);
+  min-height: 2.5rem;
+  max-height: 6rem;
+  padding: var(--padding-sm);
+  background-color: var(--background-color-primary);
+  color: var(--text-color);
   border: var(--input-border);
   border-radius: var(--border-radius-small);
   font-size: var(--font-size-md);
   line-height: var(--line-height-normal);
   resize: none;
-  transition: var(--transition-colors), border-color var(--transition-standard);
+  transition: background-color var(--transition-colors), border-color var(--transition-colors), box-shadow var(--transition-colors);
 }
 
 /* Center empty chat placeholder within history pane */
