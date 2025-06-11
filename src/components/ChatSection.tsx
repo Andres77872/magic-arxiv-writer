@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import type { FormEvent, KeyboardEvent, ChangeEvent } from 'react';
+import { ChatTimer } from './ChatTimer';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -15,6 +16,9 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [metricsHistory, setMetricsHistory] = useState<
+    { sendTime: number; processTime: number; totalTime: number; startTime: number }[]
+  >([]);
   const chatHistoryRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -38,6 +42,12 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
     setChatHistory(newHistory);
     setInput('');
     setIsGenerating(true);
+    const metricsIndex = metricsHistory.length;
+    const tFetchStart = performance.now();
+    setMetricsHistory((m) => [
+      ...m,
+      { sendTime: 0, processTime: 0, totalTime: 0, startTime: tFetchStart },
+    ]);
 
     const systemMessage =
       'You are a helpful assistant specialized in editing technical reports in markdown format.';
@@ -59,6 +69,8 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
     const assistantMessageIndex = newHistory.length;
 
     try {
+      let firstByteTime: number | null = null;
+      let processTime: number | null = null;
       const response = await fetch('https://magic.arz.ai/chat/openai/v1/completion', {
         method: 'POST',
         headers: {
@@ -84,6 +96,18 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
 
       while (!done) {
         const { value, done: doneReading } = await reader.read();
+        const now = performance.now();
+        if (firstByteTime === null) {
+          firstByteTime = now - tFetchStart;
+          setMetricsHistory((m) => {
+            const newMetrics = [...m];
+            newMetrics[metricsIndex] = {
+              ...newMetrics[metricsIndex],
+              sendTime: firstByteTime!,
+            };
+            return newMetrics;
+          });
+        }
         done = doneReading;
         const chunk = decoder.decode(value);
         const lines = chunk.split('\n').filter((line) => line.trim().startsWith('data:'));
@@ -97,6 +121,17 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
             const parsed = JSON.parse(data);
             const content = parsed.choices[0].delta.content;
             if (content) {
+              if (processTime === null && firstByteTime !== null) {
+                processTime = performance.now() - tFetchStart - firstByteTime;
+                setMetricsHistory((m) => {
+                  const newMetrics = [...m];
+                  newMetrics[metricsIndex] = {
+                    ...newMetrics[metricsIndex],
+                    processTime: processTime!,
+                  };
+                  return newMetrics;
+                });
+              }
               updatedContent += content;
               setChatHistory((h) =>
                 h.map((msg, idx) =>
@@ -104,12 +139,31 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
                 )
               );
               onUpdateMarkdown(updatedContent);
+              const totalTimeSoFar = performance.now() - tFetchStart;
+              setMetricsHistory((m) => {
+                const newMetrics = [...m];
+                newMetrics[metricsIndex] = {
+                  ...newMetrics[metricsIndex],
+                  totalTime: totalTimeSoFar,
+                };
+                return newMetrics;
+              });
             }
           } catch (err) {
             console.error('Could not parse stream message', err);
           }
         }
       }
+      const tEnd = performance.now();
+      const finalTotalTime = tEnd - tFetchStart;
+      setMetricsHistory((m) => {
+        const newMetrics = [...m];
+        newMetrics[metricsIndex] = {
+          ...newMetrics[metricsIndex],
+          totalTime: finalTotalTime,
+        };
+        return newMetrics;
+      });
   } finally {
     setIsGenerating(false);
     inputRef.current?.focus();
@@ -140,7 +194,16 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
         ) : (
           turns.map((turn, idx) => (
             <div key={idx} className="chat-turn">
-              <div className="chat-message user">{turn.user.content}</div>
+              <div className="chat-message user">
+                {turn.user.content}
+                {metricsHistory[idx] && (
+                  <ChatTimer
+                    sendTime={metricsHistory[idx].sendTime}
+                    processTime={metricsHistory[idx].processTime}
+                    totalTime={metricsHistory[idx].totalTime}
+                  />
+                )}
+              </div>
               {turn.assistant && (
                 <div className="chat-message assistant">
                   {turn.assistant.content.slice(-150)}
