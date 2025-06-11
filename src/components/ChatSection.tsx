@@ -17,7 +17,14 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
   const [input, setInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [metricsHistory, setMetricsHistory] = useState<
-    { sendTime: number; processTime: number; totalTime: number; startTime: number }[]
+    {
+      sendTime: number;
+      processTime: number;
+      generatingTime: number;
+      totalTime: number;
+      startTime: number;
+      isStreaming: boolean;
+    }[]
   >([]);
   const chatHistoryRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -46,7 +53,14 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
     const tFetchStart = performance.now();
     setMetricsHistory((m) => [
       ...m,
-      { sendTime: 0, processTime: 0, totalTime: 0, startTime: tFetchStart },
+      {
+        sendTime: 0,
+        processTime: 0,
+        generatingTime: 0,
+        totalTime: 0,
+        startTime: tFetchStart,
+        isStreaming: true,
+      },
     ]);
 
     const systemMessage =
@@ -139,15 +153,6 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
                 )
               );
               onUpdateMarkdown(updatedContent);
-              const totalTimeSoFar = performance.now() - tFetchStart;
-              setMetricsHistory((m) => {
-                const newMetrics = [...m];
-                newMetrics[metricsIndex] = {
-                  ...newMetrics[metricsIndex],
-                  totalTime: totalTimeSoFar,
-                };
-                return newMetrics;
-              });
             }
           } catch (err) {
             console.error('Could not parse stream message', err);
@@ -158,9 +163,12 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
       const finalTotalTime = tEnd - tFetchStart;
       setMetricsHistory((m) => {
         const newMetrics = [...m];
+        const { sendTime, processTime } = newMetrics[metricsIndex];
         newMetrics[metricsIndex] = {
           ...newMetrics[metricsIndex],
+          generatingTime: finalTotalTime - (sendTime + processTime),
           totalTime: finalTotalTime,
+          isStreaming: false,
         };
         return newMetrics;
       });
@@ -200,13 +208,16 @@ export function ChatSection({ markdown, onUpdateMarkdown }: ChatSectionProps) {
                   <ChatTimer
                     sendTime={metricsHistory[idx].sendTime}
                     processTime={metricsHistory[idx].processTime}
+                    generatingTime={metricsHistory[idx].generatingTime}
                     totalTime={metricsHistory[idx].totalTime}
+                    startTime={metricsHistory[idx].startTime}
+                    isStreaming={metricsHistory[idx].isStreaming}
                   />
                 )}
               </div>
               {turn.assistant && (
                 <div className="chat-message assistant">
-                  {turn.assistant.content.slice(-150)}
+                  {turn.assistant.content.slice(-360)}
                 </div>
               )}
             </div>
