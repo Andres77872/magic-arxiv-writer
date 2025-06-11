@@ -266,7 +266,7 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
                                                 <ul>
                                                     {metricsHistory[idx].nodeExecutions.map((node) => (
                                                         <li key={node.node_id}>
-                                                            <strong>{node.node_class}</strong> ({node.node_id}):{' '}
+                                                            <strong>{node.node_class}</strong> ({node.node_id.slice(-4)}):{' '}
                                                             {node.status === 'running'
                                                                 ? 'Running...'
                                                                 : `${node.execution_time.toFixed(2)}s`}
