@@ -6,7 +6,7 @@ import { EmptyState } from './EmptyState';
 import { PanelHeader } from './PanelHeader';
 import { PanelFooter } from './PanelFooter';
 import { type ArxivPaper } from './types';
-import './ReferencesPanel.css';
+import './index.css';
 
 interface ReferencesPanelProps {
   onCiteReference: (reference: ArxivPaper) => void;

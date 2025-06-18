@@ -1,3 +1,5 @@
+import './ScoreBadge.css';
+
 interface ScoreBadgeProps {
   score: number;
 }

@@ -1,4 +1,5 @@
 import type { ArxivPaper } from './types';
+import './PanelFooter.css';
 
 interface PanelFooterProps {
   papers: ArxivPaper[];

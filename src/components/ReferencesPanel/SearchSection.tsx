@@ -1,4 +1,5 @@
 import type { SortOption } from './types';
+import './SearchSection.css';
 
 interface SearchSectionProps {
   searchQuery: string;

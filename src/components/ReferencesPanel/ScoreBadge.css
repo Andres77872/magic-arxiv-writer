@@ -1,0 +1,76 @@
+/* Score Badge Styles */
+.score-indicator {
+  margin-bottom: var(--margin-xs);
+}
+
+.score-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--padding-xs) var(--padding-sm);
+  border-radius: var(--border-radius-medium);
+  min-width: 80px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.score-badge.score-excellent {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  animation: scoreGlow 2s ease-in-out infinite;
+}
+
+.score-badge.score-very-good {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+.score-badge.score-good {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+}
+
+.score-badge.score-fair {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.score-badge.score-low {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.score-value {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-family-mono);
+  line-height: 1;
+}
+
+.score-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  opacity: 0.9;
+  margin-top: 2px;
+}
+
+/* Score-based animations */
+@keyframes scoreGlow {
+  0%, 100% { box-shadow: 0 0 5px rgba(124, 58, 237, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.6); }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .score-badge {
+    min-width: 60px;
+  }
+
+  .score-value {
+    font-size: var(--font-size-sm);
+  }
+
+  .score-label {
+    font-size: 10px;
+  }
+} 

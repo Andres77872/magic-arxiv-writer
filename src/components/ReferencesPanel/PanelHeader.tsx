@@ -1,3 +1,5 @@
+import './PanelHeader.css';
+
 interface PanelHeaderProps {
   papersCount: number;
   lastSearchQuery: string;

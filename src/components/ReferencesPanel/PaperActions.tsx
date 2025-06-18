@@ -1,4 +1,5 @@
 import type { ArxivPaper } from './types';
+import './PaperActions.css';
 
 interface PaperActionsProps {
   paper: ArxivPaper;

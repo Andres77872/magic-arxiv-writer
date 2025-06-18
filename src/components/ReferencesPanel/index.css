@@ -1,0 +1,67 @@
+/* Main References Panel Styles */
+.references-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--background-color-primary);
+  overflow: hidden;
+}
+
+.references-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--padding-md) var(--padding-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.references-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.references-list::-webkit-scrollbar-track {
+  background: var(--background-color-secondary);
+  border-radius: 4px;
+}
+
+.references-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.references-list::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Animation Enhancements */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .reference-card {
+    border-width: 2px;
+  }
+  
+  .action-btn {
+    border-width: 2px;
+  }
+  
+  .search-input-wrapper {
+    border-width: 2px;
+  }
+
+  .score-badge {
+    border: 2px solid currentColor;
+  }
+} 

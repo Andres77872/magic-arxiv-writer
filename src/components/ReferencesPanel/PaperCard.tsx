@@ -3,6 +3,7 @@ import type { ArxivPaper } from './types';
 import { ScoreBadge } from './ScoreBadge';
 import { PaperActions } from './PaperActions';
 import { PaperStats } from './PaperStats';
+import './PaperCard.css';
 
 interface PaperCardProps {
   paper: ArxivPaper;

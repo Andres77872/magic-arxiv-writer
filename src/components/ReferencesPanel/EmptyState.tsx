@@ -1,3 +1,5 @@
+import './EmptyState.css';
+
 interface EmptyStateProps {
   lastSearchQuery: string;
   onSearch: (query: string) => void;
