@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import './App.css';
-import {ChatSection} from './components/ChatSection';
+import {ChatPanel} from './components/ChatPanel';
 import {RichTextEditor} from './components/RichTextEditor';
 import {ReferencesPanel} from './components/ReferencesPanel';
 import {AcademicTemplates} from './components/AcademicTemplates';
@@ -53,7 +53,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
     const [panelMode, setPanelMode] = useState<PanelMode>('chat');
     
     // Reference count for display (will be managed by ReferencesPanel internally)
-    const [referencesCount, setReferencesCount] = useState(0);
+    const [referencesCount] = useState(0);
 
     const handleCiteReference = (reference: ArxivPaper) => {
         // Insert citation into the document
@@ -85,10 +85,10 @@ Start by exploring the templates or asking the AI assistant for help with your r
         setPanelMode('chat'); // Switch to chat to start using AI prompts
     };
 
-    const handleUsePrompt = (prompt: string) => {
+    const handleUsePrompt = () => {
         setPanelMode('chat');
-        // The ChatSection component will need to be updated to accept initial prompts
-        // For now, we'll switch to chat mode - you can enhance this further
+        // The ChatPanel component now handles prompts internally through the EmptyState
+        // Users can click on suggested prompts to start conversations
     };
 
     const exportToPDF = () => {
@@ -160,7 +160,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
 
                     <div className="panel-content">
                         {panelMode === 'chat' && (
-                            <ChatSection markdown={markdown} onUpdateMarkdown={setMarkdown}/>
+                            <ChatPanel markdown={markdown} onUpdateMarkdown={setMarkdown}/>
                         )}
                         {panelMode === 'references' && (
                             <ReferencesPanel 

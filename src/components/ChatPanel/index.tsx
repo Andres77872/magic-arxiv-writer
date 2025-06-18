@@ -1,44 +1,18 @@
 import type {FormEvent} from 'react';
 import {useEffect, useRef, useState} from 'react';
-import {ChatTimer} from './ChatTimer';
-import {ChatInput} from './ChatInput';
-import './ChatSection.css';
+import { PanelHeader } from './PanelHeader';
+import { ChatInput } from './ChatInput';
+import { ChatMessage } from './ChatMessage';
+import { EmptyState } from './EmptyState';
+import { type ChatPanelProps, type ChatMessage as ChatMessageType, type ChatMetrics, type NodeExecution, type ConnectionStatus } from './types';
+import './index.css';
 
-interface ChatMessage {
-    role: 'user' | 'assistant';
-    content: string;
-}
-
-interface ChatSectionProps {
-    markdown: string;
-    onUpdateMarkdown: (content: string) => void;
-}
-
-interface NodeExecution {
-    node_id: string;
-    node_class: string;
-    start_time: number;
-    end_time: number;
-    execution_time: number;
-    status: 'running' | 'completed';
-}
-
-export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
-    const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
+    const [chatHistory, setChatHistory] = useState<ChatMessageType[]>([]);
     const [input, setInput] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
-    const [connectionStatus, setConnectionStatus] = useState<'connected' | 'connecting' | 'disconnected'>('connected');
-    const [metricsHistory, setMetricsHistory] = useState<
-        {
-            sendTime: number;
-            processTime: number;
-            generatingTime: number;
-            totalTime: number;
-            startTime: number;
-            isStreaming: boolean;
-            nodeExecutions: NodeExecution[];
-        }[]
-    >([]);
+    const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('connected');
+    const [metricsHistory, setMetricsHistory] = useState<ChatMetrics[]>([]);
     const chatHistoryRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -48,19 +22,8 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
         }
     }, [chatHistory]);
 
-    const suggestedPrompts = [
-        "📝 Generate an arXiv paper outline for transformer architectures",
-        "🔍 Search for recent papers on attention mechanisms and provide citations",
-        "🔬 Create a methodology section with mathematical notation and algorithms", 
-        "📊 Write a results section comparing with state-of-the-art baselines",
-        "📖 Review and improve this academic text for arXiv submission",
-        "🎯 Generate related work section with proper academic comparisons",
-        "📐 Format mathematical equations and theoretical proofs",
-        "🏷️ Add proper citations and references in academic style"
-    ];
-
-    const handleSuggestedPrompt = (prompt: string) => {
-        setInput(prompt.replace(/^[📝🔍🔬📊📖🎯📐🏷️]\s/, ''));
+    const handlePromptSelect = (prompt: string) => {
+        setInput(prompt);
     };
 
     const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
@@ -68,7 +31,7 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
         const instruction = input.trim();
         if (!instruction) return;
 
-        const userMessage: ChatMessage = {role: 'user', content: instruction};
+        const userMessage: ChatMessageType = {role: 'user', content: instruction};
         const newHistory = [...chatHistory, userMessage];
         setChatHistory(newHistory);
         setInput('');
@@ -233,12 +196,12 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
     };
 
     // Group messages into user/assistant turns
-    type ChatTurn = { user: ChatMessage; assistant?: ChatMessage };
+    type ChatTurn = { user: ChatMessageType; assistant?: ChatMessageType };
     const turns: ChatTurn[] = [];
     for (let i = 0; i < chatHistory.length; i++) {
         if (chatHistory[i].role === 'user') {
             const userMsg = chatHistory[i];
-            let assistantMsg: ChatMessage | undefined;
+            let assistantMsg: ChatMessageType | undefined;
             if (i + 1 < chatHistory.length && chatHistory[i + 1].role === 'assistant') {
                 assistantMsg = chatHistory[i + 1];
                 i++;
@@ -248,93 +211,25 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
     }
 
     return (
-        <div className="chat-section">
-            <div className="section-header">
-                <h2>💬 AI Assistant</h2>
-                <div className="connection-status">
-                    <div className={`status-indicator ${connectionStatus}`}></div>
-                    <span className="status-text">
-                        {connectionStatus === 'connected' && 'Connected'}
-                        {connectionStatus === 'connecting' && 'Connecting...'}
-                        {connectionStatus === 'disconnected' && 'Disconnected'}
-                    </span>
-                </div>
-            </div>
+        <div className="chat-panel">
+            <PanelHeader connectionStatus={connectionStatus} />
             
             <div className="chat-history" ref={chatHistoryRef}>
                 {turns.length === 0 ? (
-                    <div className="empty-state">
-                        <div className="empty-icon">🤖</div>
-                        <h3>Ready to help with your paper!</h3>
-                        <p>Start a conversation with the AI assistant to generate and refine your academic content.</p>
-                        
-                        <div className="suggested-prompts">
-                            <h4>Try these suggestions:</h4>
-                            {suggestedPrompts.map((prompt, idx) => (
-                                <button 
-                                    key={idx}
-                                    className="suggestion-pill"
-                                    onClick={() => handleSuggestedPrompt(prompt)}
-                                >
-                                    {prompt}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                    <EmptyState onPromptSelect={handlePromptSelect} />
                 ) : (
                     turns.map((turn, idx) => (
                         <div key={idx} className="chat-turn">
-                            <div className="chat-message user">
-                                <div className="message-avatar">👤</div>
-                                <div className="message-content">
-                                    <div className="message-text">{turn.user.content}</div>
-                                    {metricsHistory[idx] && (
-                                        <ChatTimer
-                                            sendTime={metricsHistory[idx].sendTime}
-                                            processTime={metricsHistory[idx].processTime}
-                                            generatingTime={metricsHistory[idx].generatingTime}
-                                            totalTime={metricsHistory[idx].totalTime}
-                                            startTime={metricsHistory[idx].startTime}
-                                            isStreaming={metricsHistory[idx].isStreaming}
-                                        />
-                                    )}
-                                </div>
-                            </div>
+                            <ChatMessage 
+                                message={turn.user}
+                                metrics={metricsHistory[idx]}
+                            />
                             {turn.assistant && (
-                                <div className="chat-message assistant">
-                                    <div className="message-avatar">🤖</div>
-                                    <div className="message-content">
-                                        <div className="message-text">
-                                            {isGenerating && idx === turns.length - 1 && !turn.assistant.content ? (
-                                                <div className="typing-indicator">
-                                                    <span></span>
-                                                    <span></span>
-                                                    <span></span>
-                                                    Generating content...
-                                                </div>
-                                            ) : (
-                                                turn.assistant.content.slice(-360) || "Thinking..."
-                                            )}
-                                        </div>
-                                        {metricsHistory[idx]?.nodeExecutions.length > 0 && (
-                                            <div className="node-feedback">
-                                                <details>
-                                                    <summary>🔧 Execution Details</summary>
-                                                    <ul>
-                                                        {metricsHistory[idx].nodeExecutions.map((node) => (
-                                                            <li key={node.node_id}>
-                                                                <strong>{node.node_class}</strong> ({node.node_id.slice(-4)}):{' '}
-                                                                {node.status === 'running'
-                                                                    ? '⏳ Running...'
-                                                                    : `✅ ${node.execution_time.toFixed(2)}s`}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </details>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                                <ChatMessage 
+                                    message={turn.assistant}
+                                    isGenerating={isGenerating && idx === turns.length - 1 && !turn.assistant.content}
+                                    nodeExecutions={metricsHistory[idx]?.nodeExecutions}
+                                />
                             )}
                         </div>
                     ))
@@ -351,4 +246,4 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
             />
         </div>
     );
-}
+} 

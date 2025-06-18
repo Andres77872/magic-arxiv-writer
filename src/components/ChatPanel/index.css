@@ -1,0 +1,55 @@
+/* Chat Panel Main Styles */
+.chat-panel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color-primary);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+/* Chat History */
+.chat-history {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--padding-md);
+  background: var(--background-color-primary);
+}
+
+/* Chat Turn */
+.chat-turn {
+  margin-bottom: var(--margin-lg);
+}
+
+/* Scrollbar Styling */
+.chat-history::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-history::-webkit-scrollbar-track {
+  background: var(--background-color-tertiary);
+}
+
+.chat-history::-webkit-scrollbar-thumb {
+  background: var(--background-color-hover);
+  border-radius: 3px;
+}
+
+.chat-history::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color-muted);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .chat-history {
+    padding: var(--padding-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-history {
+    padding: var(--padding-xs);
+  }
+} 

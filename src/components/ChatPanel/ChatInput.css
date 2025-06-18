@@ -1,0 +1,121 @@
+/* Chat Input Styles */
+.chat-input-container {
+  padding: var(--padding-md);
+  background: var(--background-color-secondary);
+}
+
+.chat-input {
+  background: var(--background-color-primary);
+  border-radius: var(--border-radius-medium);
+  border: 1px solid var(--border-color);
+}
+
+.input-wrapper {
+  display: flex;
+  gap: var(--gap-sm);
+  padding: var(--padding-sm);
+  background: var(--background-color-primary);
+  border-radius: var(--border-radius-medium);
+  transition: box-shadow 0.2s ease;
+}
+
+.input-wrapper:focus-within {
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  border-color: var(--accent-color);
+}
+
+.message-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-color);
+  font-size: var(--font-size-md);
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  min-height: 20px;
+  max-height: 120px;
+  overflow-y: auto;
+  line-height: var(--line-height-normal);
+}
+
+.message-input::placeholder {
+  color: var(--text-color-placeholder);
+}
+
+.send-button {
+  padding: var(--padding-xs) var(--padding-sm);
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+}
+
+.send-button:hover:not(:disabled) {
+  background: var(--accent-color-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.send-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.send-button.loading {
+  pointer-events: none;
+}
+
+.send-icon {
+  font-size: var(--font-size-md);
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Input Hint */
+.input-hint {
+  font-size: var(--font-size-xs);
+  color: var(--text-color-tertiary);
+  text-align: center;
+  margin-top: var(--margin-xs);
+}
+
+.input-hint kbd {
+  background: var(--background-color-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-family: var(--font-family-mono);
+  font-size: 10px;
+}
+
+/* Animations */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 

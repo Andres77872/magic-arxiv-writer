@@ -1,0 +1,45 @@
+/* Chat Timer Styles */
+.chat-timer {
+  display: flex;
+  gap: var(--gap-sm);
+  margin-top: var(--margin-xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-color-tertiary);
+  background: var(--background-color-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  padding: var(--padding-xs) var(--padding-sm);
+}
+
+.chat-timer-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.timer-icon {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.timer-label {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-color-secondary);
+}
+
+.timer-value {
+  font-weight: var(--font-weight-semibold);
+  color: var(--accent-color);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .chat-timer {
+    flex-wrap: wrap;
+    gap: var(--gap-xs);
+  }
+  
+  .chat-timer-item {
+    font-size: var(--font-size-xs);
+  }
+} 

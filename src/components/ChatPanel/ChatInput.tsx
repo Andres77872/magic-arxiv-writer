@@ -1,13 +1,7 @@
 import type {ChangeEvent, FormEvent, KeyboardEvent} from 'react';
 import {forwardRef, useEffect, useImperativeHandle, useRef} from 'react';
-
-export interface ChatInputProps {
-    value: string;
-    onChange: (value: string) => void;
-    onSubmit: () => void;
-    disabled?: boolean;
-    isLoading?: boolean;
-}
+import { type ChatInputProps } from './types';
+import './ChatInput.css';
 
 /**
  * ChatInput renders the message input form with auto-resizing textarea,
@@ -92,4 +86,4 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(
             </div>
         );
     },
-);
+); 

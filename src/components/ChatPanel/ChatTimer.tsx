@@ -1,13 +1,6 @@
 import { useState, useEffect } from 'react';
-
-interface ChatTimerProps {
-  sendTime: number;
-  processTime: number;
-  generatingTime: number;
-  totalTime: number;
-  startTime: number;
-  isStreaming: boolean;
-}
+import { type ChatTimerProps } from './types';
+import './ChatTimer.css';
 
 export function ChatTimer({
   sendTime,
@@ -76,4 +69,4 @@ export function ChatTimer({
       </div>
     </div>
   );
-}
+} 
