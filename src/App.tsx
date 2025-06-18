@@ -5,7 +5,6 @@ import {RichTextEditor} from './components/RichTextEditor';
 import {ReferencesPanel} from './components/ReferencesPanel';
 import {AcademicTemplates} from './components/AcademicTemplates';
 import type {ArxivPaper} from './components/ReferencesPanel/types';
-import './components/RichTextEditor.css';
 import './components/AcademicTemplates.css';
 import './components/DocumentEditor.css';
 import './components/PanelSelector.css';
