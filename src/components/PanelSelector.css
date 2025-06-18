@@ -1,0 +1,104 @@
+/* Panel Selector Styles */
+.left-panel {
+  width: 45%;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color-secondary);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.document-panel {
+  width: 55%;
+  min-width: 400px;
+}
+
+.panel-selector {
+  display: flex;
+  background: var(--background-color-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.panel-tab {
+  flex: 1;
+  padding: var(--padding-sm) var(--padding-md);
+  background: transparent;
+  border: none;
+  color: var(--text-color-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.panel-tab:hover {
+  background: var(--background-color-hover);
+  color: var(--text-color);
+}
+
+.panel-tab.active {
+  background: var(--background-color-primary);
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}
+
+.panel-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Academic specific animations */
+@keyframes academicSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.reference-card,
+.template-card {
+  animation: academicSlideIn 0.3s ease-out;
+}
+
+/* Enhanced mobile responsiveness for academic features */
+@media (max-width: 1024px) {
+  .left-panel,
+  .document-panel {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .panel-selector {
+    flex-wrap: wrap;
+  }
+  
+  .panel-tab {
+    min-width: 120px;
+    font-size: var(--font-size-xs);
+    padding: var(--padding-xs) var(--padding-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .panel-tab {
+    flex: none;
+    min-width: 100px;
+    font-size: 10px;
+    padding: var(--padding-xs);
+  }
+  
+  .left-panel {
+    min-height: 40vh;
+  }
+  
+  .document-panel {
+    min-height: 50vh;
+  }
+} 

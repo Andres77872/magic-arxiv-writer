@@ -2,6 +2,7 @@ import type {FormEvent} from 'react';
 import {useEffect, useRef, useState} from 'react';
 import {ChatTimer} from './ChatTimer';
 import {ChatInput} from './ChatInput';
+import './ChatSection.css';
 
 interface ChatMessage {
     role: 'user' | 'assistant';
@@ -48,15 +49,18 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
     }, [chatHistory]);
 
     const suggestedPrompts = [
-        "📝 Generate an abstract for a machine learning paper",
-        "🔬 Create a methodology section for computer vision research", 
-        "📊 Write a results section with statistical analysis",
-        "📖 Improve the grammar and clarity of this text",
-        "🎯 Add a compelling conclusion to the paper"
+        "📝 Generate an arXiv paper outline for transformer architectures",
+        "🔍 Search for recent papers on attention mechanisms and provide citations",
+        "🔬 Create a methodology section with mathematical notation and algorithms", 
+        "📊 Write a results section comparing with state-of-the-art baselines",
+        "📖 Review and improve this academic text for arXiv submission",
+        "🎯 Generate related work section with proper academic comparisons",
+        "📐 Format mathematical equations and theoretical proofs",
+        "🏷️ Add proper citations and references in academic style"
     ];
 
     const handleSuggestedPrompt = (prompt: string) => {
-        setInput(prompt.replace(/^[📝🔬📊📖🎯]\s/, ''));
+        setInput(prompt.replace(/^[📝🔍🔬📊📖🎯📐🏷️]\s/, ''));
     };
 
     const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
