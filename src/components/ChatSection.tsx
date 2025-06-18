@@ -26,6 +26,7 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
+    const [connectionStatus, setConnectionStatus] = useState<'connected' | 'connecting' | 'disconnected'>('connected');
     const [metricsHistory, setMetricsHistory] = useState<
         {
             sendTime: number;
@@ -46,6 +47,17 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
         }
     }, [chatHistory]);
 
+    const suggestedPrompts = [
+        "📝 Generate an abstract for a machine learning paper",
+        "🔬 Create a methodology section for computer vision research", 
+        "📊 Write a results section with statistical analysis",
+        "📖 Improve the grammar and clarity of this text",
+        "🎯 Add a compelling conclusion to the paper"
+    ];
+
+    const handleSuggestedPrompt = (prompt: string) => {
+        setInput(prompt.replace(/^[📝🔬📊📖🎯]\s/, ''));
+    };
 
     const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
@@ -57,6 +69,8 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
         setChatHistory(newHistory);
         setInput('');
         setIsGenerating(true);
+        setConnectionStatus('connecting');
+        
         const metricsIndex = metricsHistory.length;
         const tFetchStart = performance.now();
         setMetricsHistory((m) => [
@@ -88,6 +102,7 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
         const assistantMessageIndex = newHistory.length;
 
         try {
+            setConnectionStatus('connected');
             let firstByteTime: number | null = null;
             let processTime: number | null = null;
             const response = await fetch('https://magic.arz.ai/chat/openai/v1/completion', {
@@ -105,6 +120,7 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
 
             if (!response.ok || !response.body) {
                 console.error('Error from API', await response.text());
+                setConnectionStatus('disconnected');
                 return;
             }
 
@@ -203,6 +219,9 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
                 };
                 return newMetrics;
             });
+        } catch (error) {
+            console.error('Request failed:', error);
+            setConnectionStatus('disconnected');
         } finally {
             setIsGenerating(false);
             inputRef.current?.focus();
@@ -226,52 +245,98 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
 
     return (
         <div className="chat-section">
-            <div className="panel-header">Chat</div>
+            <div className="section-header">
+                <h2>💬 AI Assistant</h2>
+                <div className="connection-status">
+                    <div className={`status-indicator ${connectionStatus}`}></div>
+                    <span className="status-text">
+                        {connectionStatus === 'connected' && 'Connected'}
+                        {connectionStatus === 'connecting' && 'Connecting...'}
+                        {connectionStatus === 'disconnected' && 'Disconnected'}
+                    </span>
+                </div>
+            </div>
+            
             <div className="chat-history" ref={chatHistoryRef}>
                 {turns.length === 0 ? (
-                    <div className="empty-placeholder">Type a message to begin...</div>
+                    <div className="empty-state">
+                        <div className="empty-icon">🤖</div>
+                        <h3>Ready to help with your paper!</h3>
+                        <p>Start a conversation with the AI assistant to generate and refine your academic content.</p>
+                        
+                        <div className="suggested-prompts">
+                            <h4>Try these suggestions:</h4>
+                            {suggestedPrompts.map((prompt, idx) => (
+                                <button 
+                                    key={idx}
+                                    className="suggestion-pill"
+                                    onClick={() => handleSuggestedPrompt(prompt)}
+                                >
+                                    {prompt}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 ) : (
                     turns.map((turn, idx) => (
                         <div key={idx} className="chat-turn">
                             <div className="chat-message user">
-                                {turn.user.content}
-                                {metricsHistory[idx] && (
-                                    <ChatTimer
-                                        sendTime={metricsHistory[idx].sendTime}
-                                        processTime={metricsHistory[idx].processTime}
-                                        generatingTime={metricsHistory[idx].generatingTime}
-                                        totalTime={metricsHistory[idx].totalTime}
-                                        startTime={metricsHistory[idx].startTime}
-                                        isStreaming={metricsHistory[idx].isStreaming}
-                                    />
-                                )}
+                                <div className="message-avatar">👤</div>
+                                <div className="message-content">
+                                    <div className="message-text">{turn.user.content}</div>
+                                    {metricsHistory[idx] && (
+                                        <ChatTimer
+                                            sendTime={metricsHistory[idx].sendTime}
+                                            processTime={metricsHistory[idx].processTime}
+                                            generatingTime={metricsHistory[idx].generatingTime}
+                                            totalTime={metricsHistory[idx].totalTime}
+                                            startTime={metricsHistory[idx].startTime}
+                                            isStreaming={metricsHistory[idx].isStreaming}
+                                        />
+                                    )}
+                                </div>
                             </div>
                             {turn.assistant && (
                                 <div className="chat-message assistant">
-                                    {turn.assistant.content.slice(-360)}
-                                    {metricsHistory[idx]?.nodeExecutions.length > 0 && (
-                                        <div className="node-feedback">
-                                            <details>
-                                                <summary>Node execution details</summary>
-                                                <ul>
-                                                    {metricsHistory[idx].nodeExecutions.map((node) => (
-                                                        <li key={node.node_id}>
-                                                            <strong>{node.node_class}</strong> ({node.node_id.slice(-4)}):{' '}
-                                                            {node.status === 'running'
-                                                                ? 'Running...'
-                                                                : `${node.execution_time.toFixed(2)}s`}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </details>
+                                    <div className="message-avatar">🤖</div>
+                                    <div className="message-content">
+                                        <div className="message-text">
+                                            {isGenerating && idx === turns.length - 1 && !turn.assistant.content ? (
+                                                <div className="typing-indicator">
+                                                    <span></span>
+                                                    <span></span>
+                                                    <span></span>
+                                                    Generating content...
+                                                </div>
+                                            ) : (
+                                                turn.assistant.content.slice(-360) || "Thinking..."
+                                            )}
                                         </div>
-                                    )}
+                                        {metricsHistory[idx]?.nodeExecutions.length > 0 && (
+                                            <div className="node-feedback">
+                                                <details>
+                                                    <summary>🔧 Execution Details</summary>
+                                                    <ul>
+                                                        {metricsHistory[idx].nodeExecutions.map((node) => (
+                                                            <li key={node.node_id}>
+                                                                <strong>{node.node_class}</strong> ({node.node_id.slice(-4)}):{' '}
+                                                                {node.status === 'running'
+                                                                    ? '⏳ Running...'
+                                                                    : `✅ ${node.execution_time.toFixed(2)}s`}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </details>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
                         </div>
                     ))
                 )}
             </div>
+            
             <ChatInput
                 ref={inputRef}
                 value={input}

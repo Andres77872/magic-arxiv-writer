@@ -54,17 +54,25 @@ export function ChatTimer({
 
   return (
     <div className="chat-timer">
-      <div className="chat-timer-item" title="Sending time">
-        <strong>Sent:</strong> {format(displayedSendTime)}
+      <div className="chat-timer-item" title="Time to establish connection">
+        <span className="timer-icon">📡</span>
+        <span className="timer-label">Send:</span>
+        <span className="timer-value">{format(displayedSendTime)}</span>
       </div>
-      <div className="chat-timer-item" title="Processing time">
-        <strong>Proc:</strong> {format(displayedProcessTime)}
+      <div className="chat-timer-item" title="Server processing time">
+        <span className="timer-icon">⚙️</span>
+        <span className="timer-label">Proc:</span>
+        <span className="timer-value">{format(displayedProcessTime)}</span>
       </div>
-      <div className="chat-timer-item" title="Generating time">
-        <strong>Gen:</strong> {format(displayedGeneratingTime)}
+      <div className="chat-timer-item" title="Content generation time">
+        <span className="timer-icon">✍️</span>
+        <span className="timer-label">Gen:</span>
+        <span className="timer-value">{format(displayedGeneratingTime)}</span>
       </div>
-      <div className="chat-timer-item" title="Total time">
-        <strong>Total:</strong> {format(displayedTotalTime)}
+      <div className="chat-timer-item" title="Total response time">
+        <span className="timer-icon">⏱️</span>
+        <span className="timer-label">Total:</span>
+        <span className="timer-value">{format(displayedTotalTime)}</span>
       </div>
     </div>
   );

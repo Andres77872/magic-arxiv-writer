@@ -54,24 +54,42 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(
         };
 
         return (
-            <form onSubmit={handleSubmit} className="chat-input">
-        <textarea
-            ref={textareaRef}
-            rows={1}
-            placeholder="Ask for changes (e.g. improve grammar, add conclusion)"
-            value={value}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={disabled}
-        />
-                <button type="submit" disabled={disabled || !value.trim() || isLoading} aria-label="Send message">
-                    {isLoading ? (
-                        <span className="loader" aria-hidden/>
-                    ) :
-                        "Generate"
-                    }
-                </button>
-            </form>
+            <div className="chat-input-container">
+                <form onSubmit={handleSubmit} className="chat-input">
+                    <div className="input-wrapper">
+                        <textarea
+                            ref={textareaRef}
+                            rows={1}
+                            placeholder="Ask for changes (e.g., improve grammar, add conclusion, generate abstract...)"
+                            value={value}
+                            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            disabled={disabled}
+                            className="message-input"
+                        />
+                        <button 
+                            type="submit" 
+                            disabled={disabled || !value.trim() || isLoading} 
+                            aria-label="Send message"
+                            className={`send-button ${isLoading ? 'loading' : ''}`}
+                        >
+                            {isLoading ? (
+                                <div className="loading-spinner">
+                                    <div className="spinner"></div>
+                                </div>
+                            ) : (
+                                <>
+                                    <span className="send-icon">🚀</span>
+                                    <span className="send-text">Generate</span>
+                                </>
+                            )}
+                        </button>
+                    </div>
+                </form>
+                <div className="input-hint">
+                    <span>💡 Press <kbd>Enter</kbd> to send, <kbd>Shift+Enter</kbd> for new line</span>
+                </div>
+            </div>
         );
     },
 );
