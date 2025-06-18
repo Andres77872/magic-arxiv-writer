@@ -81,17 +81,17 @@
 }
 
 .footer-btn:hover {
-  background: var(--accent-color-dark, #5b21b6);
+  background: var(--accent-color-dark);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(124, 58, 237, 0.3);
 }
 
 .footer-btn.primary {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, var(--color-messages-success), var(--color-messages-success-dark));
 }
 
 .footer-btn.primary:hover {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: linear-gradient(135deg, var(--color-messages-success-dark), var(--color-messages-success-darker));
 }
 
 /* Added missing bulk-action-btn class */
@@ -100,7 +100,7 @@
   align-items: center;
   gap: var(--gap-sm);
   padding: var(--padding-sm) var(--padding-md);
-  background: linear-gradient(135deg, var(--accent-color), var(--accent-color-secondary, #9333ea));
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-color-secondary));
   color: white;
   border: none;
   border-radius: var(--border-radius-small);

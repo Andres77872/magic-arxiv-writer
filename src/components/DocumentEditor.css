@@ -139,7 +139,7 @@
 
 /* Markdown Preview Styles */
 .markdown-preview {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-base);
   line-height: var(--line-height-relaxed);
   color: var(--text-color);
   max-width: none;

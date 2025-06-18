@@ -25,14 +25,24 @@
     /* Accent Colors - Modern and vibrant */
     --accent-color: #7c3aed; /* Purple primary */
     --accent-color-hover: #6d28d9; /* Darker purple hover */
-    --accent-color-secondary: #a855f7; /* Lighter purple */
+    --accent-color-dark: #5b21b6; /* Darker purple for contrast */
+    --accent-color-secondary: #9333ea; /* Secondary purple */
     --accent-color-muted: #5b21b6; /* Muted purple */
 
     /* Status Message Colors - Accessible and clear */
     --color-messages-info: #3b82f6; /* Blue info */
+    --color-messages-info-dark: #2563eb; /* Darker blue info */
     --color-messages-success: #10b981; /* Green success */
+    --color-messages-success-dark: #059669; /* Darker green success */
+    --color-messages-success-darker: #047857; /* Even darker green */
     --color-messages-error: #ef4444; /* Red error */
+    --color-messages-error-dark: #dc2626; /* Darker red error */
     --color-messages-warning: #f59e0b; /* Amber warning */
+    --color-messages-warning-dark: #d97706; /* Darker amber warning */
+
+    /* Error State Colors */
+    --error-bg-light: #fef2f2; /* Light red background */
+    --error-border-light: #fecaca; /* Light red border */
 
     /* Semantic Colors */
     --color-dark: #0a0a0b; /* Deepest dark */

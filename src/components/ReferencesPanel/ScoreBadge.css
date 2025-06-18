@@ -15,28 +15,28 @@
 }
 
 .score-badge.score-excellent {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, var(--color-messages-success), var(--color-messages-success-dark));
   color: white;
   animation: scoreGlow 2s ease-in-out infinite;
 }
 
 .score-badge.score-very-good {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, var(--color-messages-info), var(--color-messages-info-dark));
   color: white;
 }
 
 .score-badge.score-good {
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  background: linear-gradient(135deg, var(--accent-color-secondary), var(--accent-color));
   color: white;
 }
 
 .score-badge.score-fair {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: linear-gradient(135deg, var(--color-messages-warning), var(--color-messages-warning-dark));
   color: white;
 }
 
 .score-badge.score-low {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: linear-gradient(135deg, var(--color-messages-error), var(--color-messages-error-dark));
   color: white;
 }
 

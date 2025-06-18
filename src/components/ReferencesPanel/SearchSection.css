@@ -67,7 +67,7 @@
 }
 
 .search-button:hover:not(:disabled) {
-  background: var(--accent-color-dark, #5b21b6);
+  background: var(--accent-color-dark);
   transform: translateY(-1px);
 }
 
@@ -168,7 +168,7 @@
 }
 
 .filter-badge.score-stats {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, var(--color-messages-success), var(--color-messages-success-dark));
   font-family: var(--font-family-mono);
 }
 
@@ -178,11 +178,11 @@
   align-items: center;
   gap: var(--gap-sm);
   padding: var(--padding-sm) var(--padding-md);
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: var(--error-bg-light);
+  border: 1px solid var(--error-border-light);
   border-radius: var(--border-radius-small);
   margin-top: var(--margin-sm);
-  color: #dc2626;
+  color: var(--color-messages-error-dark);
 }
 
 .error-icon {
@@ -197,7 +197,7 @@
 .error-dismiss {
   background: none;
   border: none;
-  color: #dc2626;
+  color: var(--color-messages-error-dark);
   cursor: pointer;
   font-size: var(--font-size-md);
   padding: var(--padding-xs);

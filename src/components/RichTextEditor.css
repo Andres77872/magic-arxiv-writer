@@ -444,7 +444,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--accent-color), var(--accent-color-secondary, #9333ea));
+  background: linear-gradient(90deg, var(--accent-color), var(--accent-color-secondary));
   border-radius: var(--border-radius-medium) var(--border-radius-medium) 0 0;
 }
 

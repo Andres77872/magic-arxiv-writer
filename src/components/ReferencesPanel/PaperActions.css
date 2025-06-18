@@ -38,7 +38,7 @@
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, var(--accent-color), var(--accent-color-secondary, #9333ea));
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-color-secondary));
   color: white;
   border-color: var(--accent-color);
   box-shadow: 0 2px 4px rgba(124, 58, 237, 0.2);
