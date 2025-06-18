@@ -9,7 +9,7 @@ export function PanelHeader({ papersCount, lastSearchQuery }: PanelHeaderProps) 
       <div className="header-content">
         <h3>📚 Research References</h3>
         <div className="header-subtitle">
-          Search and cite arXiv papers with ColPali embeddings
+          Search and cite arXiv papers with semantic similarity search
         </div>
       </div>
       {papersCount > 0 && (

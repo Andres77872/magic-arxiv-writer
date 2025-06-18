@@ -115,7 +115,7 @@ export function SearchSection({
             Limit: {limit} papers
           </span>
           <span className="filter-badge">
-            ColPali Enhanced
+            Semantic Search
           </span>
           {avgScore > 0 && (
             <span className="filter-badge score-stats">

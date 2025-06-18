@@ -13,6 +13,37 @@ interface ReferencesPanelProps {
   limit?: number;
 }
 
+// Mock data for fallback
+const mockPapers: ArxivPaper[] = [
+  {
+    id: '1706.03762',
+    title: 'Attention Is All You Need',
+    authors: 'Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin',
+    abstract: 'The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.',
+    date: '2017-06-12T17:57:59Z',
+    doi: null,
+    score: 0.95
+  },
+  {
+    id: '1810.04805',
+    title: 'BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding',
+    authors: 'Jacob Devlin, Ming-Wei Chang, Kenton Lee, Kristina Toutanova',
+    abstract: 'We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models, BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers.',
+    date: '2018-10-11T18:33:37Z',
+    doi: null,
+    score: 0.92
+  },
+  {
+    id: '2005.14165',
+    title: 'Language Models are Few-Shot Learners',
+    authors: 'Tom B. Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared Kaplan, Prafulla Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, Sandhini Agarwal, Ariel Herbert-Voss, Gretchen Krueger, Tom Henighan, Rewon Child, Aditya Ramesh, Daniel M. Ziegler, Jeffrey Wu, Clemens Winter, Christopher Hesse, Mark Chen, Eric Sigler, Mateusz Litwin, Scott Gray, Benjamin Chess, Jack Clark, Christopher Berner, Sam McCandlish, Alec Radford, Ilya Sutskever, Dario Amodei',
+    abstract: 'Recent work has demonstrated substantial gains on many NLP tasks and benchmarks by pre-training on a large corpus of text followed by fine-tuning on a specific task. While typically task-agnostic in architecture, this method still requires task-specific fine-tuning datasets of thousands or tens of thousands of examples.',
+    date: '2020-05-28T17:29:35Z',
+    doi: null,
+    score: 0.89
+  }
+];
+
 export function ReferencesPanel({ 
   onCiteReference,
   limit = 10
@@ -54,22 +85,38 @@ export function ReferencesPanel({
       }
 
       const data = await response.json();
+      console.log('API Response:', data); // Debug log
       
-      const transformedPapers: ArxivPaper[] = data.map((paper: any, index: number) => ({
-        id: paper.id,
-        title: paper.title,
-        authors: paper.authors,
-        abstract: paper.abstract,
-        date: paper.date,
-        doi: paper.doi,
-        score: paper.score || (1.0 - (index * 0.05)),
-      }));
+      // Transform and validate the data
+      const transformedPapers: ArxivPaper[] = data.map((paper: any, index: number) => {
+        const transformedPaper = {
+          id: paper.id || `unknown-${index}`,
+          title: paper.title || 'Untitled Paper',
+          authors: paper.authors || 'Unknown Authors',
+          abstract: paper.abstract || 'No abstract available',
+          date: paper.date || new Date().toISOString(),
+          doi: paper.doi || null,
+          score: paper.score || (1.0 - (index * 0.05)),
+        };
+        
+        console.log('Transformed paper:', transformedPaper); // Debug log
+        return transformedPaper;
+      });
 
       setPapers(transformedPapers);
     } catch (err) {
       console.error('Search error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to search papers');
-      setPapers([]);
+      console.log('Using fallback mock data...');
+      
+      // Use mock data as fallback
+      const filteredMockData = mockPapers.filter(paper => 
+        paper.title.toLowerCase().includes(query.toLowerCase()) ||
+        paper.abstract.toLowerCase().includes(query.toLowerCase()) ||
+        paper.authors.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      setPapers(filteredMockData.length > 0 ? filteredMockData : mockPapers);
+      setError(`API unavailable. Showing sample results for "${query}"`);
     } finally {
       setIsSearching(false);
     }
@@ -102,9 +149,7 @@ export function ReferencesPanel({
 
   // Load sample papers on mount
   useEffect(() => {
-    if (papers.length === 0) {
-      searchPapers('transformer attention mechanisms');
-    }
+    searchPapers('transformer attention mechanisms');
   }, []);
 
   return (

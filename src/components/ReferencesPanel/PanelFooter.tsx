@@ -78,16 +78,6 @@ export function PanelFooter({ papers, onCiteReference }: PanelFooterProps) {
           </button>
         </div>
       )}
-
-      <div className="footer-branding">
-        <div className="brand-info">
-          <span className="brand-text">Enhanced by</span>
-          <span className="brand-name">ColPali Embeddings</span>
-        </div>
-        <div className="search-info">
-          <span className="search-source">arXiv.org</span>
-        </div>
-      </div>
     </div>
   );
 } 

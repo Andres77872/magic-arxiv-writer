@@ -48,11 +48,6 @@ export function PaperStats({ paper, onSearchRelated }: PaperStatsProps) {
           <span className="btn-icon">🔍</span>
           <span className="btn-text">Find Similar</span>
         </button>
-        
-        <div className="colpali-credit">
-          <span className="credit-text">Powered by</span>
-          <span className="credit-brand">ColPali</span>
-        </div>
       </div>
     </div>
   );
