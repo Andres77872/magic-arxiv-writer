@@ -4,8 +4,8 @@ import {ChatSection} from './components/ChatSection';
 import {RichTextEditor} from './components/RichTextEditor';
 import {ReferencesPanel} from './components/ReferencesPanel';
 import {AcademicTemplates} from './components/AcademicTemplates';
+import type {ArxivPaper} from './components/ReferencesPanel/types';
 import './components/RichTextEditor.css';
-import './components/ReferencesPanel.css';
 import './components/AcademicTemplates.css';
 import './components/DocumentEditor.css';
 import './components/PanelSelector.css';
@@ -15,18 +15,7 @@ import remarkGfm from 'remark-gfm';
 type ViewMode = 'edit' | 'preview' | 'split';
 type PanelMode = 'chat' | 'references' | 'templates';
 
-// Mock data for demonstration - replace with your API integration
-interface ArxivReference {
-  id: string;
-  title: string;
-  authors: string[];
-  abstract: string;
-  published: string;
-  arxiv_id: string;
-  categories: string[];
-  url: string;
-  relevance_score?: number;
-}
+// Template interface for academic paper templates
 
 interface Template {
   id: string;
@@ -63,49 +52,15 @@ Start by exploring the templates or asking the AI assistant for help with your r
     const [viewMode, setViewMode] = useState<ViewMode>('edit');
     const [panelMode, setPanelMode] = useState<PanelMode>('chat');
     
-    // Mock references data - replace with your API integration
-    const [references, setReferences] = useState<ArxivReference[]>([]);
-    const [isSearchingReferences, setIsSearchingReferences] = useState(false);
+    // Reference count for display (will be managed by ReferencesPanel internally)
+    const [referencesCount, setReferencesCount] = useState(0);
 
-    // Handlers for academic features
-    const handleSearchReferences = async (query: string) => {
-        setIsSearchingReferences(true);
-        
-        // TODO: Replace with your actual API call to search arXiv papers using ColPali embeddings
-        try {
-            // Simulated API call - replace with your RAG search endpoint
-            console.log('Searching arXiv papers for:', query);
-            
-            // Mock response - replace with actual data from your API
-            const mockReferences: ArxivReference[] = [
-                {
-                    id: '1',
-                    title: 'Attention Is All You Need',
-                    authors: ['Ashish Vaswani', 'Noam Shazeer', 'Niki Parmar'],
-                    abstract: 'The dominant sequence transduction models are based on complex recurrent or convolutional neural networks...',
-                    published: '2017-06-12',
-                    arxiv_id: '1706.03762',
-                    categories: ['cs.CL', 'cs.LG'],
-                    url: 'https://arxiv.org/abs/1706.03762',
-                    relevance_score: 0.95
-                }
-            ];
-            
-            setTimeout(() => {
-                setReferences(mockReferences);
-                setIsSearchingReferences(false);
-            }, 1000);
-            
-        } catch (error) {
-            console.error('Error searching references:', error);
-            setIsSearchingReferences(false);
-        }
-    };
-
-    const handleCiteReference = (reference: ArxivReference) => {
+    const handleCiteReference = (reference: ArxivPaper) => {
         // Insert citation into the document
-        const citation = `[${reference.authors[0]?.split(' ').pop() || 'Unknown'} et al., ${new Date(reference.published).getFullYear()}]`;
-        const citationWithLink = `${citation}(#ref-${reference.arxiv_id.replace('.', '')})`;
+        const firstAuthor = reference.authors.split(',')[0]?.trim().split(' ').pop() || 'Unknown';
+        const year = new Date(reference.date).getFullYear();
+        const citation = `[${firstAuthor} et al., ${year}]`;
+        const citationWithLink = `${citation}(#ref-${reference.id.replace('.', '')})`;
         
         // Add to document - you can customize the citation format
         const currentContent = markdown;
@@ -118,9 +73,9 @@ Start by exploring the templates or asking the AI assistant for help with your r
             setMarkdown(newContent + referencesSection);
         }
         
-        const referenceEntry = `- **${reference.title}** (${reference.arxiv_id})\n  ${reference.authors.join(', ')}\n  *arXiv preprint arXiv:${reference.arxiv_id}* (${new Date(reference.published).getFullYear()})\n  [${reference.url}](${reference.url})\n\n`;
+        const referenceEntry = `- **${reference.title}** (arXiv:${reference.id})\n  ${reference.authors}\n  *arXiv preprint arXiv:${reference.id}* (${year})\n  [https://arxiv.org/abs/${reference.id}](https://arxiv.org/abs/${reference.id})\n\n`;
         
-        if (!currentContent.includes(reference.arxiv_id)) {
+        if (!currentContent.includes(reference.id)) {
             setMarkdown(newContent + referenceEntry);
         }
     };
@@ -209,10 +164,8 @@ Start by exploring the templates or asking the AI assistant for help with your r
                         )}
                         {panelMode === 'references' && (
                             <ReferencesPanel 
-                                references={references}
                                 onCiteReference={handleCiteReference}
-                                onSearchReferences={handleSearchReferences}
-                                isSearching={isSearchingReferences}
+                                limit={10}
                             />
                         )}
                         {panelMode === 'templates' && (
@@ -260,7 +213,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
                                     {markdown.split('\n').length} lines
                                 </span>
                                 <span className="stat">
-                                    {references.length} refs
+                                    {referencesCount} refs
                                 </span>
                             </div>
                         </div>
