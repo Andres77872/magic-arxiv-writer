@@ -15,13 +15,13 @@ type PanelMode = 'chat' | 'references' | 'templates';
 // Template interface for academic paper templates
 
 interface Template {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  category: string;
-  structure: string;
-  prompts: string[];
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    category: string;
+    structure: string;
+    prompts: string[];
 }
 
 function App() {
@@ -48,7 +48,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
 
     const [viewMode, setViewMode] = useState<ViewMode>('edit');
     const [panelMode, setPanelMode] = useState<PanelMode>('chat');
-    
+
     // Calculate document stats
     const wordCount = markdown.split(/\s+/).filter(word => word.length > 0).length;
     const lineCount = markdown.split('\n').length;
@@ -60,20 +60,20 @@ Start by exploring the templates or asking the AI assistant for help with your r
         const year = new Date(reference.date).getFullYear();
         const citation = `[${firstAuthor} et al., ${year}]`;
         const citationWithLink = `${citation}(#ref-${reference.id.replace('.', '')})`;
-        
+
         // Add to document - you can customize the citation format
         const currentContent = markdown;
         const newContent = currentContent + `\n\n${citationWithLink}`;
         setMarkdown(newContent);
-        
+
         // Add to references section if not already present
         if (!currentContent.includes(`## References`)) {
             const referencesSection = `\n\n## References\n\n`;
             setMarkdown(newContent + referencesSection);
         }
-        
+
         const referenceEntry = `- **${reference.title}** (arXiv:${reference.id})\n  ${reference.authors}\n  *arXiv preprint arXiv:${reference.id}* (${year})\n  [https://arxiv.org/abs/${reference.id}](https://arxiv.org/abs/${reference.id})\n\n`;
-        
+
         if (!currentContent.includes(reference.id)) {
             setMarkdown(newContent + referenceEntry);
         }
@@ -112,7 +112,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
 
     const handleExportMarkdown = () => {
         try {
-            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const blob = new Blob([markdown], {type: 'text/markdown'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -135,10 +135,12 @@ Start by exploring the templates or asking the AI assistant for help with your r
                         <h1>📄 ArXiv Writer Assistant</h1>
                         <p>AI-powered academic paper writing with arXiv integration & RAG search</p>
                         <div className="header-links">
-                            <a href="https://arizmendi.io/" target="_blank" rel="noopener noreferrer" className="header-link">
+                            <a href="https://arizmendi.io/" target="_blank" rel="noopener noreferrer"
+                               className="header-link">
                                 🌐 Portfolio
                             </a>
-                            <a href="https://github.com/Andres77872/magic-arxiv-writer" target="_blank" rel="noopener noreferrer" className="header-link">
+                            <a href="https://github.com/Andres77872/magic-arxiv-writer" target="_blank"
+                               rel="noopener noreferrer" className="header-link">
                                 📂 GitHub
                             </a>
                         </div>
@@ -159,26 +161,26 @@ Start by exploring the templates or asking the AI assistant for help with your r
                     </div>
                 </div>
             </header>
-            
+
             <main className="main-content">
                 {/* Left Panel - Dynamic content based on panel mode */}
                 <aside className="left-panel">
                     <nav className="panel-selector">
-                        <button 
+                        <button
                             className={`panel-tab ${panelMode === 'chat' ? 'active' : ''}`}
                             onClick={() => setPanelMode('chat')}
                             aria-label="AI Assistant Panel"
                         >
                             💬 AI Assistant
                         </button>
-                        <button 
+                        <button
                             className={`panel-tab ${panelMode === 'references' ? 'active' : ''}`}
                             onClick={() => setPanelMode('references')}
                             aria-label="References Panel"
                         >
                             📚 References
                         </button>
-                        <button 
+                        <button
                             className={`panel-tab ${panelMode === 'templates' ? 'active' : ''}`}
                             onClick={() => setPanelMode('templates')}
                             aria-label="Templates Panel"
@@ -189,19 +191,19 @@ Start by exploring the templates or asking the AI assistant for help with your r
 
                     <div className="panel-content">
                         {panelMode === 'chat' && (
-                            <ChatPanel 
-                                markdown={markdown} 
+                            <ChatPanel
+                                markdown={markdown}
                                 onUpdateMarkdown={setMarkdown}
                             />
                         )}
                         {panelMode === 'references' && (
-                            <ReferencesPanel 
+                            <ReferencesPanel
                                 onCiteReference={handleCiteReference}
                                 limit={20}
                             />
                         )}
                         {panelMode === 'templates' && (
-                            <AcademicTemplates 
+                            <AcademicTemplates
                                 onUseTemplate={handleUseTemplate}
                                 onUsePrompt={handleUsePrompt}
                             />
@@ -215,7 +217,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
                         <h2>📝 Document</h2>
                         <div className="document-controls">
                             <div className="view-mode-toggle" role="tablist">
-                                <button 
+                                <button
                                     className={`mode-button ${viewMode === 'edit' ? 'active' : ''}`}
                                     onClick={() => setViewMode('edit')}
                                     title="Edit Mode"
@@ -224,7 +226,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
                                 >
                                     ✏️ Edit
                                 </button>
-                                <button 
+                                <button
                                     className={`mode-button ${viewMode === 'preview' ? 'active' : ''}`}
                                     onClick={() => setViewMode('preview')}
                                     title="Preview Mode"
@@ -233,7 +235,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
                                 >
                                     👁️ Preview
                                 </button>
-                                <button 
+                                <button
                                     className={`mode-button ${viewMode === 'split' ? 'active' : ''}`}
                                     onClick={() => setViewMode('split')}
                                     title="Split Mode"
@@ -256,7 +258,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
                             </div>
                         </div>
                     </header>
-                    
+
                     <div className={`editor-container ${viewMode}`}>
                         {(viewMode === 'edit' || viewMode === 'split') && (
                             <div className="editor-pane" role="tabpanel">
@@ -268,7 +270,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
                                 />
                             </div>
                         )}
-                        
+
                         {(viewMode === 'preview' || viewMode === 'split') && (
                             <div className="preview-pane" role="tabpanel">
                                 <div className="preview-content markdown-preview">
@@ -277,10 +279,10 @@ Start by exploring the templates or asking the AI assistant for help with your r
                                             {markdown}
                                         </ReactMarkdown>
                                     ) : (
-                                        <div style={{ 
-                                            display: 'flex', 
-                                            alignItems: 'center', 
-                                            justifyContent: 'center', 
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
                                             height: '200px',
                                             color: 'var(--text-color-tertiary)',
                                             fontStyle: 'italic'

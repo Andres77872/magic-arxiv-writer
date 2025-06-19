@@ -1,10 +1,12 @@
 # RichTextEditor Component
 
-A feature-rich, academic-focused rich text editor built with TipTap and React. This component provides a comprehensive writing experience optimized for academic and professional content creation.
+A feature-rich, academic-focused rich text editor built with TipTap and React. This component provides a comprehensive
+writing experience optimized for academic and professional content creation.
 
 ## Features
 
 ### Core Functionality
+
 - **Rich Text Editing**: Full-featured WYSIWYG editor with markdown support
 - **Academic Focus**: Optimized styling for academic papers and professional documents
 - **Fullscreen Mode**: Distraction-free writing experience
@@ -12,6 +14,7 @@ A feature-rich, academic-focused rich text editor built with TipTap and React. T
 - **Keyboard Shortcuts**: Comprehensive keyboard support for power users
 
 ### **NEW: Smooth Generation Animations** 🎭
+
 - **Typewriter effect** during AI content generation
 - **Blinking cursor** at the end of generated text
 - **Visual feedback** indicators when content is being streamed
@@ -20,6 +23,7 @@ A feature-rich, academic-focused rich text editor built with TipTap and React. T
 - **Enhanced chat streaming** with improved visual effects
 
 ### Formatting Options
+
 - **Text Formatting**: Bold, italic, strikethrough, inline code
 - **Headings**: H1-H6 with academic styling
 - **Lists**: Bullet and numbered lists with custom styling
@@ -28,6 +32,7 @@ A feature-rich, academic-focused rich text editor built with TipTap and React. T
 - **Horizontal Rules**: Section dividers
 
 ### Advanced Features
+
 - **Markdown Conversion**: Bidirectional markdown/HTML conversion
 - **Auto-save**: Real-time content updates
 - **Responsive Design**: Mobile-friendly interface
@@ -84,27 +89,30 @@ function MyComponent() {
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | - | Current markdown content |
-| `onChange` | `(value: string) => void` | - | Content change handler |
-| `placeholder` | `string` | "Start writing your academic paper..." | Placeholder text |
-| `height` | `string` | "100%" | Editor height |
-| `isGenerating` | `boolean` | `false` | Enables smooth generation animations |
+| Prop           | Type                      | Default                                | Description                          |
+|----------------|---------------------------|----------------------------------------|--------------------------------------|
+| `value`        | `string`                  | -                                      | Current markdown content             |
+| `onChange`     | `(value: string) => void` | -                                      | Content change handler               |
+| `placeholder`  | `string`                  | "Start writing your academic paper..." | Placeholder text                     |
+| `height`       | `string`                  | "100%"                                 | Editor height                        |
+| `isGenerating` | `boolean`                 | `false`                                | Enables smooth generation animations |
 
 ## Keyboard Shortcuts
 
 ### Text Formatting
+
 - `Ctrl/Cmd + B` - Bold
 - `Ctrl/Cmd + I` - Italic
 - `Ctrl/Cmd + K` - Inline code
 
 ### Editor Actions
+
 - `Ctrl/Cmd + Z` - Undo
 - `Ctrl/Cmd + Y` - Redo
 - `Escape` - Exit fullscreen (when in fullscreen)
 
 ### Heading Shortcuts
+
 - `Ctrl/Cmd + Alt + 1` - H1
 - `Ctrl/Cmd + Alt + 2` - H2
 - `Ctrl/Cmd + Alt + 3` - H3
@@ -112,6 +120,7 @@ function MyComponent() {
 ## Styling
 
 ### CSS Variables
+
 The component uses CSS custom properties for theming:
 
 ```css
@@ -128,6 +137,7 @@ The component uses CSS custom properties for theming:
 ```
 
 ### Customization
+
 Each component has its own CSS file allowing for granular customization:
 
 ```css
@@ -145,18 +155,21 @@ Each component has its own CSS file allowing for granular customization:
 ## Academic Features
 
 ### Typography
+
 - Professional heading hierarchy
 - Optimized line spacing for readability
 - Academic citation styling
 - Print-optimized layouts
 
 ### Enhanced Elements
+
 - **Code blocks**: Syntax highlighting with language indicators
 - **Blockquotes**: Visual quote marks and academic styling
 - **Lists**: Custom bullet points and numbering
 - **Horizontal rules**: Decorative section dividers
 
 ### Writing Tools
+
 - Real-time word and character counting
 - Status bar showing current formatting
 - Distraction-free fullscreen mode
@@ -165,6 +178,7 @@ Each component has its own CSS file allowing for granular customization:
 ## Technical Details
 
 ### Dependencies
+
 - `@tiptap/react` - Core editor framework
 - `@tiptap/starter-kit` - Basic editing features
 - `@tiptap/extension-typography` - Typography enhancements
@@ -172,12 +186,14 @@ Each component has its own CSS file allowing for granular customization:
 - `turndown` - HTML to Markdown conversion
 
 ### Performance
+
 - Lazy loading of editor instance
 - Optimized re-renders with useMemo
 - Efficient markdown conversion
 - Minimal DOM manipulation
 
 ### Accessibility
+
 - Full keyboard navigation
 - Screen reader support
 - High contrast mode support
@@ -203,6 +219,7 @@ When adding new features:
 ## Examples
 
 ### Custom Placeholder
+
 ```tsx
 <RichTextEditor
   value={content}
@@ -212,6 +229,7 @@ When adding new features:
 ```
 
 ### Fixed Height
+
 ```tsx
 <RichTextEditor
   value={content}
@@ -221,6 +239,7 @@ When adding new features:
 ```
 
 ### Integration with Form
+
 ```tsx
 function PaperForm() {
   const [title, setTitle] = useState('');
@@ -256,12 +275,14 @@ function PaperForm() {
 ## CSS Classes for Styling
 
 ### Generation States
+
 - `.rich-text-editor.generating` - Applied when content is being generated
 - `.editor-content-wrapper.generating` - Applied to content wrapper during generation
 - `.editor-toolbar.generating` - Applied to toolbar during generation
 - `.message-text.streaming` - Applied to chat messages being streamed
 
 ### Animation Classes
+
 - `.generation-cursor` - The blinking cursor indicator
 - `.cursor-blink` - The actual cursor character with blink animation
 - `.stream-cursor` - Inline streaming cursor in chat messages

@@ -1,29 +1,29 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import './AcademicTemplates.css';
 
 interface Template {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  category: string;
-  structure: string;
-  prompts: string[];
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    category: string;
+    structure: string;
+    prompts: string[];
 }
 
 interface AcademicTemplatesProps {
-  onUseTemplate: (template: Template) => void;
-  onUsePrompt: (prompt: string) => void;
+    onUseTemplate: (template: Template) => void;
+    onUsePrompt: (prompt: string) => void;
 }
 
 const TEMPLATES: Template[] = [
-  {
-    id: 'ml-research',
-    name: 'Machine Learning Research Paper',
-    description: 'Complete structure for ML research with methodology, experiments, and results',
-    icon: '🤖',
-    category: 'Machine Learning',
-    structure: `# Title: [Your Research Title]
+    {
+        id: 'ml-research',
+        name: 'Machine Learning Research Paper',
+        description: 'Complete structure for ML research with methodology, experiments, and results',
+        icon: '🤖',
+        category: 'Machine Learning',
+        structure: `# Title: [Your Research Title]
 
 ## Abstract
 [Brief summary of your research, methodology, key findings, and contributions]
@@ -48,22 +48,22 @@ const TEMPLATES: Template[] = [
 
 ## References
 [Will be populated automatically based on citations]`,
-    prompts: [
-      'Generate an abstract for a machine learning paper about [your topic]',
-      'Write an introduction explaining the motivation for [your research problem]',
-      'Create a related work section comparing existing approaches to [your method]',
-      'Describe the methodology for [your algorithm/approach]',
-      'Design experiments to evaluate [your method] on [dataset/task]',
-      'Analyze the results and discuss the implications of [your findings]'
-    ]
-  },
-  {
-    id: 'cv-paper',
-    name: 'Computer Vision Paper',
-    description: 'Template for computer vision research with visual analysis',
-    icon: '👁️',
-    category: 'Computer Vision',
-    structure: `# Title: [Your CV Research Title]
+        prompts: [
+            'Generate an abstract for a machine learning paper about [your topic]',
+            'Write an introduction explaining the motivation for [your research problem]',
+            'Create a related work section comparing existing approaches to [your method]',
+            'Describe the methodology for [your algorithm/approach]',
+            'Design experiments to evaluate [your method] on [dataset/task]',
+            'Analyze the results and discuss the implications of [your findings]'
+        ]
+    },
+    {
+        id: 'cv-paper',
+        name: 'Computer Vision Paper',
+        description: 'Template for computer vision research with visual analysis',
+        icon: '👁️',
+        category: 'Computer Vision',
+        structure: `# Title: [Your CV Research Title]
 
 ## Abstract
 [Summary focusing on visual task, dataset, and performance improvements]
@@ -101,21 +101,21 @@ const TEMPLATES: Template[] = [
 [Summary and future directions]
 
 ## References`,
-    prompts: [
-      'Create an abstract for a computer vision paper on [visual task]',
-      'Write an introduction for [image/video processing problem]',
-      'Describe a neural network architecture for [CV task]',
-      'Design ablation studies for [your CV method]',
-      'Compare results with state-of-the-art methods on [dataset]'
-    ]
-  },
-  {
-    id: 'nlp-paper',
-    name: 'NLP Research Paper',
-    description: 'Natural Language Processing research template',
-    icon: '💬',
-    category: 'Natural Language Processing',
-    structure: `# Title: [Your NLP Research Title]
+        prompts: [
+            'Create an abstract for a computer vision paper on [visual task]',
+            'Write an introduction for [image/video processing problem]',
+            'Describe a neural network architecture for [CV task]',
+            'Design ablation studies for [your CV method]',
+            'Compare results with state-of-the-art methods on [dataset]'
+        ]
+    },
+    {
+        id: 'nlp-paper',
+        name: 'NLP Research Paper',
+        description: 'Natural Language Processing research template',
+        icon: '💬',
+        category: 'Natural Language Processing',
+        structure: `# Title: [Your NLP Research Title]
 
 ## Abstract
 [Overview of language task, approach, and linguistic contributions]
@@ -142,21 +142,21 @@ const TEMPLATES: Template[] = [
 [Contributions to NLP and linguistics]
 
 ## References`,
-    prompts: [
-      'Generate an abstract for an NLP paper on [language task]',
-      'Explain the linguistic motivation for [your NLP problem]',
-      'Describe a transformer-based model for [text processing task]',
-      'Design evaluation metrics for [NLP task]',
-      'Analyze the linguistic patterns learned by [your model]'
-    ]
-  },
-  {
-    id: 'theory-paper',
-    name: 'Theoretical Paper',
-    description: 'Mathematical and theoretical computer science template',
-    icon: '📐',
-    category: 'Theory',
-    structure: `# Title: [Your Theoretical Contribution]
+        prompts: [
+            'Generate an abstract for an NLP paper on [language task]',
+            'Explain the linguistic motivation for [your NLP problem]',
+            'Describe a transformer-based model for [text processing task]',
+            'Design evaluation metrics for [NLP task]',
+            'Analyze the linguistic patterns learned by [your model]'
+        ]
+    },
+    {
+        id: 'theory-paper',
+        name: 'Theoretical Paper',
+        description: 'Mathematical and theoretical computer science template',
+        icon: '📐',
+        category: 'Theory',
+        structure: `# Title: [Your Theoretical Contribution]
 
 ## Abstract
 [Mathematical problem, theoretical contributions, and significance]
@@ -183,21 +183,21 @@ const TEMPLATES: Template[] = [
 [Summary of theoretical contributions]
 
 ## References`,
-    prompts: [
-      'Formulate the theoretical problem for [mathematical concept]',
-      'Prove the complexity bounds for [your algorithm]',
-      'Provide theoretical justification for [your approach]',
-      'Analyze the convergence properties of [your method]',
-      'Discuss the theoretical implications of [your results]'
-    ]
-  },
-  {
-    id: 'survey-paper',
-    name: 'Survey Paper',
-    description: 'Comprehensive survey and review template',
-    icon: '📊',
-    category: 'Survey',
-    structure: `# Title: A Survey of [Research Area]
+        prompts: [
+            'Formulate the theoretical problem for [mathematical concept]',
+            'Prove the complexity bounds for [your algorithm]',
+            'Provide theoretical justification for [your approach]',
+            'Analyze the convergence properties of [your method]',
+            'Discuss the theoretical implications of [your results]'
+        ]
+    },
+    {
+        id: 'survey-paper',
+        name: 'Survey Paper',
+        description: 'Comprehensive survey and review template',
+        icon: '📊',
+        category: 'Survey',
+        structure: `# Title: A Survey of [Research Area]
 
 ## Abstract
 [Scope of survey, key areas covered, and main insights]
@@ -227,139 +227,139 @@ const TEMPLATES: Template[] = [
 [Summary of field state and recommendations]
 
 ## References`,
-    prompts: [
-      'Create a comprehensive taxonomy for [research field]',
-      'Survey the main approaches in [research area]',
-      'Compare and contrast methods for [specific problem]',
-      'Identify key challenges in [research domain]',
-      'Analyze trends and future directions in [field]'
-    ]
-  }
+        prompts: [
+            'Create a comprehensive taxonomy for [research field]',
+            'Survey the main approaches in [research area]',
+            'Compare and contrast methods for [specific problem]',
+            'Identify key challenges in [research domain]',
+            'Analyze trends and future directions in [field]'
+        ]
+    }
 ];
 
-export function AcademicTemplates({ onUseTemplate, onUsePrompt }: AcademicTemplatesProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [expandedTemplate, setExpandedTemplate] = useState<string | null>(null);
+export function AcademicTemplates({onUseTemplate, onUsePrompt}: AcademicTemplatesProps) {
+    const [selectedCategory, setSelectedCategory] = useState<string>('all');
+    const [expandedTemplate, setExpandedTemplate] = useState<string | null>(null);
 
-  const categories = ['all', ...Array.from(new Set(TEMPLATES.map(t => t.category)))];
-  
-  const filteredTemplates = selectedCategory === 'all' 
-    ? TEMPLATES 
-    : TEMPLATES.filter(t => t.category === selectedCategory);
+    const categories = ['all', ...Array.from(new Set(TEMPLATES.map(t => t.category)))];
 
-  return (
-    <div className="academic-templates">
-      <div className="templates-header">
-        <h3>📋 Academic Templates & Prompts</h3>
-        <p>Choose a paper structure or use AI prompts to get started</p>
-      </div>
+    const filteredTemplates = selectedCategory === 'all'
+        ? TEMPLATES
+        : TEMPLATES.filter(t => t.category === selectedCategory);
 
-      {/* Category Filter */}
-      <div className="category-selector">
-        {categories.map(category => (
-          <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
-          >
-            {category === 'all' ? 'All' : category}
-          </button>
-        ))}
-      </div>
-
-      {/* Templates List */}
-      <div className="templates-list">
-        {filteredTemplates.map(template => (
-          <div key={template.id} className="template-card">
-            <div className="template-header">
-              <div className="template-info">
-                <span className="template-icon">{template.icon}</span>
-                <div>
-                  <h4 className="template-name">{template.name}</h4>
-                  <p className="template-description">{template.description}</p>
-                  <span className="template-category">{template.category}</span>
-                </div>
-              </div>
-              <div className="template-actions">
-                <button 
-                  onClick={() => onUseTemplate(template)}
-                  className="action-btn primary"
-                  title="Use this template"
-                >
-                  📝 Use Template
-                </button>
-                <button
-                  onClick={() => setExpandedTemplate(
-                    expandedTemplate === template.id ? null : template.id
-                  )}
-                  className="action-btn secondary"
-                  title="View details"
-                >
-                  {expandedTemplate === template.id ? '👆 Collapse' : '👁️ Details'}
-                </button>
-              </div>
+    return (
+        <div className="academic-templates">
+            <div className="templates-header">
+                <h3>📋 Academic Templates & Prompts</h3>
+                <p>Choose a paper structure or use AI prompts to get started</p>
             </div>
 
-            {expandedTemplate === template.id && (
-              <div className="template-details">
-                <div className="template-structure">
-                  <h5>📄 Paper Structure:</h5>
-                  <pre className="structure-preview">{template.structure.substring(0, 300)}...</pre>
-                </div>
-                
-                <div className="template-prompts">
-                  <h5>🤖 AI Writing Prompts:</h5>
-                  <div className="prompts-list">
-                    {template.prompts.map((prompt, index) => (
-                      <div key={index} className="prompt-item">
-                        <span className="prompt-text">"{prompt}"</span>
-                        <button
-                          onClick={() => onUsePrompt(prompt)}
-                          className="prompt-use-btn"
-                          title="Use this prompt"
-                        >
-                          ✨ Use
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+            {/* Category Filter */}
+            <div className="category-selector">
+                {categories.map(category => (
+                    <button
+                        key={category}
+                        onClick={() => setSelectedCategory(category)}
+                        className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
+                    >
+                        {category === 'all' ? 'All' : category}
+                    </button>
+                ))}
+            </div>
 
-      {/* Quick Start Section */}
-      <div className="quick-start">
-        <h4>🚀 Quick Start Options</h4>
-        <div className="quick-actions">
-          <button 
-            onClick={() => onUsePrompt("Generate a complete arXiv paper outline for [your research topic], including all major sections, key points to cover, and suggested methodologies.")}
-            className="quick-action-btn"
-          >
-            📋 Generate Paper Outline
-          </button>
-          <button 
-            onClick={() => onUsePrompt("Create an abstract for an arXiv paper about [your topic], highlighting the problem, methodology, key contributions, and results.")}
-            className="quick-action-btn"
-          >
-            📄 Write Abstract
-          </button>
-          <button 
-            onClick={() => onUsePrompt("Review and improve the following academic text for clarity, coherence, and academic style: [paste your text]")}
-            className="quick-action-btn"
-          >
-            ✨ Improve Writing
-          </button>
-          <button 
-            onClick={() => onUsePrompt("Search for and summarize recent arXiv papers related to [your research area] and explain how they relate to [your work].")}
-            className="quick-action-btn"
-          >
-            🔍 Find Related Work
-          </button>
+            {/* Templates List */}
+            <div className="templates-list">
+                {filteredTemplates.map(template => (
+                    <div key={template.id} className="template-card">
+                        <div className="template-header">
+                            <div className="template-info">
+                                <span className="template-icon">{template.icon}</span>
+                                <div>
+                                    <h4 className="template-name">{template.name}</h4>
+                                    <p className="template-description">{template.description}</p>
+                                    <span className="template-category">{template.category}</span>
+                                </div>
+                            </div>
+                            <div className="template-actions">
+                                <button
+                                    onClick={() => onUseTemplate(template)}
+                                    className="action-btn primary"
+                                    title="Use this template"
+                                >
+                                    📝 Use Template
+                                </button>
+                                <button
+                                    onClick={() => setExpandedTemplate(
+                                        expandedTemplate === template.id ? null : template.id
+                                    )}
+                                    className="action-btn secondary"
+                                    title="View details"
+                                >
+                                    {expandedTemplate === template.id ? '👆 Collapse' : '👁️ Details'}
+                                </button>
+                            </div>
+                        </div>
+
+                        {expandedTemplate === template.id && (
+                            <div className="template-details">
+                                <div className="template-structure">
+                                    <h5>📄 Paper Structure:</h5>
+                                    <pre className="structure-preview">{template.structure.substring(0, 300)}...</pre>
+                                </div>
+
+                                <div className="template-prompts">
+                                    <h5>🤖 AI Writing Prompts:</h5>
+                                    <div className="prompts-list">
+                                        {template.prompts.map((prompt, index) => (
+                                            <div key={index} className="prompt-item">
+                                                <span className="prompt-text">"{prompt}"</span>
+                                                <button
+                                                    onClick={() => onUsePrompt(prompt)}
+                                                    className="prompt-use-btn"
+                                                    title="Use this prompt"
+                                                >
+                                                    ✨ Use
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+
+            {/* Quick Start Section */}
+            <div className="quick-start">
+                <h4>🚀 Quick Start Options</h4>
+                <div className="quick-actions">
+                    <button
+                        onClick={() => onUsePrompt("Generate a complete arXiv paper outline for [your research topic], including all major sections, key points to cover, and suggested methodologies.")}
+                        className="quick-action-btn"
+                    >
+                        📋 Generate Paper Outline
+                    </button>
+                    <button
+                        onClick={() => onUsePrompt("Create an abstract for an arXiv paper about [your topic], highlighting the problem, methodology, key contributions, and results.")}
+                        className="quick-action-btn"
+                    >
+                        📄 Write Abstract
+                    </button>
+                    <button
+                        onClick={() => onUsePrompt("Review and improve the following academic text for clarity, coherence, and academic style: [paste your text]")}
+                        className="quick-action-btn"
+                    >
+                        ✨ Improve Writing
+                    </button>
+                    <button
+                        onClick={() => onUsePrompt("Search for and summarize recent arXiv papers related to [your research area] and explain how they relate to [your work].")}
+                        className="quick-action-btn"
+                    >
+                        🔍 Find Related Work
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 } 

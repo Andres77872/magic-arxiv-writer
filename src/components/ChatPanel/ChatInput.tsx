@@ -1,6 +1,6 @@
 import type {ChangeEvent, FormEvent, KeyboardEvent} from 'react';
 import {forwardRef, useEffect, useImperativeHandle, useRef} from 'react';
-import { type ChatInputProps } from './types';
+import {type ChatInputProps} from './types';
 
 /**
  * ChatInput renders the message input form with auto-resizing textarea,
@@ -65,16 +65,16 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(
                             aria-describedby="input-hint"
                             maxLength={2000}
                         />
-                        <button 
-                            type="submit" 
-                            disabled={!canSend} 
+                        <button
+                            type="submit"
+                            disabled={!canSend}
                             aria-label={isLoading ? 'Generating response...' : 'Send message'}
                             className={`send-button ${isLoading ? 'loading' : ''}`}
                             title={isLoading ? 'Generating response...' : 'Send message (Enter)'}
                         >
                             {isLoading ? (
                                 <div className="loading-spinner" aria-hidden="true">
-                                    <div className="spinner" />
+                                    <div className="spinner"/>
                                 </div>
                             ) : (
                                 <>
@@ -89,7 +89,7 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(
                     <span>
                         💡 Press <kbd>Enter</kbd> to send, <kbd>Shift+Enter</kbd> for new line
                         {value.length > 1800 && (
-                            <span style={{ color: 'var(--color-messages-warning)', marginLeft: 'var(--space-sm)' }}>
+                            <span style={{color: 'var(--color-messages-warning)', marginLeft: 'var(--space-sm)'}}>
                                 • {2000 - value.length} characters remaining
                             </span>
                         )}

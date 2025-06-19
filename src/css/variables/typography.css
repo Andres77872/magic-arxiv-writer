@@ -7,19 +7,19 @@
 
     /* Font Sizes - Refined modular scale for better hierarchy */
     --font-size-base: 14px; /* Slightly smaller base for more content */
-    --font-size-xs: 0.75rem;    /* 12px */
-    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-xs: 0.75rem; /* 12px */
+    --font-size-sm: 0.875rem; /* 14px */
     --font-size-small: 0.875rem; /* 14px - for backward compatibility */
-    --font-size-md: 1rem;       /* 16px */
-    --font-size-normal: 1rem;   /* 16px - for backward compatibility */
-    --font-size-lg: 1.125rem;   /* 18px */
-    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-md: 1rem; /* 16px */
+    --font-size-normal: 1rem; /* 16px - for backward compatibility */
+    --font-size-lg: 1.125rem; /* 18px */
+    --font-size-xl: 1.25rem; /* 20px */
     --font-size-large: 1.25rem; /* 20px - for backward compatibility */
-    --font-size-2xl: 1.5rem;    /* 24px */
-    --font-size-3xl: 1.875rem;  /* 30px */
-    --font-size-4xl: 2.25rem;   /* 36px */
-    --font-size-5xl: 3rem;      /* 48px */
-    --font-size-6xl: 3.75rem;   /* 60px */
+    --font-size-2xl: 1.5rem; /* 24px */
+    --font-size-3xl: 1.875rem; /* 30px */
+    --font-size-4xl: 2.25rem; /* 36px */
+    --font-size-5xl: 3rem; /* 48px */
+    --font-size-6xl: 3.75rem; /* 60px */
 
     /* Font Weights - More nuanced weight system */
     --font-weight-light: 300;

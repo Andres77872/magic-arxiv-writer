@@ -1,48 +1,48 @@
 export interface RichTextEditorProps {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  height?: string;
+    value: string;
+    onChange: (value: string) => void;
+    placeholder?: string;
+    height?: string;
 }
 
 export interface EditorToolbarProps {
-  editor: any;
-  isFullscreen: boolean;
-  onToggleFullscreen: () => void;
-  wordCount: number;
-  characterCount: number;
+    editor: any;
+    isFullscreen: boolean;
+    onToggleFullscreen: () => void;
+    wordCount: number;
+    characterCount: number;
 }
 
 export interface ToolbarButtonProps {
-  onClick: () => void;
-  isActive?: boolean;
-  disabled?: boolean;
-  title?: string;
-  children: React.ReactNode;
+    onClick: () => void;
+    isActive?: boolean;
+    disabled?: boolean;
+    title?: string;
+    children: React.ReactNode;
 }
 
 export interface ToolbarGroupProps {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }
 
 export interface EditorStatsProps {
-  wordCount: number;
-  characterCount: number;
+    wordCount: number;
+    characterCount: number;
 }
 
 export interface EditorStatusBarProps {
-  editor: any;
+    editor: any;
 }
 
 export interface LoadingStateProps {
-  message?: string;
+    message?: string;
 }
 
 export interface EditorContentProps {
-  editor: any;
+    editor: any;
 }
 
 export type MarkdownConversionService = {
-  markdownToHtml: (markdown: string) => string;
-  htmlToMarkdown: (html: string) => string;
+    markdownToHtml: (markdown: string) => string;
+    htmlToMarkdown: (html: string) => string;
 }; 

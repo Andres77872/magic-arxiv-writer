@@ -7,19 +7,19 @@
     --border-radius-large: 16px;
     --border-radius-xl: 24px;
     --border-radius-full: 9999px;
-    
+
     /* Border Width */
     --border-width-thin: 1px;
     --border-width-medium: 2px;
     --border-width-thick: 3px;
-    
+
     /* Border Styles - Consistent and clean */
     --border-standard: var(--border-width-thin) solid var(--border-color);
     --border-hover: var(--border-width-thin) solid var(--border-color-lighter);
     --border-focus: var(--border-width-thin) solid var(--accent-color);
     --border-dashed: var(--border-width-medium) dashed var(--border-color-lighter);
     --border-accent: var(--border-width-medium) solid var(--accent-color);
-    
+
     /* Backward compatibility */
     --border-radius: var(--border-radius-small);
 }

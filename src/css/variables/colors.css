@@ -59,7 +59,7 @@
     /* Component-specific Colors */
     --header-transparency: rgba(22, 27, 34, 0.95);
     --glass-backdrop: rgba(22, 27, 34, 0.7);
-    
+
     /* Input Colors - Clean and modern */
     --input-background-color: var(--background-color-primary);
     --input-background-color-hover: var(--background-color-secondary);
@@ -70,7 +70,7 @@
     --input-border-focus: 1px solid var(--accent-color);
     --input-box-shadow-hover: 0 1px 3px rgba(46, 160, 67, 0.1);
     --input-box-shadow-focus: 0 0 0 3px rgba(46, 160, 67, 0.2);
-    
+
     /* Button Colors - Consistent with new accent */
     --button-background-color: var(--background-color-tertiary);
     --button-background-color-hover: var(--background-color-hover);
@@ -79,7 +79,7 @@
     --button-border: 1px solid var(--border-color);
     --button-border-top-color: var(--border-color-lighter);
     --button-box-shadow-hover: 0 3px 12px rgba(0, 0, 0, 0.2);
-    
+
     /* Focus Colors */
     --focus-outline: 2px solid var(--accent-color);
     --focus-outline-offset: 2px;

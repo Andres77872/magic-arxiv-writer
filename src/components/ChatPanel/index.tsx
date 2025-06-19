@@ -1,10 +1,16 @@
 import type {FormEvent} from 'react';
-import {useEffect, useRef, useState, useCallback} from 'react';
-import { PanelHeader } from './PanelHeader';
-import { ChatInput } from './ChatInput';
-import { ChatMessage } from './ChatMessage';
-import { EmptyState } from './EmptyState';
-import { type ChatPanelProps, type ChatMessage as ChatMessageType, type ChatMetrics, type NodeExecution, type ConnectionStatus } from './types';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {PanelHeader} from './PanelHeader';
+import {ChatInput} from './ChatInput';
+import {ChatMessage} from './ChatMessage';
+import {EmptyState} from './EmptyState';
+import {
+    type ChatMessage as ChatMessageType,
+    type ChatMetrics,
+    type ChatPanelProps,
+    type ConnectionStatus,
+    type NodeExecution
+} from './types';
 import './index.css';
 
 interface ChatTurn {
@@ -18,17 +24,15 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
     const [isGenerating, setIsGenerating] = useState(false);
     const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('connected');
     const [metricsHistory, setMetricsHistory] = useState<ChatMetrics[]>([]);
-    const [currentGenerationSummary, setCurrentGenerationSummary] = useState('');
     const chatHistoryRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
-
 
 
     useEffect(() => {
         if (chatHistoryRef.current) {
             const {scrollTop, scrollHeight, clientHeight} = chatHistoryRef.current;
             const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
-            
+
             if (isNearBottom) {
                 chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
             }
@@ -50,9 +54,8 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
         setChatHistory(newHistory);
         setInput('');
         setIsGenerating(true);
-        setCurrentGenerationSummary('Starting generation...');
         setConnectionStatus('connecting');
-        
+
         const metricsIndex = metricsHistory.length;
         const tFetchStart = performance.now();
         setMetricsHistory((m) => [
@@ -89,7 +92,7 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
             let processTime: number | null = null;
             let updatedContent = '';
             let wordCount = 0;
-            
+
             const response = await fetch('https://magic.arz.ai/chat/openai/v1/completion', {
                 method: 'POST',
                 headers: {
@@ -179,15 +182,14 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
                             }
                             updatedContent += content;
                             wordCount = updatedContent.split(/\s+/).filter(word => word.length > 0).length;
-                            
+
                             // Update editor with full content for smooth animation
                             onUpdateMarkdown(updatedContent);
-                            
+
                             // Update chat with only generation summary (last ~50 characters + word count)
                             const contentTail = updatedContent.slice(-50).trim();
                             const summary = `<div class="generation-status">Generating content... <span class="word-count-badge">${wordCount} words</span></div><div class="content-preview">"...${contentTail}"</div>`;
-                            setCurrentGenerationSummary(summary);
-                            
+
                             setChatHistory((h) =>
                                 h.map((msg, idx) =>
                                     idx === assistantMessageIndex ? {...msg, content: summary} : msg
@@ -199,16 +201,15 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
                     }
                 }
             }
-            
+
             // Final summary when done
             const finalSummary = `<div class="generation-complete">Generated ${wordCount} words of content for your document.</div>`;
-            setCurrentGenerationSummary(finalSummary);
             setChatHistory((h) =>
                 h.map((msg, idx) =>
                     idx === assistantMessageIndex ? {...msg, content: finalSummary} : msg
                 )
             );
-            
+
             const tEnd = performance.now();
             const finalTotalTime = tEnd - tFetchStart;
             setMetricsHistory((m) => {
@@ -228,7 +229,6 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
             setChatHistory((h) => h.slice(0, -1)); // Remove the empty assistant message
         } finally {
             setIsGenerating(false);
-            setCurrentGenerationSummary('');
             inputRef.current?.focus();
         }
     }, [input, isGenerating, chatHistory, markdown, metricsHistory, onUpdateMarkdown]);
@@ -249,20 +249,20 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
 
     return (
         <div className="chat-panel">
-            <PanelHeader connectionStatus={connectionStatus} />
-            
+            <PanelHeader connectionStatus={connectionStatus}/>
+
             <div className="chat-history" ref={chatHistoryRef}>
                 {turns.length === 0 ? (
-                    <EmptyState onPromptSelect={handlePromptSelect} />
+                    <EmptyState onPromptSelect={handlePromptSelect}/>
                 ) : (
                     turns.map((turn, idx) => (
                         <div key={idx} className="chat-turn">
-                            <ChatMessage 
+                            <ChatMessage
                                 message={turn.user}
                                 metrics={metricsHistory[idx]}
                             />
                             {turn.assistant && (
-                                <ChatMessage 
+                                <ChatMessage
                                     message={turn.assistant}
                                     isGenerating={isGenerating && idx === turns.length - 1 && !turn.assistant.content}
                                     nodeExecutions={metricsHistory[idx]?.nodeExecutions}
@@ -272,7 +272,7 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
                     ))
                 )}
             </div>
-            
+
             <ChatInput
                 ref={inputRef}
                 value={input}

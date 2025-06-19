@@ -1,10 +1,10 @@
-import { type ConnectionStatus } from './types';
+import {type ConnectionStatus} from './types';
 
 interface PanelHeaderProps {
     connectionStatus: ConnectionStatus;
 }
 
-export function PanelHeader({ connectionStatus }: PanelHeaderProps) {
+export function PanelHeader({connectionStatus}: PanelHeaderProps) {
     const getStatusConfig = () => {
         switch (connectionStatus) {
             case 'connected':
@@ -47,13 +47,13 @@ export function PanelHeader({ connectionStatus }: PanelHeaderProps) {
     return (
         <header className="chat-panel-header" role="banner">
             <h2>💬 AI Assistant</h2>
-            <div 
+            <div
                 className={`connection-status ${statusConfig.className}`}
-                role="status" 
+                role="status"
                 aria-label={`Connection status: ${statusConfig.text} - ${statusConfig.subtext}`}
                 title={statusConfig.tooltip}
             >
-                <div 
+                <div
                     className={`status-indicator ${connectionStatus}`}
                     aria-hidden="true"
                 />

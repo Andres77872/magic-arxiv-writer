@@ -1,6 +1,7 @@
 # ChatPanel Component
 
-A modular chat interface component for interacting with an AI assistant. This component follows the same architectural pattern as the ReferencesPanel.
+A modular chat interface component for interacting with an AI assistant. This component follows the same architectural
+pattern as the ReferencesPanel.
 
 ## Structure
 
@@ -25,35 +26,41 @@ ChatPanel/
 ## Components
 
 ### ChatPanel (Main Component)
+
 - Manages chat state and message history
 - Handles API communication for streaming responses
 - Orchestrates all sub-components
 - Tracks performance metrics and node executions
 
 ### ChatInput
+
 - Auto-resizing textarea for message input
 - Enter to send, Shift+Enter for newline
 - Loading states and disabled states
 - Focus management
 
 ### ChatTimer
+
 - Real-time performance metrics display
 - Shows send, process, generation, and total times
 - Updates during streaming responses
 - Formatted timing displays
 
 ### ChatMessage
+
 - Renders individual user/assistant messages
 - Handles typing indicators
 - Shows performance metrics for user messages
 - Displays node execution details for assistant responses
 
 ### EmptyState
+
 - Shows welcome message and suggested prompts
 - Interactive prompt buttons
 - Guides new users
 
 ### PanelHeader
+
 - Displays connection status with visual indicators
 - Panel title and branding
 - Responsive design
@@ -78,6 +85,7 @@ function App() {
 ## Props
 
 ### ChatPanelProps
+
 - `markdown: string` - Current document content
 - `onUpdateMarkdown: (content: string) => void` - Callback for content updates
 
@@ -95,6 +103,7 @@ function App() {
 ## API Integration
 
 The component integrates with the Magic ArXiv Writer API:
+
 - Endpoint: `https://magic.arz.ai/chat/openai/v1/completion`
 - Supports streaming responses
 - Includes conversation memory
@@ -103,6 +112,7 @@ The component integrates with the Magic ArXiv Writer API:
 ## Styling
 
 All components use CSS custom properties (CSS variables) for theming:
+
 - Consistent with the overall application design
 - Responsive breakpoints for mobile/tablet
 - Dark/light theme support through CSS variables

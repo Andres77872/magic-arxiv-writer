@@ -28,12 +28,12 @@ export function ChatMessage({message, isGenerating = false, metrics, nodeExecuti
 
     const formatContent = (content: string) => {
         if (!content) return '';
-        
+
         // Check if it's a generation summary (contains HTML)
         if (content.includes('generation-status') || content.includes('generation-complete')) {
             return content; // Return HTML as-is for generation summaries
         }
-        
+
         // Simple markdown-like formatting for regular chat
         return content
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -45,9 +45,9 @@ export function ChatMessage({message, isGenerating = false, metrics, nodeExecuti
     };
 
     // Determine if this is a generation summary message
-    const isGenerationSummary = message.content.includes('generation-status') || 
-                               message.content.includes('generation-complete') ||
-                               (isGenerating && message.role === 'assistant');
+    const isGenerationSummary = message.content.includes('generation-status') ||
+        message.content.includes('generation-complete') ||
+        (isGenerating && message.role === 'assistant');
 
     return (
         <div className={`chat-message ${message.role} ${isGenerating ? 'generating' : ''}`}>
@@ -55,10 +55,10 @@ export function ChatMessage({message, isGenerating = false, metrics, nodeExecuti
                 {message.role === 'user' ? '👤' : '🤖'}
             </div>
             <div className="message-content">
-                <div 
+                <div
                     className={`message-text ${isGenerating ? 'streaming' : ''} ${isGenerationSummary ? 'generation-summary' : ''}`}
-                    dangerouslySetInnerHTML={{ 
-                        __html: formatContent(displayedContent) + (showCursor ? '<span class="stream-cursor">|</span>' : '') 
+                    dangerouslySetInnerHTML={{
+                        __html: formatContent(displayedContent) + (showCursor ? '<span class="stream-cursor">|</span>' : '')
                     }}
                 />
                 {showCursor && (
@@ -70,7 +70,7 @@ export function ChatMessage({message, isGenerating = false, metrics, nodeExecuti
                     </div>
                 )}
                 {metrics && (
-                    <ChatTimer 
+                    <ChatTimer
                         sendTime={metrics.sendTime}
                         processTime={metrics.processTime}
                         generatingTime={metrics.generatingTime}
