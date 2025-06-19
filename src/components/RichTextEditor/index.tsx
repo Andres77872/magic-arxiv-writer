@@ -2,7 +2,7 @@ import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Typography from '@tiptap/extension-typography';
 import Placeholder from '@tiptap/extension-placeholder';
-import { useEffect, useMemo, useState, useRef } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { type RichTextEditorProps } from './types';
 import { LoadingState } from './LoadingState';
 import { EditorToolbar } from './EditorToolbar';
@@ -16,7 +16,7 @@ export function RichTextEditor({
   value, 
   onChange, 
   placeholder, 
-  height = '100%' 
+  height = '100%'
 }: RichTextEditorProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [wordCount, setWordCount] = useState(0);

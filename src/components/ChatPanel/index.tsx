@@ -18,8 +18,11 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
     const [isGenerating, setIsGenerating] = useState(false);
     const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('connected');
     const [metricsHistory, setMetricsHistory] = useState<ChatMetrics[]>([]);
+    const [currentGenerationSummary, setCurrentGenerationSummary] = useState('');
     const chatHistoryRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
+
+
 
     useEffect(() => {
         if (chatHistoryRef.current) {
@@ -47,6 +50,7 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
         setChatHistory(newHistory);
         setInput('');
         setIsGenerating(true);
+        setCurrentGenerationSummary('Starting generation...');
         setConnectionStatus('connecting');
         
         const metricsIndex = metricsHistory.length;
@@ -75,14 +79,17 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
             userMessage,
         ];
 
-        // Prepare placeholder for assistant response
-        setChatHistory((h) => [...h, {role: 'assistant', content: ''}]);
+        // Prepare placeholder for assistant response - only showing generation summary
+        setChatHistory((h) => [...h, {role: 'assistant', content: 'Generating content for your document...'}]);
         const assistantMessageIndex = newHistory.length;
 
         try {
             setConnectionStatus('connected');
             let firstByteTime: number | null = null;
             let processTime: number | null = null;
+            let updatedContent = '';
+            let wordCount = 0;
+            
             const response = await fetch('https://magic.arz.ai/chat/openai/v1/completion', {
                 method: 'POST',
                 headers: {
@@ -105,7 +112,6 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let done = false;
-            let updatedContent = '';
 
             while (!done) {
                 const {value, done: doneReading} = await reader.read();
@@ -172,18 +178,37 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
                                 });
                             }
                             updatedContent += content;
+                            wordCount = updatedContent.split(/\s+/).filter(word => word.length > 0).length;
+                            
+                            // Update editor with full content for smooth animation
+                            onUpdateMarkdown(updatedContent);
+                            
+                            // Update chat with only generation summary (last ~50 characters + word count)
+                            const contentTail = updatedContent.slice(-50).trim();
+                            const summary = `<div class="generation-status">Generating content... <span class="word-count-badge">${wordCount} words</span></div><div class="content-preview">"...${contentTail}"</div>`;
+                            setCurrentGenerationSummary(summary);
+                            
                             setChatHistory((h) =>
                                 h.map((msg, idx) =>
-                                    idx === assistantMessageIndex ? {...msg, content: updatedContent} : msg
+                                    idx === assistantMessageIndex ? {...msg, content: summary} : msg
                                 )
                             );
-                            onUpdateMarkdown(updatedContent);
                         }
                     } catch (err) {
                         console.error('Could not parse stream message', err);
                     }
                 }
             }
+            
+            // Final summary when done
+            const finalSummary = `<div class="generation-complete">Generated ${wordCount} words of content for your document.</div>`;
+            setCurrentGenerationSummary(finalSummary);
+            setChatHistory((h) =>
+                h.map((msg, idx) =>
+                    idx === assistantMessageIndex ? {...msg, content: finalSummary} : msg
+                )
+            );
+            
             const tEnd = performance.now();
             const finalTotalTime = tEnd - tFetchStart;
             setMetricsHistory((m) => {
@@ -203,6 +228,7 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
             setChatHistory((h) => h.slice(0, -1)); // Remove the empty assistant message
         } finally {
             setIsGenerating(false);
+            setCurrentGenerationSummary('');
             inputRef.current?.focus();
         }
     }, [input, isGenerating, chatHistory, markdown, metricsHistory, onUpdateMarkdown]);

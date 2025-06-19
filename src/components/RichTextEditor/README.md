@@ -11,6 +11,14 @@ A feature-rich, academic-focused rich text editor built with TipTap and React. T
 - **Real-time Stats**: Live word and character counting
 - **Keyboard Shortcuts**: Comprehensive keyboard support for power users
 
+### **NEW: Smooth Generation Animations** 🎭
+- **Typewriter effect** during AI content generation
+- **Blinking cursor** at the end of generated text
+- **Visual feedback** indicators when content is being streamed
+- **Smooth text appearance** animations for new content
+- **Toolbar progress indicator** during generation
+- **Enhanced chat streaming** with improved visual effects
+
 ### Formatting Options
 - **Text Formatting**: Bold, italic, strikethrough, inline code
 - **Headings**: H1-H6 with academic styling
@@ -82,6 +90,7 @@ function MyComponent() {
 | `onChange` | `(value: string) => void` | - | Content change handler |
 | `placeholder` | `string` | "Start writing your academic paper..." | Placeholder text |
 | `height` | `string` | "100%" | Editor height |
+| `isGenerating` | `boolean` | `false` | Enables smooth generation animations |
 
 ## Keyboard Shortcuts
 
@@ -242,4 +251,38 @@ function PaperForm() {
     </form>
   );
 }
-``` 
+```
+
+## CSS Classes for Styling
+
+### Generation States
+- `.rich-text-editor.generating` - Applied when content is being generated
+- `.editor-content-wrapper.generating` - Applied to content wrapper during generation
+- `.editor-toolbar.generating` - Applied to toolbar during generation
+- `.message-text.streaming` - Applied to chat messages being streamed
+
+### Animation Classes
+- `.generation-cursor` - The blinking cursor indicator
+- `.cursor-blink` - The actual cursor character with blink animation
+- `.stream-cursor` - Inline streaming cursor in chat messages
+
+## Accessibility
+
+- All animations respect `prefers-reduced-motion`
+- ARIA labels and semantic HTML structure
+- Keyboard navigation support
+- Focus management and visual indicators
+
+## Dependencies
+
+- `@tiptap/react` - Core editor
+- `@tiptap/starter-kit` - Basic extensions
+- `@tiptap/extension-typography` - Smart typography
+- `@tiptap/extension-placeholder` - Placeholder support
+
+## Performance
+
+- Efficient re-rendering with React.memo on child components
+- Debounced content updates
+- Optimized animation performance with CSS transforms
+- Minimal DOM manipulation during streaming 

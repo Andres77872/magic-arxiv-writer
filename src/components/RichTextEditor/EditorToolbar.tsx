@@ -3,12 +3,12 @@ import { ToolbarButton } from './ToolbarButton';
 import { ToolbarGroup } from './ToolbarGroup';
 import { EditorStats } from './EditorStats';
 
-export function EditorToolbar({ 
-  editor, 
-  isFullscreen, 
-  onToggleFullscreen, 
-  wordCount, 
-  characterCount 
+export function EditorToolbar({
+  editor,
+  isFullscreen,
+  onToggleFullscreen,
+  wordCount,
+  characterCount
 }: EditorToolbarProps) {
   if (!editor) return null;
 
@@ -64,18 +64,18 @@ export function EditorToolbar({
             <em>I</em>
           </ToolbarButton>
           <ToolbarButton
-            onClick={() => editor.chain().focus().toggleCode().run()}
-            isActive={editor.isActive('code')}
-            title="Inline Code (Ctrl+K)"
-          >
-            {'</>'}
-          </ToolbarButton>
-          <ToolbarButton
             onClick={() => editor.chain().focus().toggleStrike().run()}
             isActive={editor.isActive('strike')}
             title="Strikethrough"
           >
             <s>S</s>
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleCode().run()}
+            isActive={editor.isActive('code')}
+            title="Inline Code (Ctrl+K)"
+          >
+            {'</>'}
           </ToolbarButton>
         </ToolbarGroup>
 
@@ -97,18 +97,18 @@ export function EditorToolbar({
             <span className="list-icon">1.</span>
           </ToolbarButton>
           <ToolbarButton
-            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            isActive={editor.isActive('codeBlock')}
-            title="Code Block"
-          >
-            {'{ }'}
-          </ToolbarButton>
-          <ToolbarButton
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
             isActive={editor.isActive('blockquote')}
             title="Quote"
           >
             <span className="quote-icon">"</span>
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            isActive={editor.isActive('codeBlock')}
+            title="Code Block"
+          >
+            {'{ }'}
           </ToolbarButton>
         </ToolbarGroup>
 

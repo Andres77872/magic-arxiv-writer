@@ -24,7 +24,7 @@ export interface ChatMetrics {
 
 export interface ChatPanelProps {
   markdown: string;
-  onUpdateMarkdown: (content: string) => void;
+  onUpdateMarkdown: (markdown: string) => void;
 }
 
 export interface ChatInputProps {
