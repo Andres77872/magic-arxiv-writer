@@ -284,22 +284,3 @@
     /* Text Viewer Variables */
     --text-area-min-height: 9.375rem; /* 150px */
 }
-
-/* Chat timer metrics under user message */
-.chat-timer {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    gap: var(--gap-xs) var(--gap-sm);
-    font-size: var(--font-size-xs);
-    color: var(--text-color-secondary);
-    margin-top: var(--margin-xs);
-    border-top: var(--border-standard);
-    padding-top: var(--padding-xs);
-}
-.chat-timer-item {
-    margin: 0;
-}
-.chat-timer-item strong {
-    margin-right: var(--gap-xxs);
-    font-weight: var(--font-weight-medium);
-}

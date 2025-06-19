@@ -1,62 +1,58 @@
 import type {FormEvent} from 'react';
-import {useEffect, useRef, useState} from 'react';
-import {ChatTimer} from './ChatTimer';
-import {ChatInput} from './ChatInput';
+import {useEffect, useRef, useState, useCallback} from 'react';
+import { PanelHeader } from './PanelHeader';
+import { ChatInput } from './ChatInput';
+import { ChatMessage } from './ChatMessage';
+import { EmptyState } from './EmptyState';
+import { type ChatPanelProps, type ChatMessage as ChatMessageType, type ChatMetrics, type NodeExecution, type ConnectionStatus } from './types';
+import './index.css';
 
-interface ChatMessage {
-    role: 'user' | 'assistant';
-    content: string;
+interface ChatTurn {
+    user: ChatMessageType;
+    assistant?: ChatMessageType;
 }
 
-interface ChatSectionProps {
-    markdown: string;
-    onUpdateMarkdown: (content: string) => void;
-}
-
-interface NodeExecution {
-    node_id: string;
-    node_class: string;
-    start_time: number;
-    end_time: number;
-    execution_time: number;
-    status: 'running' | 'completed';
-}
-
-export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
-    const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
+    const [chatHistory, setChatHistory] = useState<ChatMessageType[]>([]);
     const [input, setInput] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
-    const [metricsHistory, setMetricsHistory] = useState<
-        {
-            sendTime: number;
-            processTime: number;
-            generatingTime: number;
-            totalTime: number;
-            startTime: number;
-            isStreaming: boolean;
-            nodeExecutions: NodeExecution[];
-        }[]
-    >([]);
+    const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('connected');
+    const [metricsHistory, setMetricsHistory] = useState<ChatMetrics[]>([]);
+    const [currentGenerationSummary, setCurrentGenerationSummary] = useState('');
     const chatHistoryRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
+
+
     useEffect(() => {
         if (chatHistoryRef.current) {
-            chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+            const {scrollTop, scrollHeight, clientHeight} = chatHistoryRef.current;
+            const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+            
+            if (isNearBottom) {
+                chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+            }
         }
     }, [chatHistory]);
 
+    const handlePromptSelect = useCallback((prompt: string) => {
+        setInput(prompt);
+        inputRef.current?.focus();
+    }, []);
 
-    const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback(async (e?: FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
         const instruction = input.trim();
-        if (!instruction) return;
+        if (!instruction || isGenerating) return;
 
-        const userMessage: ChatMessage = {role: 'user', content: instruction};
+        const userMessage: ChatMessageType = {role: 'user', content: instruction};
         const newHistory = [...chatHistory, userMessage];
         setChatHistory(newHistory);
         setInput('');
         setIsGenerating(true);
+        setCurrentGenerationSummary('Starting generation...');
+        setConnectionStatus('connecting');
+        
         const metricsIndex = metricsHistory.length;
         const tFetchStart = performance.now();
         setMetricsHistory((m) => [
@@ -83,13 +79,17 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
             userMessage,
         ];
 
-        // Prepare placeholder for assistant response
-        setChatHistory((h) => [...h, {role: 'assistant', content: ''}]);
+        // Prepare placeholder for assistant response - only showing generation summary
+        setChatHistory((h) => [...h, {role: 'assistant', content: 'Generating content for your document...'}]);
         const assistantMessageIndex = newHistory.length;
 
         try {
+            setConnectionStatus('connected');
             let firstByteTime: number | null = null;
             let processTime: number | null = null;
+            let updatedContent = '';
+            let wordCount = 0;
+            
             const response = await fetch('https://magic.arz.ai/chat/openai/v1/completion', {
                 method: 'POST',
                 headers: {
@@ -105,13 +105,13 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
 
             if (!response.ok || !response.body) {
                 console.error('Error from API', await response.text());
+                setConnectionStatus('disconnected');
                 return;
             }
 
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let done = false;
-            let updatedContent = '';
 
             while (!done) {
                 const {value, done: doneReading} = await reader.read();
@@ -178,18 +178,37 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
                                 });
                             }
                             updatedContent += content;
+                            wordCount = updatedContent.split(/\s+/).filter(word => word.length > 0).length;
+                            
+                            // Update editor with full content for smooth animation
+                            onUpdateMarkdown(updatedContent);
+                            
+                            // Update chat with only generation summary (last ~50 characters + word count)
+                            const contentTail = updatedContent.slice(-50).trim();
+                            const summary = `<div class="generation-status">Generating content... <span class="word-count-badge">${wordCount} words</span></div><div class="content-preview">"...${contentTail}"</div>`;
+                            setCurrentGenerationSummary(summary);
+                            
                             setChatHistory((h) =>
                                 h.map((msg, idx) =>
-                                    idx === assistantMessageIndex ? {...msg, content: updatedContent} : msg
+                                    idx === assistantMessageIndex ? {...msg, content: summary} : msg
                                 )
                             );
-                            onUpdateMarkdown(updatedContent);
                         }
                     } catch (err) {
                         console.error('Could not parse stream message', err);
                     }
                 }
             }
+            
+            // Final summary when done
+            const finalSummary = `<div class="generation-complete">Generated ${wordCount} words of content for your document.</div>`;
+            setCurrentGenerationSummary(finalSummary);
+            setChatHistory((h) =>
+                h.map((msg, idx) =>
+                    idx === assistantMessageIndex ? {...msg, content: finalSummary} : msg
+                )
+            );
+            
             const tEnd = performance.now();
             const finalTotalTime = tEnd - tFetchStart;
             setMetricsHistory((m) => {
@@ -203,19 +222,23 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
                 };
                 return newMetrics;
             });
+        } catch (error) {
+            console.error('Request failed:', error);
+            setConnectionStatus('disconnected');
+            setChatHistory((h) => h.slice(0, -1)); // Remove the empty assistant message
         } finally {
             setIsGenerating(false);
+            setCurrentGenerationSummary('');
             inputRef.current?.focus();
         }
-    };
+    }, [input, isGenerating, chatHistory, markdown, metricsHistory, onUpdateMarkdown]);
 
     // Group messages into user/assistant turns
-    type ChatTurn = { user: ChatMessage; assistant?: ChatMessage };
     const turns: ChatTurn[] = [];
     for (let i = 0; i < chatHistory.length; i++) {
         if (chatHistory[i].role === 'user') {
             const userMsg = chatHistory[i];
-            let assistantMsg: ChatMessage | undefined;
+            let assistantMsg: ChatMessageType | undefined;
             if (i + 1 < chatHistory.length && chatHistory[i + 1].role === 'assistant') {
                 assistantMsg = chatHistory[i + 1];
                 i++;
@@ -225,53 +248,31 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
     }
 
     return (
-        <div className="chat-section">
-            <div className="panel-header">Chat</div>
+        <div className="chat-panel">
+            <PanelHeader connectionStatus={connectionStatus} />
+            
             <div className="chat-history" ref={chatHistoryRef}>
                 {turns.length === 0 ? (
-                    <div className="empty-placeholder">Type a message to begin...</div>
+                    <EmptyState onPromptSelect={handlePromptSelect} />
                 ) : (
                     turns.map((turn, idx) => (
                         <div key={idx} className="chat-turn">
-                            <div className="chat-message user">
-                                {turn.user.content}
-                                {metricsHistory[idx] && (
-                                    <ChatTimer
-                                        sendTime={metricsHistory[idx].sendTime}
-                                        processTime={metricsHistory[idx].processTime}
-                                        generatingTime={metricsHistory[idx].generatingTime}
-                                        totalTime={metricsHistory[idx].totalTime}
-                                        startTime={metricsHistory[idx].startTime}
-                                        isStreaming={metricsHistory[idx].isStreaming}
-                                    />
-                                )}
-                            </div>
+                            <ChatMessage 
+                                message={turn.user}
+                                metrics={metricsHistory[idx]}
+                            />
                             {turn.assistant && (
-                                <div className="chat-message assistant">
-                                    {turn.assistant.content.slice(-360)}
-                                    {metricsHistory[idx]?.nodeExecutions.length > 0 && (
-                                        <div className="node-feedback">
-                                            <details>
-                                                <summary>Node execution details</summary>
-                                                <ul>
-                                                    {metricsHistory[idx].nodeExecutions.map((node) => (
-                                                        <li key={node.node_id}>
-                                                            <strong>{node.node_class}</strong> ({node.node_id.slice(-4)}):{' '}
-                                                            {node.status === 'running'
-                                                                ? 'Running...'
-                                                                : `${node.execution_time.toFixed(2)}s`}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </details>
-                                        </div>
-                                    )}
-                                </div>
+                                <ChatMessage 
+                                    message={turn.assistant}
+                                    isGenerating={isGenerating && idx === turns.length - 1 && !turn.assistant.content}
+                                    nodeExecutions={metricsHistory[idx]?.nodeExecutions}
+                                />
                             )}
                         </div>
                     ))
                 )}
             </div>
+            
             <ChatInput
                 ref={inputRef}
                 value={input}
@@ -282,4 +283,4 @@ export function ChatSection({markdown, onUpdateMarkdown}: ChatSectionProps) {
             />
         </div>
     );
-}
+} 

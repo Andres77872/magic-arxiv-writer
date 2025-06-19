@@ -15,6 +15,7 @@
     --padding-xs: var(--space-xs);
     --padding-small: var(--space-xs);
     --padding-sm: var(--space-sm);
+    --padding-md: var(--space-md);
     --padding-medium: var(--space-md);
     --padding-lg: var(--space-lg);
     --padding-large: var(--space-lg);
@@ -26,6 +27,7 @@
     --margin-xs: var(--space-xs);
     --margin-small: var(--space-xs);
     --margin-sm: var(--space-sm);
+    --margin-md: var(--space-md);
     --margin-medium: var(--space-md);
     --margin-lg: var(--space-lg);
     --margin-large: var(--space-lg);
@@ -37,6 +39,7 @@
     --gap-xs: var(--space-xs);
     --gap-small: var(--space-xs);
     --gap-sm: var(--space-sm);
+    --gap-md: var(--space-md);
     --gap-medium: var(--space-md);
     --gap-lg: var(--space-lg);
     --gap-large: var(--space-lg);

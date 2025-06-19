@@ -1,13 +1,5 @@
 import { useState, useEffect } from 'react';
-
-interface ChatTimerProps {
-  sendTime: number;
-  processTime: number;
-  generatingTime: number;
-  totalTime: number;
-  startTime: number;
-  isStreaming: boolean;
-}
+import { type ChatTimerProps } from './types';
 
 export function ChatTimer({
   sendTime,
@@ -31,8 +23,7 @@ export function ChatTimer({
   }, [isStreaming]);
 
   const elapsed = now - startTime;
-  const displayedSendTime =
-    sendTime > 0 ? sendTime : Math.max(elapsed, 0);
+  const displayedSendTime = sendTime > 0 ? sendTime : Math.max(elapsed, 0);
 
   let displayedProcessTime = 0;
   if (processTime > 0) {
@@ -49,23 +40,28 @@ export function ChatTimer({
   }
 
   const displayedTotalTime = isStreaming ? elapsed : totalTime;
-
   const format = (time: number) => `${(time / 1000).toFixed(2)}s`;
 
   return (
     <div className="chat-timer">
-      <div className="chat-timer-item" title="Sending time">
-        <strong>Sent:</strong> {format(displayedSendTime)}
-      </div>
-      <div className="chat-timer-item" title="Processing time">
-        <strong>Proc:</strong> {format(displayedProcessTime)}
-      </div>
-      <div className="chat-timer-item" title="Generating time">
-        <strong>Gen:</strong> {format(displayedGeneratingTime)}
-      </div>
-      <div className="chat-timer-item" title="Total time">
-        <strong>Total:</strong> {format(displayedTotalTime)}
+      <div className="timer-metrics">
+        <div className="timer-metric" title="Time to establish connection">
+          <span className="metric-label">Send</span>
+          <span className="metric-value">{format(displayedSendTime)}</span>
+        </div>
+        <div className="timer-metric" title="Server processing time">
+          <span className="metric-label">Process</span>
+          <span className="metric-value">{format(displayedProcessTime)}</span>
+        </div>
+        <div className="timer-metric" title="Content generation time">
+          <span className="metric-label">Generate</span>
+          <span className="metric-value">{format(displayedGeneratingTime)}</span>
+        </div>
+        <div className="timer-metric" title="Total response time">
+          <span className="metric-label">Total</span>
+          <span className="metric-value">{format(displayedTotalTime)}</span>
+        </div>
       </div>
     </div>
   );
-}
+} 
