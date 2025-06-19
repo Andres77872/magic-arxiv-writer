@@ -134,6 +134,14 @@ Start by exploring the templates or asking the AI assistant for help with your r
                     <div className="header-title">
                         <h1>📄 ArXiv Writer Assistant</h1>
                         <p>AI-powered academic paper writing with arXiv integration & RAG search</p>
+                        <div className="header-links">
+                            <a href="https://arizmendi.io/" target="_blank" rel="noopener noreferrer" className="header-link">
+                                🌐 Portfolio
+                            </a>
+                            <a href="https://github.com/Andres77872/magic-arxiv-writer" target="_blank" rel="noopener noreferrer" className="header-link">
+                                📂 GitHub
+                            </a>
+                        </div>
                     </div>
                     <div className="header-actions">
                         <button className="action-button secondary" onClick={handleClearDocument}>
