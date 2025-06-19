@@ -6,8 +6,6 @@ import {ReferencesPanel} from './components/ReferencesPanel';
 import {AcademicTemplates} from './components/AcademicTemplates';
 import type {ArxivPaper} from './components/ReferencesPanel/types';
 import './components/AcademicTemplates.css';
-import './components/DocumentEditor.css';
-import './components/PanelSelector.css';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -51,8 +49,10 @@ Start by exploring the templates or asking the AI assistant for help with your r
     const [viewMode, setViewMode] = useState<ViewMode>('edit');
     const [panelMode, setPanelMode] = useState<PanelMode>('chat');
     
-    // Reference count for display (will be managed by ReferencesPanel internally)
-    const [referencesCount] = useState(0);
+    // Calculate document stats
+    const wordCount = markdown.split(/\s+/).filter(word => word.length > 0).length;
+    const lineCount = markdown.split('\n').length;
+    const charCount = markdown.length;
 
     const handleCiteReference = (reference: ArxivPaper) => {
         // Insert citation into the document
@@ -90,14 +90,41 @@ Start by exploring the templates or asking the AI assistant for help with your r
         // Users can click on suggested prompts to start conversations
     };
 
+    const handleClearDocument = () => {
+        if (window.confirm('Are you sure you want to clear the document? This action cannot be undone.')) {
+            setMarkdown('');
+        }
+    };
+
     const exportToPDF = () => {
         // TODO: Implement PDF export functionality
         console.log('Exporting to PDF...');
+        // Placeholder implementation
+        alert('PDF export functionality will be implemented soon!');
     };
 
     const exportToLatex = () => {
         // TODO: Convert markdown to LaTeX format
         console.log('Exporting to LaTeX...');
+        // Placeholder implementation
+        alert('LaTeX export functionality will be implemented soon!');
+    };
+
+    const handleExportMarkdown = () => {
+        try {
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'arxiv-paper.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Failed to export markdown:', error);
+            alert('Failed to export the document. Please try again.');
+        }
     };
 
     return (
@@ -109,7 +136,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
                         <p>AI-powered academic paper writing with arXiv integration & RAG search</p>
                     </div>
                     <div className="header-actions">
-                        <button className="action-button secondary" onClick={() => setMarkdown('')}>
+                        <button className="action-button secondary" onClick={handleClearDocument}>
                             <span>🗑️</span> Clear
                         </button>
                         <button className="action-button secondary" onClick={exportToLatex}>
@@ -118,15 +145,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
                         <button className="action-button secondary" onClick={exportToPDF}>
                             <span>📄</span> PDF
                         </button>
-                        <button className="action-button primary" onClick={() => {
-                            const blob = new Blob([markdown], { type: 'text/markdown' });
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = 'arxiv-paper.md';
-                            a.click();
-                            URL.revokeObjectURL(url);
-                        }}>
+                        <button className="action-button primary" onClick={handleExportMarkdown}>
                             <span>📥</span> Export
                         </button>
                     </div>
@@ -135,31 +154,37 @@ Start by exploring the templates or asking the AI assistant for help with your r
             
             <main className="main-content">
                 {/* Left Panel - Dynamic content based on panel mode */}
-                <div className="left-panel">
-                    <div className="panel-selector">
+                <aside className="left-panel">
+                    <nav className="panel-selector">
                         <button 
                             className={`panel-tab ${panelMode === 'chat' ? 'active' : ''}`}
                             onClick={() => setPanelMode('chat')}
+                            aria-label="AI Assistant Panel"
                         >
                             💬 AI Assistant
                         </button>
                         <button 
                             className={`panel-tab ${panelMode === 'references' ? 'active' : ''}`}
                             onClick={() => setPanelMode('references')}
+                            aria-label="References Panel"
                         >
                             📚 References
                         </button>
                         <button 
                             className={`panel-tab ${panelMode === 'templates' ? 'active' : ''}`}
                             onClick={() => setPanelMode('templates')}
+                            aria-label="Templates Panel"
                         >
                             📋 Templates
                         </button>
-                    </div>
+                    </nav>
 
                     <div className="panel-content">
                         {panelMode === 'chat' && (
-                            <ChatPanel markdown={markdown} onUpdateMarkdown={setMarkdown}/>
+                            <ChatPanel 
+                                markdown={markdown} 
+                                onUpdateMarkdown={setMarkdown}
+                            />
                         )}
                         {panelMode === 'references' && (
                             <ReferencesPanel 
@@ -174,18 +199,20 @@ Start by exploring the templates or asking the AI assistant for help with your r
                             />
                         )}
                     </div>
-                </div>
+                </aside>
 
                 {/* Right Panel - Document Editor */}
-                <div className="document-panel">
-                    <div className="section-header">
+                <section className="document-panel">
+                    <header className="section-header">
                         <h2>📝 Document</h2>
                         <div className="document-controls">
-                            <div className="view-mode-toggle">
+                            <div className="view-mode-toggle" role="tablist">
                                 <button 
                                     className={`mode-button ${viewMode === 'edit' ? 'active' : ''}`}
                                     onClick={() => setViewMode('edit')}
                                     title="Edit Mode"
+                                    role="tab"
+                                    aria-selected={viewMode === 'edit'}
                                 >
                                     ✏️ Edit
                                 </button>
@@ -193,6 +220,8 @@ Start by exploring the templates or asking the AI assistant for help with your r
                                     className={`mode-button ${viewMode === 'preview' ? 'active' : ''}`}
                                     onClick={() => setViewMode('preview')}
                                     title="Preview Mode"
+                                    role="tab"
+                                    aria-selected={viewMode === 'preview'}
                                 >
                                     👁️ Preview
                                 </button>
@@ -200,46 +229,62 @@ Start by exploring the templates or asking the AI assistant for help with your r
                                     className={`mode-button ${viewMode === 'split' ? 'active' : ''}`}
                                     onClick={() => setViewMode('split')}
                                     title="Split Mode"
+                                    role="tab"
+                                    aria-selected={viewMode === 'split'}
                                 >
                                     ⚡ Split
                                 </button>
                             </div>
-                            <div className="document-stats">
-                                <span className="stat">
-                                    {markdown.split(/\s+/).filter(word => word.length > 0).length} words
+                            <div className="document-stats" aria-label="Document Statistics">
+                                <span className="stat" title={`${wordCount} words`}>
+                                    {wordCount.toLocaleString()} words
                                 </span>
-                                <span className="stat">
-                                    {markdown.split('\n').length} lines
+                                <span className="stat" title={`${lineCount} lines`}>
+                                    {lineCount.toLocaleString()} lines
                                 </span>
-                                <span className="stat">
-                                    {referencesCount} refs
+                                <span className="stat" title={`${charCount} characters`}>
+                                    {charCount.toLocaleString()} chars
                                 </span>
                             </div>
                         </div>
-                    </div>
+                    </header>
                     
                     <div className={`editor-container ${viewMode}`}>
                         {(viewMode === 'edit' || viewMode === 'split') && (
-                            <div className="editor-pane">
+                            <div className="editor-pane" role="tabpanel">
                                 <RichTextEditor
                                     value={markdown}
                                     onChange={setMarkdown}
                                     placeholder="Start writing your academic paper..."
+                                    height="100%"
                                 />
                             </div>
                         )}
                         
                         {(viewMode === 'preview' || viewMode === 'split') && (
-                            <div className="preview-pane">
+                            <div className="preview-pane" role="tabpanel">
                                 <div className="preview-content markdown-preview">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                        {markdown || '*No content to preview*'}
-                                    </ReactMarkdown>
+                                    {markdown ? (
+                                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                            {markdown}
+                                        </ReactMarkdown>
+                                    ) : (
+                                        <div style={{ 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center', 
+                                            height: '200px',
+                                            color: 'var(--text-color-tertiary)',
+                                            fontStyle: 'italic'
+                                        }}>
+                                            No content to preview
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
                     </div>
-                </div>
+                </section>
             </main>
         </div>
     );

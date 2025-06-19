@@ -1,13 +1,10 @@
 import { EditorContent as TipTapEditorContent } from '@tiptap/react';
 import { type EditorContentProps } from './types';
-import './EditorContent.css';
 
-export function EditorContent({ editor, height, isFullscreen }: EditorContentProps) {
+export function EditorContent({ editor }: EditorContentProps) {
   return (
     <div className="editor-content-wrapper">
-      <div className="editor-scroll-container">
-        <TipTapEditorContent editor={editor} />
-      </div>
+      <TipTapEditorContent editor={editor} />
     </div>
   );
 } 

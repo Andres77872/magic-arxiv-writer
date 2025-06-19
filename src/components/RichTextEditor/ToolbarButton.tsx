@@ -1,21 +1,19 @@
 import { type ToolbarButtonProps } from './types';
-import './ToolbarButton.css';
 
 export function ToolbarButton({ 
   onClick, 
   isActive = false, 
   disabled = false, 
   title, 
-  children, 
-  className = '' 
+  children 
 }: ToolbarButtonProps) {
   return (
     <button
-      type="button"
+      className={`toolbar-button ${isActive ? 'active' : ''}`}
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className={`toolbar-button ${isActive ? 'active' : ''} ${className}`.trim()}
+      type="button"
     >
       {children}
     </button>

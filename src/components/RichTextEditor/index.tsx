@@ -21,7 +21,6 @@ export function RichTextEditor({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [wordCount, setWordCount] = useState(0);
   const [characterCount, setCharacterCount] = useState(0);
-  const editorRef = useRef<HTMLDivElement>(null);
 
   // Initialize markdown converter service
   const markdownConverter = useMemo(() => createMarkdownConverter(), []);
@@ -138,7 +137,6 @@ export function RichTextEditor({
 
   return (
     <div 
-      ref={editorRef}
       className={`rich-text-editor ${isFullscreen ? 'fullscreen' : ''}`}
       style={{ height: isFullscreen ? '100vh' : height }}
     >
@@ -150,11 +148,7 @@ export function RichTextEditor({
         characterCount={characterCount}
       />
 
-      <EditorContent
-        editor={editor}
-        height={height}
-        isFullscreen={isFullscreen}
-      />
+      <EditorContent editor={editor} />
 
       <EditorStatusBar editor={editor} />
     </div>

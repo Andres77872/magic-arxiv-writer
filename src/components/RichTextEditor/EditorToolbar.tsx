@@ -2,7 +2,6 @@ import { type EditorToolbarProps } from './types';
 import { ToolbarButton } from './ToolbarButton';
 import { ToolbarGroup } from './ToolbarGroup';
 import { EditorStats } from './EditorStats';
-import './EditorToolbar.css';
 
 export function EditorToolbar({ 
   editor, 

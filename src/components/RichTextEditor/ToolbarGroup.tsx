@@ -1,9 +1,8 @@
 import { type ToolbarGroupProps } from './types';
-import './ToolbarGroup.css';
 
-export function ToolbarGroup({ children, className = '' }: ToolbarGroupProps) {
+export function ToolbarGroup({ children }: ToolbarGroupProps) {
   return (
-    <div className={`toolbar-group ${className}`.trim()}>
+    <div className="toolbar-group">
       {children}
     </div>
   );

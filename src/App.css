@@ -1,4 +1,4 @@
-/* Root container to fill viewport and center content */
+/* Root container - Clean foundation */
 #root {
   width: 100%;
   max-width: 100%;
@@ -9,35 +9,41 @@
   overflow: hidden;
 }
 
-/* Main App Container */
+/* Main App Container - Minimalist layout */
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: linear-gradient(135deg, var(--background-color-website) 0%, var(--background-color-primary) 100%);
+  background: var(--background-color-website);
+  color: var(--text-color);
 }
 
-/* Header Styles */
+/* Header - Clean and functional */
 .app-header {
-  background: var(--background-color-secondary);
-  border-bottom: 2px solid var(--border-color);
-  padding: var(--padding-lg) var(--padding-xl);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+  background: var(--background-color-primary);
+  border-bottom: var(--border-standard);
+  padding: var(--padding-md) var(--padding-lg);
+  flex-shrink: 0;
 }
 
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
+  gap: var(--gap-lg);
+}
+
+.header-title {
+  flex: 1;
+  min-width: 0;
 }
 
 .header-title h1 {
   margin: 0;
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-color);
   display: flex;
   align-items: center;
@@ -46,71 +52,378 @@
 
 .header-title p {
   margin: var(--margin-xs) 0 0 0;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
   color: var(--text-color-secondary);
   font-weight: var(--font-weight-normal);
 }
 
 .header-actions {
   display: flex;
-  gap: var(--gap-md);
+  gap: var(--gap-sm);
+  flex-shrink: 0;
 }
 
+/* Action Buttons - Consistent with design system */
 .action-button {
   display: inline-flex;
   align-items: center;
   gap: var(--gap-xs);
   padding: var(--padding-sm) var(--padding-md);
-  border: none;
+  border: var(--border-standard);
   border-radius: var(--border-radius-small);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-colors);
   text-decoration: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
 }
 
 .action-button.primary {
   background: var(--accent-color);
-  color: white;
+  color: var(--color-brighter);
+  border-color: var(--accent-color);
 }
 
 .action-button.primary:hover {
   background: var(--accent-color-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(122, 132, 184, 0.3);
+  border-color: var(--accent-color-hover);
 }
 
 .action-button.secondary {
-  background: var(--background-color-tertiary);
+  background: var(--background-color-secondary);
   color: var(--text-color);
-  border: 1px solid var(--border-color);
+  border-color: var(--border-color);
 }
 
 .action-button.secondary:hover {
   background: var(--background-color-hover);
-  transform: translateY(-1px);
+  color: var(--text-color);
 }
 
-/* Main Content Area */
+/* Main Content - Optimized layout */
 .main-content {
   flex: 1;
   display: flex;
-  gap: var(--gap-lg);
-  padding: var(--padding-lg);
+  gap: var(--gap-md);
+  padding: var(--padding-md);
   overflow: hidden;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   width: 100%;
+  min-height: 0;
+}
+
+/* Left Panel - Sidebar navigation */
+.left-panel {
+  width: 350px;
+  min-width: 300px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color-primary);
+  border: var(--border-standard);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+}
+
+/* Panel Selector - Tab navigation */
+.panel-selector {
+  display: flex;
+  background: var(--background-color-secondary);
+  border-bottom: var(--border-standard);
+}
+
+.panel-tab {
+  flex: 1;
+  padding: var(--padding-sm) var(--padding-md);
+  background: transparent;
+  color: var(--text-color-secondary);
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: var(--transition-colors);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.panel-tab:hover {
+  background: var(--background-color-hover);
+  color: var(--text-color);
+}
+
+.panel-tab.active {
+  background: var(--background-color-primary);
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}
+
+/* Panel Content */
+.panel-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Document Panel - Main editing area */
+.document-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color-primary);
+  border: var(--border-standard);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* Section Header - Document controls */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--padding-md) var(--padding-lg);
+  background: var(--background-color-secondary);
+  border-bottom: var(--border-standard);
+  flex-shrink: 0;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+/* Document Controls */
+.document-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+}
+
+/* View Mode Toggle */
+.view-mode-toggle {
+  display: flex;
+  background: var(--background-color-tertiary);
+  border: var(--border-standard);
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+}
+
+.mode-button {
+  padding: var(--padding-xs) var(--padding-md);
+  background: transparent;
+  color: var(--text-color-secondary);
+  border: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: var(--transition-colors);
+  white-space: nowrap;
+}
+
+.mode-button:hover {
+  background: var(--background-color-hover);
+  color: var(--text-color);
+}
+
+.mode-button.active {
+  background: var(--accent-color);
+  color: var(--color-brighter);
+}
+
+/* Document Stats */
+.document-stats {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  font-size: var(--font-size-xs);
+}
+
+.stat {
+  color: var(--text-color-secondary);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+/* Editor Container - Split view support */
+.editor-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  background: var(--background-color-primary);
+}
+
+.editor-container.edit {
+  flex-direction: column;
+}
+
+.editor-container.preview {
+  flex-direction: column;
+}
+
+.editor-container.split {
+  flex-direction: row;
+  gap: var(--gap-sm);
+}
+
+/* Editor Pane */
+.editor-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.editor-container.split .editor-pane {
+  border-right: var(--border-standard);
+}
+
+/* Preview Pane */
+.preview-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--background-color-primary);
+}
+
+.preview-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--padding-lg);
+}
+
+/* Markdown Preview Styling */
+.markdown-preview {
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--text-color);
+}
+
+.markdown-preview h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin: var(--margin-xl) 0 var(--margin-lg) 0;
+  color: var(--text-color);
+  border-bottom: 3px solid var(--accent-color);
+  padding-bottom: var(--padding-sm);
+}
+
+.markdown-preview h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  margin: var(--margin-lg) 0 var(--margin-md) 0;
+  color: var(--text-color);
+  border-left: 4px solid var(--accent-color);
+  padding-left: var(--padding-md);
+}
+
+.markdown-preview h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin: var(--margin-md) 0 var(--margin-sm) 0;
+  color: var(--text-color);
+}
+
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  margin: var(--margin-md) 0 var(--margin-sm) 0;
+  color: var(--text-color);
+}
+
+.markdown-preview p {
+  margin: 0 0 var(--margin-md) 0;
+  line-height: var(--line-height-relaxed);
+}
+
+.markdown-preview code {
+  background: var(--background-color-tertiary);
+  color: var(--accent-color);
+  padding: 3px 6px;
+  border-radius: var(--border-radius-small);
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+  border: var(--border-standard);
+}
+
+.markdown-preview pre {
+  background: var(--background-color-secondary);
+  border: var(--border-standard);
+  border-radius: var(--border-radius-medium);
+  padding: var(--padding-lg);
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+}
+
+.markdown-preview pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.markdown-preview blockquote {
+  border-left: 4px solid var(--accent-color);
+  background: var(--background-color-secondary);
+  margin: var(--margin-lg) 0;
+  padding: var(--padding-lg);
+  font-style: italic;
+  color: var(--text-color-secondary);
+  border-radius: 0 var(--border-radius-medium) var(--border-radius-medium) 0;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  margin: var(--margin-md) 0;
+  padding-left: var(--padding-xl);
+}
+
+.markdown-preview li {
+  margin: var(--margin-sm) 0;
+  line-height: var(--line-height-relaxed);
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .left-panel {
+    width: 320px;
+    min-width: 280px;
+  }
+  
+  .header-content {
+    gap: var(--gap-md);
+  }
+  
+  .document-controls {
+    gap: var(--gap-md);
+  }
+}
+
 @media (max-width: 1024px) {
   .main-content {
     flex-direction: column;
-    padding: var(--padding-md);
     gap: var(--gap-md);
+  }
+  
+  .left-panel {
+    width: 100%;
+    min-width: auto;
+    max-width: none;
+    height: 300px;
+    flex-shrink: 0;
   }
   
   .header-content {
@@ -118,47 +431,98 @@
     gap: var(--gap-md);
     text-align: center;
   }
+  
+  .header-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .editor-container.split {
+    flex-direction: column;
+  }
+  
+  .editor-container.split .editor-pane {
+    border-right: none;
+    border-bottom: var(--border-standard);
+  }
 }
 
 @media (max-width: 768px) {
   .app-header {
-    padding: var(--padding-md);
+    padding: var(--padding-sm) var(--padding-md);
   }
   
-  .header-title h1 {
-    font-size: var(--font-size-xl);
-  }
-  
-  .header-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  .action-button {
-    justify-content: center;
-  }
-  
-  .main-content {
-    padding: var(--padding-sm);
-    gap: var(--gap-md);
-  }
-}
-
-@media (max-width: 480px) {
   .header-title h1 {
     font-size: var(--font-size-lg);
   }
   
   .header-title p {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
+  }
+  
+  .main-content {
+    padding: var(--padding-sm);
+    gap: var(--gap-sm);
+  }
+  
+  .section-header {
+    padding: var(--padding-sm) var(--padding-md);
+    flex-direction: column;
+    gap: var(--gap-sm);
+    align-items: stretch;
+  }
+  
+  .document-controls {
+    justify-content: space-between;
+    gap: var(--gap-sm);
+  }
+  
+  .view-mode-toggle {
+    flex: 1;
+  }
+  
+  .mode-button {
+    flex: 1;
+    padding: var(--padding-xs) var(--padding-sm);
+    font-size: var(--font-size-xs);
+  }
+  
+  .document-stats {
+    gap: var(--gap-sm);
+    font-size: var(--font-size-xs);
+  }
+  
+  .panel-tab {
+    padding: var(--padding-xs) var(--padding-sm);
+    font-size: var(--font-size-xs);
+  }
+  
+  .left-panel {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .action-button {
+    padding: var(--padding-xs) var(--padding-sm);
+    font-size: var(--font-size-xs);
+  }
+  
+  .header-actions {
+    width: 100%;
   }
   
   .action-button {
-    font-size: var(--font-size-xs);
-    padding: var(--padding-xs) var(--padding-sm);
+    flex: 1;
+    justify-content: center;
   }
   
   .main-content {
     padding: var(--padding-xs);
+  }
+  
+  .preview-content,
+  .editor-content-wrapper {
+    padding: var(--padding-md);
   }
 }

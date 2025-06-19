@@ -19,12 +19,10 @@ export interface ToolbarButtonProps {
   disabled?: boolean;
   title?: string;
   children: React.ReactNode;
-  className?: string;
 }
 
 export interface ToolbarGroupProps {
   children: React.ReactNode;
-  className?: string;
 }
 
 export interface EditorStatsProps {
@@ -42,8 +40,6 @@ export interface LoadingStateProps {
 
 export interface EditorContentProps {
   editor: any;
-  height: string;
-  isFullscreen: boolean;
 }
 
 export type MarkdownConversionService = {
