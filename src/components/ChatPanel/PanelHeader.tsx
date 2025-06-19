@@ -1,5 +1,4 @@
 import { type ConnectionStatus } from './types';
-import './PanelHeader.css';
 
 interface PanelHeaderProps {
     connectionStatus: ConnectionStatus;
@@ -10,7 +9,7 @@ export function PanelHeader({ connectionStatus }: PanelHeaderProps) {
         <div className="chat-panel-header">
             <h2>💬 AI Assistant</h2>
             <div className="connection-status">
-                <div className={`status-indicator ${connectionStatus}`}></div>
+                <div className={`status-indicator ${connectionStatus}`} />
                 <span className="status-text">
                     {connectionStatus === 'connected' && 'Connected'}
                     {connectionStatus === 'connecting' && 'Connecting...'}

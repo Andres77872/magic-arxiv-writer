@@ -1,5 +1,4 @@
 import { type EmptyStateProps } from './types';
-import './EmptyState.css';
 
 const suggestedPrompts = [
     "📝 Generate an arXiv paper outline for transformer architectures",

@@ -1,11 +1,16 @@
 import type {FormEvent} from 'react';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState, useCallback} from 'react';
 import { PanelHeader } from './PanelHeader';
 import { ChatInput } from './ChatInput';
 import { ChatMessage } from './ChatMessage';
 import { EmptyState } from './EmptyState';
 import { type ChatPanelProps, type ChatMessage as ChatMessageType, type ChatMetrics, type NodeExecution, type ConnectionStatus } from './types';
 import './index.css';
+
+interface ChatTurn {
+    user: ChatMessageType;
+    assistant?: ChatMessageType;
+}
 
 export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
     const [chatHistory, setChatHistory] = useState<ChatMessageType[]>([]);
@@ -18,18 +23,24 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
 
     useEffect(() => {
         if (chatHistoryRef.current) {
-            chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+            const {scrollTop, scrollHeight, clientHeight} = chatHistoryRef.current;
+            const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+            
+            if (isNearBottom) {
+                chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+            }
         }
     }, [chatHistory]);
 
-    const handlePromptSelect = (prompt: string) => {
+    const handlePromptSelect = useCallback((prompt: string) => {
         setInput(prompt);
-    };
+        inputRef.current?.focus();
+    }, []);
 
-    const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback(async (e?: FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
         const instruction = input.trim();
-        if (!instruction) return;
+        if (!instruction || isGenerating) return;
 
         const userMessage: ChatMessageType = {role: 'user', content: instruction};
         const newHistory = [...chatHistory, userMessage];
@@ -189,14 +200,14 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
         } catch (error) {
             console.error('Request failed:', error);
             setConnectionStatus('disconnected');
+            setChatHistory((h) => h.slice(0, -1)); // Remove the empty assistant message
         } finally {
             setIsGenerating(false);
             inputRef.current?.focus();
         }
-    };
+    }, [input, isGenerating, chatHistory, markdown, metricsHistory, onUpdateMarkdown]);
 
     // Group messages into user/assistant turns
-    type ChatTurn = { user: ChatMessageType; assistant?: ChatMessageType };
     const turns: ChatTurn[] = [];
     for (let i = 0; i < chatHistory.length; i++) {
         if (chatHistory[i].role === 'user') {

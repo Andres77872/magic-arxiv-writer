@@ -1,7 +1,6 @@
 import type {ChangeEvent, FormEvent, KeyboardEvent} from 'react';
 import {forwardRef, useEffect, useImperativeHandle, useRef} from 'react';
 import { type ChatInputProps } from './types';
-import './ChatInput.css';
 
 /**
  * ChatInput renders the message input form with auto-resizing textarea,
@@ -69,7 +68,7 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(
                         >
                             {isLoading ? (
                                 <div className="loading-spinner">
-                                    <div className="spinner"></div>
+                                    <div className="spinner" />
                                 </div>
                             ) : (
                                 <>

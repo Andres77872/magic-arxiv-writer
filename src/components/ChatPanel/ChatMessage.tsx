@@ -1,6 +1,5 @@
 import { ChatTimer } from './ChatTimer';
 import { type MessageProps } from './types';
-import './ChatMessage.css';
 
 export function ChatMessage({ 
     message, 
@@ -19,9 +18,9 @@ export function ChatMessage({
                 <div className="message-text">
                     {isGenerating && !message.content ? (
                         <div className="typing-indicator">
-                            <span></span>
-                            <span></span>
-                            <span></span>
+                            <span />
+                            <span />
+                            <span />
                             Generating content...
                         </div>
                     ) : (
