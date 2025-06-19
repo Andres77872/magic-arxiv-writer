@@ -8,48 +8,71 @@ export function ChatMessage({
     nodeExecutions = []
 }: MessageProps) {
     const isUser = message.role === 'user';
+    const messageRole = isUser ? 'User' : 'AI Assistant';
 
     return (
-        <div className={`chat-message ${message.role}`}>
-            <div className="message-avatar">
+        <article 
+            className={`chat-message ${message.role}`}
+            role="article"
+            aria-label={`Message from ${messageRole}`}
+        >
+            <div 
+                className="message-avatar"
+                aria-label={`${messageRole} avatar`}
+                role="img"
+            >
                 {isUser ? '👤' : '🤖'}
             </div>
             <div className="message-content">
-                <div className="message-text">
+                <div 
+                    className="message-text"
+                    role="region"
+                    aria-label={`${messageRole} message content`}
+                >
                     {isGenerating && !message.content ? (
-                        <div className="typing-indicator">
-                            <span />
-                            <span />
-                            <span />
-                            Generating content...
+                        <div 
+                            className="typing-indicator" 
+                            role="status" 
+                            aria-live="polite"
+                            aria-label="AI is generating content"
+                        >
+                            <span className="typing-dot" aria-hidden="true" />
+                            <span className="typing-dot" aria-hidden="true" />
+                            <span className="typing-dot" aria-hidden="true" />
+                            <span className="typing-text">Generating content...</span>
                         </div>
                     ) : (
-                        message.content.slice(-360) || "Thinking..."
+                        <span>{message.content.slice(-360) || "Thinking..."}</span>
                     )}
                 </div>
                 
                 {metrics && isUser && (
-                    <ChatTimer
-                        sendTime={metrics.sendTime}
-                        processTime={metrics.processTime}
-                        generatingTime={metrics.generatingTime}
-                        totalTime={metrics.totalTime}
-                        startTime={metrics.startTime}
-                        isStreaming={metrics.isStreaming}
-                    />
+                    <div role="complementary" aria-label="Message timing metrics">
+                        <ChatTimer
+                            sendTime={metrics.sendTime}
+                            processTime={metrics.processTime}
+                            generatingTime={metrics.generatingTime}
+                            totalTime={metrics.totalTime}
+                            startTime={metrics.startTime}
+                            isStreaming={metrics.isStreaming}
+                        />
+                    </div>
                 )}
                 
                 {nodeExecutions.length > 0 && !isUser && (
-                    <div className="node-feedback">
+                    <div className="node-feedback" role="complementary" aria-label="Processing details">
                         <details>
-                            <summary>🔧 Execution Details</summary>
-                            <ul>
+                            <summary>🔧 Execution Details ({nodeExecutions.length} operations)</summary>
+                            <ul role="list">
                                 {nodeExecutions.map((node) => (
-                                    <li key={node.node_id}>
-                                        <strong>{node.node_class}</strong> ({node.node_id.slice(-4)}):{' '}
-                                        {node.status === 'running'
-                                            ? '⏳ Running...'
-                                            : `✅ ${node.execution_time.toFixed(2)}s`}
+                                    <li key={node.node_id} role="listitem">
+                                        <strong>{node.node_class}</strong> 
+                                        <span className="node-id">({node.node_id.slice(-4)})</span>:{' '}
+                                        <span className={`node-status ${node.status}`}>
+                                            {node.status === 'running'
+                                                ? '⏳ Running...'
+                                                : `✅ ${node.execution_time.toFixed(2)}s`}
+                                        </span>
                                     </li>
                                 ))}
                             </ul>
@@ -57,6 +80,6 @@ export function ChatMessage({
                     </div>
                 )}
             </div>
-        </div>
+        </article>
     );
 } 

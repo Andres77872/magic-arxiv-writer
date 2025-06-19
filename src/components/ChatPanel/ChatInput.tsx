@@ -46,9 +46,11 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(
             onSubmit();
         };
 
+        const canSend = !disabled && value.trim() && !isLoading;
+
         return (
             <div className="chat-input-container">
-                <form onSubmit={handleSubmit} className="chat-input">
+                <form onSubmit={handleSubmit} className="chat-input" role="form" aria-label="Message input">
                     <div className="input-wrapper">
                         <textarea
                             ref={textareaRef}
@@ -59,28 +61,39 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(
                             onKeyDown={handleKeyDown}
                             disabled={disabled}
                             className="message-input"
+                            aria-label="Type your message"
+                            aria-describedby="input-hint"
+                            maxLength={2000}
                         />
                         <button 
                             type="submit" 
-                            disabled={disabled || !value.trim() || isLoading} 
-                            aria-label="Send message"
+                            disabled={!canSend} 
+                            aria-label={isLoading ? 'Generating response...' : 'Send message'}
                             className={`send-button ${isLoading ? 'loading' : ''}`}
+                            title={isLoading ? 'Generating response...' : 'Send message (Enter)'}
                         >
                             {isLoading ? (
-                                <div className="loading-spinner">
+                                <div className="loading-spinner" aria-hidden="true">
                                     <div className="spinner" />
                                 </div>
                             ) : (
                                 <>
-                                    <span className="send-icon">🚀</span>
+                                    <span className="send-icon" aria-hidden="true">🚀</span>
                                     <span className="send-text">Generate</span>
                                 </>
                             )}
                         </button>
                     </div>
                 </form>
-                <div className="input-hint">
-                    <span>💡 Press <kbd>Enter</kbd> to send, <kbd>Shift+Enter</kbd> for new line</span>
+                <div className="input-hint" id="input-hint" role="note">
+                    <span>
+                        💡 Press <kbd>Enter</kbd> to send, <kbd>Shift+Enter</kbd> for new line
+                        {value.length > 1800 && (
+                            <span style={{ color: 'var(--color-messages-warning)', marginLeft: 'var(--space-sm)' }}>
+                                • {2000 - value.length} characters remaining
+                            </span>
+                        )}
+                    </span>
                 </div>
             </div>
         );

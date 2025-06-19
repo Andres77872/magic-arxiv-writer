@@ -1,12 +1,12 @@
 /* typography.css */
 :root {
-    /* Font Families */
-    --font-family-base: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    --font-family-heading: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    --font-family-mono: 'Roboto Mono', 'SF Mono', 'Fira Mono', 'Courier New', Courier, monospace;
+    /* Font Families - Modern system fonts with fallbacks */
+    --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    --font-family-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    --font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', 'Source Code Pro', Menlo, 'Cascadia Code', 'Consolas', monospace;
 
-    /* Font Sizes - Modular Scale */
-    --font-size-base: 16px;
+    /* Font Sizes - Refined modular scale for better hierarchy */
+    --font-size-base: 14px; /* Slightly smaller base for more content */
     --font-size-xs: 0.75rem;    /* 12px */
     --font-size-sm: 0.875rem;   /* 14px */
     --font-size-small: 0.875rem; /* 14px - for backward compatibility */
@@ -21,34 +21,54 @@
     --font-size-5xl: 3rem;      /* 48px */
     --font-size-6xl: 3.75rem;   /* 60px */
 
-    /* Font Weights */
+    /* Font Weights - More nuanced weight system */
     --font-weight-light: 300;
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
 
-    /* Line Heights */
-    --line-height-tight: 1.2;
+    /* Line Heights - Better reading experience */
+    --line-height-tight: 1.25;
+    --line-height-snug: 1.375;
     --line-height-normal: 1.5;
-    --line-height-relaxed: 1.75;
+    --line-height-relaxed: 1.625;
+    --line-height-loose: 2;
 
-    /* Letter Spacing */
+    /* Letter Spacing - Improved readability */
+    --letter-spacing-tighter: -0.05em;
     --letter-spacing-tight: -0.025em;
     --letter-spacing-normal: 0;
     --letter-spacing-wide: 0.025em;
+    --letter-spacing-wider: 0.05em;
+    --letter-spacing-widest: 0.1em;
 
-    /* Header Typography */
+    /* Header Typography - Clean and modern */
     --header-font-family: var(--font-family-heading);
     --header-font-size: var(--font-size-lg);
-    --header-font-weight: var(--font-weight-medium);
+    --header-font-weight: var(--font-weight-semibold);
     --header-line-height: var(--line-height-tight);
-    --header-letter-spacing: var(--letter-spacing-normal);
+    --header-letter-spacing: var(--letter-spacing-tight);
 
-    /* Navigation Typography */
+    /* Navigation Typography - Readable and accessible */
     --nav-font-family: var(--font-family-base);
-    --nav-font-size: var(--font-size-md);
+    --nav-font-size: var(--font-size-sm);
     --nav-font-weight: var(--font-weight-medium);
-    --nav-line-height: var(--line-height-tight);
+    --nav-line-height: var(--line-height-snug);
     --nav-letter-spacing: var(--letter-spacing-normal);
+
+    /* Button Typography */
+    --button-font-family: var(--font-family-base);
+    --button-font-size: var(--font-size-sm);
+    --button-font-weight: var(--font-weight-medium);
+    --button-line-height: var(--line-height-tight);
+    --button-letter-spacing: var(--letter-spacing-normal);
+
+    /* Body Text */
+    --body-font-family: var(--font-family-base);
+    --body-font-size: var(--font-size-md);
+    --body-font-weight: var(--font-weight-normal);
+    --body-line-height: var(--line-height-relaxed);
+    --body-letter-spacing: var(--letter-spacing-normal);
 }

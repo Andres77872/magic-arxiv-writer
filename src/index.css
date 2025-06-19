@@ -8,35 +8,73 @@
 /* Global typography, layout, and smoothing */
 body {
     font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
     line-height: var(--line-height-normal);
     font-weight: var(--font-weight-normal);
+    color: var(--text-color);
+    background-color: var(--background-color-website);
 
     margin: 0;
+    padding: 0;
     display: flex;
     place-items: center;
     min-width: 320px;
     min-height: 100vh;
 
     color-scheme: light dark;
-}
-
-* {
+    
+    /* Better font rendering */
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'kern' 1;
+    text-size-adjust: 100%;
+}
+
+html {
+    font-size: var(--font-size-base);
+    scroll-behavior: smooth;
+}
+
+/* Remove default margins and improve typography */
+h1, h2, h3, h4, h5, h6, p, ul, ol, dl, blockquote, pre, table, figure {
+    margin: 0;
+}
+
+/* Improve list styling */
+ul, ol {
+    padding-left: 1.5em;
+}
+
+/* Better image handling */
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Form elements */
+input, button, textarea, select {
+    font: inherit;
+    color: inherit;
 }
 
 /* Global link styles */
 a {
-    color: var(--accent-color);
+    color: var(--accent-color-secondary);
     font-weight: var(--font-weight-medium);
     text-decoration: none;
     transition: var(--transition-colors);
 }
 
 a:hover {
-    color: var(--accent-color-hover);
+    color: var(--accent-color);
+}
+
+a:focus {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
 }
 
 /* Global button styles */
@@ -44,54 +82,117 @@ button {
     background-color: var(--button-background-color);
     color: var(--button-text-color);
     border: var(--button-border);
-    border-top-color: var(--button-border-top-color);
-    border-radius: var(--border-radius-small);
-    padding: var(--button-padding-vertical) var(--button-padding-horizontal);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--button-font-family);
     font-size: var(--button-font-size);
     font-weight: var(--button-font-weight);
-    font-family: inherit;
+    line-height: var(--button-line-height);
     cursor: pointer;
-    transition: var(--transition-colors);
+    transition: var(--transition-colors), var(--transition-transform);
+    
+    /* Remove button defaults */
+    border: none;
+    outline: none;
+    
+    /* Better button styling */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
 }
 
 button:hover {
     background-color: var(--button-background-color-hover);
-    box-shadow: var(--button-box-shadow-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--box-shadow-hover);
 }
 
 button:active {
     background-color: var(--button-background-color-active);
+    transform: translateY(0);
+    box-shadow: var(--box-shadow-active);
+}
+
+button:focus {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+    box-shadow: var(--focus-ring);
 }
 
 button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 /* Global input/textarea styles */
-input {
+input, textarea {
     background-color: var(--input-background-color);
     color: var(--input-text-color);
     border: var(--input-border);
-    border-radius: var(--border-radius-small);
-    padding: var(--padding-small);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm);
     font-family: inherit;
     font-size: var(--font-size-md);
-    transition: var(--transition-colors), var(--transition-standard);
+    line-height: var(--line-height-normal);
+    transition: var(--transition-colors), var(--transition-transform);
+    
+    /* Remove input defaults */
+    outline: none;
+    width: 100%;
 }
 
-input:hover {
+input:hover, textarea:hover {
     background-color: var(--input-background-color-hover);
     box-shadow: var(--input-box-shadow-hover);
 }
 
-input:focus {
+input:focus, textarea:focus {
     background-color: var(--input-background-color-focus);
     border: var(--input-border-focus);
-    outline: var(--focus-outline);
     box-shadow: var(--input-box-shadow-focus);
+    transform: translateY(-1px);
 }
 
-input::placeholder {
+input::placeholder, textarea::placeholder {
     color: var(--input-placeholder-color);
+    opacity: 1;
+}
+
+/* Textarea specific styles */
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Focus management */
+:focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+}
+
+/* Better selection colors */
+::selection {
+    background-color: var(--accent-soft);
+    color: var(--text-color);
+}
+
+/* Accessibility improvements */
+[aria-hidden="true"] {
+    display: none;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

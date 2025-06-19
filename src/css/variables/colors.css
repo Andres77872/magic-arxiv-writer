@@ -1,65 +1,66 @@
 /* colors.css */
 :root {
-    /* Primary Background Colors - Enhanced with better depth */
-    --background-color-website: #0a0a0b; /* Even deeper for better contrast */
-    --background-color-primary: #1a1a1e; /* Rich dark base */
-    --background-color-secondary: #252529; /* Warm secondary */
-    --background-color-tertiary: #2d2d33; /* Elevated surfaces */
-    --background-color-hover: #363640; /* Interactive states */
-    --background-color-focus: #404047; /* Focus states */
-    --background-color-disable: #1e1e22; /* Disabled elements */
-    --background-color-header: #1a1a1e; /* Header consistency */
+    /* Primary Background Colors - Modern minimalist palette */
+    --background-color-website: #0d1117; /* GitHub-inspired deep background */
+    --background-color-primary: #161b22; /* Clean dark surfaces */
+    --background-color-secondary: #21262d; /* Elevated surfaces */
+    --background-color-tertiary: #30363d; /* Interactive surfaces */
+    --background-color-hover: #3d444d; /* Subtle hover states */
+    --background-color-focus: #484f58; /* Focus states */
+    --background-color-disable: #1c2128; /* Disabled elements */
+    --background-color-header: #161b22; /* Header consistency */
 
-    /* Text Colors - Enhanced readability */
-    --text-color: #f8f9fa; /* High contrast primary text */
-    --text-color-secondary: #b8bcc8; /* Readable secondary text */
-    --text-color-tertiary: #9099a2; /* Subtle tertiary text */
-    --text-color-placeholder: #737680; /* Accessible placeholders */
-    --text-color-header: #f8f9fa; /* Header text consistency */
+    /* Text Colors - Enhanced readability with better contrast */
+    --text-color: #f0f6fc; /* High contrast primary text */
+    --text-color-secondary: #8b949e; /* Balanced secondary text */
+    --text-color-tertiary: #7d8590; /* Subtle tertiary text */
+    --text-color-placeholder: #656c76; /* Accessible placeholders */
+    --text-color-header: #f0f6fc; /* Header text consistency */
 
-    /* Border Colors - Subtle but visible */
-    --border-color: #3a3a42; /* Main borders */
-    --border-color-lighter: #4a4a54; /* Emphasis borders */
-    --border-color-header: #3a3a42; /* Header borders */
+    /* Border Colors - Subtle but clear definition */
+    --border-color: #30363d; /* Main borders */
+    --border-color-lighter: #3d444d; /* Emphasis borders */
+    --border-color-header: #30363d; /* Header borders */
 
-    /* Accent Colors - Modern and vibrant */
-    --accent-color: #7c3aed; /* Purple primary */
-    --accent-color-hover: #6d28d9; /* Darker purple hover */
-    --accent-color-dark: #5b21b6; /* Darker purple for contrast */
-    --accent-color-secondary: #9333ea; /* Secondary purple */
-    --accent-color-muted: #5b21b6; /* Muted purple */
+    /* Accent Colors - Modern blue-violet gradient inspired */
+    --accent-color: #2ea043; /* GitHub green for primary actions */
+    --accent-color-hover: #238636; /* Darker green hover */
+    --accent-color-dark: #1a7f37; /* Darker green for contrast */
+    --accent-color-secondary: #58a6ff; /* Blue accent for secondary actions */
+    --accent-color-muted: #1f6feb; /* Muted blue */
 
-    /* Status Message Colors - Accessible and clear */
-    --color-messages-info: #3b82f6; /* Blue info */
-    --color-messages-info-dark: #2563eb; /* Darker blue info */
-    --color-messages-success: #10b981; /* Green success */
-    --color-messages-success-dark: #059669; /* Darker green success */
-    --color-messages-success-darker: #047857; /* Even darker green */
-    --color-messages-error: #ef4444; /* Red error */
-    --color-messages-error-dark: #dc2626; /* Darker red error */
-    --color-messages-warning: #f59e0b; /* Amber warning */
-    --color-messages-warning-dark: #d97706; /* Darker amber warning */
+    /* Status Message Colors - Clear and accessible */
+    --color-messages-info: #58a6ff; /* Blue info */
+    --color-messages-info-dark: #388bfd; /* Darker blue info */
+    --color-messages-success: #2ea043; /* Green success */
+    --color-messages-success-dark: #238636; /* Darker green success */
+    --color-messages-success-darker: #1a7f37; /* Even darker green */
+    --color-messages-error: #f85149; /* Red error */
+    --color-messages-error-dark: #da3633; /* Darker red error */
+    --color-messages-warning: #d29922; /* Amber warning */
+    --color-messages-warning-dark: #bb8009; /* Darker amber warning */
 
     /* Error State Colors */
-    --error-bg-light: #fef2f2; /* Light red background */
-    --error-border-light: #fecaca; /* Light red border */
+    --error-bg-light: #332424; /* Dark red background */
+    --error-border-light: #8e1519; /* Dark red border */
 
     /* Semantic Colors */
-    --color-dark: #0a0a0b; /* Deepest dark */
-    --color-hover-secondary: #2a2a2f; /* Alternative hover */
-    --color-footer: #0a0a0b; /* Footer consistency */
+    --color-dark: #0d1117; /* Deepest dark */
+    --color-hover-secondary: #262c36; /* Alternative hover */
+    --color-footer: #0d1117; /* Footer consistency */
     --color-brighter: #ffffff; /* Pure white accent */
 
-    /* Transparency Layers */
-    --background-transparency-standard: rgba(10, 10, 11, 0.7);
-    --background-transparency-light: rgba(10, 10, 11, 0.4);
-    --background-transparency-dark: rgba(10, 10, 11, 0.9);
+    /* Transparency Layers - Modern glass morphism inspired */
+    --background-transparency-standard: rgba(13, 17, 23, 0.8);
+    --background-transparency-light: rgba(13, 17, 23, 0.5);
+    --background-transparency-dark: rgba(13, 17, 23, 0.95);
     --background-transparency: var(--background-transparency-dark);
 
     /* Component-specific Colors */
-    --header-transparency: rgba(26, 26, 30, 0.95);
+    --header-transparency: rgba(22, 27, 34, 0.95);
+    --glass-backdrop: rgba(22, 27, 34, 0.7);
     
-    /* Input Colors */
+    /* Input Colors - Clean and modern */
     --input-background-color: var(--background-color-primary);
     --input-background-color-hover: var(--background-color-secondary);
     --input-background-color-focus: var(--background-color-tertiary);
@@ -67,19 +68,25 @@
     --input-placeholder-color: var(--text-color-placeholder);
     --input-border: 1px solid var(--border-color);
     --input-border-focus: 1px solid var(--accent-color);
-    --input-box-shadow-hover: 0 2px 8px rgba(124, 58, 237, 0.1);
-    --input-box-shadow-focus: 0 0 0 3px rgba(124, 58, 237, 0.2);
+    --input-box-shadow-hover: 0 1px 3px rgba(46, 160, 67, 0.1);
+    --input-box-shadow-focus: 0 0 0 3px rgba(46, 160, 67, 0.2);
     
-    /* Button Colors */
+    /* Button Colors - Consistent with new accent */
     --button-background-color: var(--background-color-tertiary);
     --button-background-color-hover: var(--background-color-hover);
     --button-background-color-active: var(--background-color-focus);
     --button-text-color: var(--text-color);
     --button-border: 1px solid var(--border-color);
     --button-border-top-color: var(--border-color-lighter);
-    --button-box-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --button-box-shadow-hover: 0 3px 12px rgba(0, 0, 0, 0.2);
     
     /* Focus Colors */
     --focus-outline: 2px solid var(--accent-color);
     --focus-outline-offset: 2px;
+
+    /* New modern additions */
+    --surface-elevated: #262c36;
+    --surface-overlay: rgba(22, 27, 34, 0.9);
+    --accent-soft: rgba(46, 160, 67, 0.1);
+    --accent-subtle: rgba(46, 160, 67, 0.05);
 }
