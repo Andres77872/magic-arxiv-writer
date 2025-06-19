@@ -1,5 +1,4 @@
 import type { ArxivPaper } from './types';
-import './PaperStats.css';
 
 interface PaperStatsProps {
   paper: ArxivPaper;
@@ -20,36 +19,29 @@ export function PaperStats({ paper, onSearchRelated }: PaperStatsProps) {
 
   return (
     <div className="paper-stats">
-      <div className="stats-row">
-        <div className="stat-item">
-          <span className="stat-icon">📊</span>
-          <span className="stat-label">Relevance:</span>
-          <span className="stat-value">{((paper.score || 0) * 100).toFixed(1)}%</span>
-        </div>
-        
-        <div className="stat-item">
-          <span className="stat-icon">📖</span>
-          <span className="stat-label">Abstract:</span>
-          <span className="stat-value">{getWordCount(paper.abstract)} words</span>
-        </div>
-        
-        <div className="stat-item">
-          <span className="stat-icon">⏱️</span>
-          <span className="stat-label">Reading time:</span>
-          <span className="stat-value">{getReadingTime(paper.abstract)} min</span>
-        </div>
+      <div className="stat-group">
+        <span className="stat-label">Relevance</span>
+        <span className="stat-value-large">{((paper.score || 0) * 100).toFixed(1)}%</span>
       </div>
       
-      <div className="stats-actions">
-        <button 
-          className="stats-action-btn"
-          onClick={onSearchRelated}
-          title="Find similar papers"
-        >
-          <span className="btn-icon">🔍</span>
-          <span className="btn-text">Find Similar</span>
-        </button>
+      <div className="stat-group">
+        <span className="stat-label">Abstract</span>
+        <span className="stat-value-large">{getWordCount(paper.abstract)} words</span>
       </div>
+      
+      <div className="stat-group">
+        <span className="stat-label">Reading</span>
+        <span className="stat-value-large">{getReadingTime(paper.abstract)} min</span>
+      </div>
+      
+      <button 
+        className="action-btn secondary"
+        onClick={onSearchRelated}
+        title="Find similar papers"
+        style={{ marginLeft: 'auto' }}
+      >
+        🔍 Similar
+      </button>
     </div>
   );
 } 

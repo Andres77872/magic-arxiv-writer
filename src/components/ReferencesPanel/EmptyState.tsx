@@ -1,43 +1,37 @@
-import './EmptyState.css';
-
 interface EmptyStateProps {
   lastSearchQuery: string;
   onSearch: (query: string) => void;
 }
 
 export function EmptyState({ lastSearchQuery, onSearch }: EmptyStateProps) {
+  const suggestions = [
+    'machine learning',
+    'deep learning',
+    'artificial intelligence',
+    'computer vision',
+    'natural language processing'
+  ];
+
   return (
-    <div className="empty-references">
+    <div className="references-empty">
       <div className="empty-icon">📄</div>
-      <h4>No papers found</h4>
-      <p className="empty-description">
+      <h3>No papers found</h3>
+      <p>
         {lastSearchQuery 
           ? `No results for "${lastSearchQuery}". Try different keywords or broader terms.`
           : 'Start by searching for research papers relevant to your work.'
         }
       </p>
       <div className="empty-suggestions">
-        <p>Try searching for:</p>
-        <div className="suggestion-list">
+        {suggestions.map((suggestion) => (
           <button 
-            className="suggestion-item"
-            onClick={() => onSearch('machine learning')}
+            key={suggestion}
+            className="empty-suggestion"
+            onClick={() => onSearch(suggestion)}
           >
-            "machine learning"
+            {suggestion}
           </button>
-          <button 
-            className="suggestion-item"
-            onClick={() => onSearch('deep learning')}
-          >
-            "deep learning"
-          </button>
-          <button 
-            className="suggestion-item"
-            onClick={() => onSearch('artificial intelligence')}
-          >
-            "artificial intelligence"
-          </button>
-        </div>
+        ))}
       </div>
     </div>
   );

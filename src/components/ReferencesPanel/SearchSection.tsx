@@ -1,5 +1,4 @@
 import type { SortOption } from './types';
-import './SearchSection.css';
 
 interface SearchSectionProps {
   searchQuery: string;
@@ -38,6 +37,13 @@ export function SearchSection({
     onSearch(query);
   };
 
+  const suggestions = [
+    'Large Language Models',
+    'Computer Vision',
+    'Neural Networks',
+    'Reinforcement Learning'
+  ];
+
   return (
     <div className="references-search">
       <form onSubmit={handleSearch} className="search-form">
@@ -57,7 +63,7 @@ export function SearchSection({
             disabled={isSearching || !searchQuery.trim()}
           >
             {isSearching ? (
-              <div className="search-spinner"></div>
+              <div className="search-spinner" />
             ) : (
               'Search'
             )}
@@ -65,34 +71,16 @@ export function SearchSection({
         </div>
         
         <div className="search-suggestions">
-          <button 
-            type="button" 
-            onClick={() => quickSearch('large language models')}
-            className="suggestion-chip"
-          >
-            LLM
-          </button>
-          <button 
-            type="button" 
-            onClick={() => quickSearch('computer vision')}
-            className="suggestion-chip"
-          >
-            Computer Vision
-          </button>
-          <button 
-            type="button" 
-            onClick={() => quickSearch('neural networks')}
-            className="suggestion-chip"
-          >
-            Neural Networks
-          </button>
-          <button 
-            type="button" 
-            onClick={() => quickSearch('reinforcement learning')}
-            className="suggestion-chip"
-          >
-            Reinforcement Learning
-          </button>
+          {suggestions.map((suggestion) => (
+            <button 
+              key={suggestion}
+              type="button" 
+              onClick={() => quickSearch(suggestion)}
+              className="suggestion-chip"
+            >
+              {suggestion}
+            </button>
+          ))}
         </div>
       </form>
 
@@ -114,9 +102,6 @@ export function SearchSection({
         <div className="filter-info">
           <span className="filter-badge">
             Limit: {limit} papers
-          </span>
-          <span className="filter-badge">
-            Semantic Search
           </span>
           {avgScore > 0 && (
             <span className="filter-badge score-stats">

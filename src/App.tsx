@@ -189,7 +189,7 @@ Start by exploring the templates or asking the AI assistant for help with your r
                         {panelMode === 'references' && (
                             <ReferencesPanel 
                                 onCiteReference={handleCiteReference}
-                                limit={10}
+                                limit={20}
                             />
                         )}
                         {panelMode === 'templates' && (

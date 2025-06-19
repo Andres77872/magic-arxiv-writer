@@ -1,5 +1,4 @@
 import type { ArxivPaper } from './types';
-import './PaperActions.css';
 
 interface PaperActionsProps {
   paper: ArxivPaper;
@@ -9,7 +8,7 @@ interface PaperActionsProps {
 export function PaperActions({ paper, onCite }: PaperActionsProps) {
   const generateBibTeX = (paper: ArxivPaper) => {
     const year = new Date(paper.date).getFullYear();
-    const firstAuthor = paper.authors.split(',')[0].trim().split(' ').pop();
+    const firstAuthor = paper.authors.split(',')[0]?.trim().split(' ').pop() || 'Unknown';
     const key = `${firstAuthor}${year}${paper.id.replace(/\./g, '')}`;
     
     return `@article{${key},
@@ -22,12 +21,14 @@ export function PaperActions({ paper, onCite }: PaperActionsProps) {
 }`;
   };
 
-  const copyBibTeX = () => {
-    const bibtex = generateBibTeX(paper);
-    navigator.clipboard.writeText(bibtex).then(() => {
-      // Could add a toast notification here
+  const copyBibTeX = async () => {
+    try {
+      const bibtex = generateBibTeX(paper);
+      await navigator.clipboard.writeText(bibtex);
       console.log('BibTeX copied to clipboard');
-    });
+    } catch (err) {
+      console.error('Failed to copy BibTeX:', err);
+    }
   };
 
   const openPDF = () => {
@@ -45,8 +46,7 @@ export function PaperActions({ paper, onCite }: PaperActionsProps) {
         onClick={onCite}
         title="Add citation to document"
       >
-        <span className="btn-icon">📎</span>
-        <span className="btn-text">Cite</span>
+        📎 Cite
       </button>
       
       <button 
@@ -54,8 +54,7 @@ export function PaperActions({ paper, onCite }: PaperActionsProps) {
         onClick={copyBibTeX}
         title="Copy BibTeX to clipboard"
       >
-        <span className="btn-icon">📋</span>
-        <span className="btn-text">BibTeX</span>
+        📋 BibTeX
       </button>
       
       <button 
@@ -63,8 +62,7 @@ export function PaperActions({ paper, onCite }: PaperActionsProps) {
         onClick={openArxiv}
         title="View on arXiv"
       >
-        <span className="btn-icon">🔗</span>
-        <span className="btn-text">View</span>
+        🔗 View
       </button>
       
       <button 
@@ -72,8 +70,7 @@ export function PaperActions({ paper, onCite }: PaperActionsProps) {
         onClick={openPDF}
         title="Download PDF"
       >
-        <span className="btn-icon">📄</span>
-        <span className="btn-text">PDF</span>
+        📄 PDF
       </button>
     </div>
   );

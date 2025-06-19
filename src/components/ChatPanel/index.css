@@ -405,7 +405,7 @@
   justify-content: center;
   text-align: center;
   padding: var(--padding-xxl);
-  height: 100%;
+  /*height: 100%;*/
   max-width: 600px;
   margin: 0 auto;
 }

@@ -3,7 +3,6 @@ import type { ArxivPaper } from './types';
 import { ScoreBadge } from './ScoreBadge';
 import { PaperActions } from './PaperActions';
 import { PaperStats } from './PaperStats';
-import './PaperCard.css';
 
 interface PaperCardProps {
   paper: ArxivPaper;
@@ -24,31 +23,19 @@ export function PaperCard({
 }: PaperCardProps) {
   const [isCardExpanded, setIsCardExpanded] = useState(false);
   
-  const getScoreColor = (score: number) => {
-    if (score >= 0.9) return 'score-excellent';
-    if (score >= 0.8) return 'score-very-good';
-    if (score >= 0.7) return 'score-good';
-    if (score >= 0.6) return 'score-fair';
-    return 'score-low';
-  };
-
   const formatAuthors = (authors: string) => {
     if (!authors || authors === 'Unknown Authors') return 'Unknown Authors';
     
     const authorList = authors.split(',').map(a => a.trim()).filter(a => a);
     if (authorList.length === 0) return 'Unknown Authors';
-    if (authorList.length <= 3) {
-      return authorList.join(', ');
-    }
+    if (authorList.length <= 3) return authorList.join(', ');
     return `${authorList.slice(0, 3).join(', ')} et al.`;
   };
 
   const getFirstAuthor = (authors: string) => {
     if (!authors || authors === 'Unknown Authors') return 'Unknown Author';
-    
     const authorList = authors.split(',').map(a => a.trim()).filter(a => a);
-    if (authorList.length === 0) return 'Unknown Author';
-    return authorList[0];
+    return authorList.length > 0 ? authorList[0] : 'Unknown Author';
   };
 
   const formatDate = (dateString: string) => {
@@ -64,52 +51,6 @@ export function PaperCard({
     } catch {
       return 'Unknown date';
     }
-  };
-
-  const getRelativeTime = (dateString: string) => {
-    if (!dateString) return 'Unknown time';
-    try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return 'Unknown time';
-      
-      const now = new Date();
-      const diffTime = Math.abs(now.getTime() - date.getTime());
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
-      if (diffDays === 1) return 'Yesterday';
-      if (diffDays < 7) return `${diffDays} days ago`;
-      if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
-      if (diffDays < 365) return `${Math.ceil(diffDays / 30)} months ago`;
-      return `${Math.ceil(diffDays / 365)} years ago`;
-    } catch {
-      return 'Unknown time';
-    }
-  };
-
-  const extractCategory = (id: string) => {
-    if (!id) return 'Unknown';
-    
-    // Try to extract category from arXiv ID pattern
-    const match = id.match(/^(\d{4})\.(\d{5})$/);
-    if (match) {
-      const categoryCode = match[2].substring(0, 2);
-      const categoryMap: Record<string, string> = {
-        '01': 'cs.AI',
-        '02': 'cs.CL',
-        '03': 'cs.CV',
-        '04': 'cs.LG',
-        '05': 'stat.ML',
-        '06': 'math.ST',
-        '07': 'cs.NE',
-        '08': 'cs.IR',
-        '09': 'cs.HC',
-        '10': 'cs.RO'
-      };
-      return categoryMap[categoryCode] || 'cs.AI';
-    }
-    
-    // Fallback for different ID patterns
-    return 'cs.AI';
   };
 
   const getAuthorCount = (authors: string) => {
@@ -129,8 +70,14 @@ export function PaperCard({
     setIsCardExpanded(!isCardExpanded);
   };
 
+  const openArxiv = () => {
+    if (safeId !== 'unknown') {
+      window.open(`https://arxiv.org/abs/${safeId}`, '_blank');
+    }
+  };
+
   return (
-    <div className={`reference-card ${getScoreColor(safeScore)} ${isCardExpanded ? 'expanded' : 'collapsed'}`}>
+    <div className={`reference-card ${isCardExpanded ? 'expanded' : 'collapsed'}`}>
       {/* Collapsed View */}
       {!isCardExpanded && (
         <div className="card-collapsed" onClick={toggleCardExpansion}>
@@ -159,25 +106,31 @@ export function PaperCard({
       {isCardExpanded && (
         <div className="card-expanded">
           <div className="card-header">
-            <div className="paper-rank">#{rank}</div>
-            <div className="paper-metadata">
-              <ScoreBadge score={safeScore} />
-              <span className="arxiv-id">arXiv:{safeId}</span>
-              <span className="paper-date" title={formatDate(safeDate)}>
-                {getRelativeTime(safeDate)}
-              </span>
-              <span className="paper-category">
-                {extractCategory(safeId)}
-              </span>
+            <div className="card-header-main">
+              <div className="paper-rank">#{rank}</div>
+              <div className="paper-metadata">
+                <ScoreBadge score={safeScore} />
+                <span className="arxiv-id">arXiv:{safeId}</span>
+                <span className="paper-date" title={formatDate(safeDate)}>
+                  {formatDate(safeDate)}
+                </span>
+              </div>
             </div>
-            <button className="collapse-btn" onClick={toggleCardExpansion} title="Collapse paper">
-              <span className="collapse-icon">▲</span>
-            </button>
+            <div className="card-header-actions">
+              <button 
+                className="collapse-btn" 
+                onClick={toggleCardExpansion} 
+                title="Collapse paper"
+                aria-label="Collapse paper details"
+              >
+                <span className="collapse-icon">▲</span>
+              </button>
+            </div>
           </div>
 
           <h4 
             className="paper-title" 
-            onClick={() => safeId !== 'unknown' && window.open(`https://arxiv.org/abs/${safeId}`, '_blank')}
+            onClick={openArxiv}
             style={{ cursor: safeId !== 'unknown' ? 'pointer' : 'default' }}
           >
             {safeTitle}

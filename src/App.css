@@ -108,7 +108,7 @@
   gap: var(--gap-md);
   padding: var(--padding-md);
   overflow: hidden;
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   width: 100%;
   min-height: 0;
@@ -116,9 +116,9 @@
 
 /* Left Panel - Sidebar navigation */
 .left-panel {
-  width: 350px;
+  width: 420px;
   min-width: 300px;
-  max-width: 400px;
+  max-width: 640px;
   display: flex;
   flex-direction: column;
   background: var(--background-color-primary);

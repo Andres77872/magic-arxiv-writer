@@ -1,28 +1,17 @@
-import './PanelHeader.css';
-
 interface PanelHeaderProps {
   papersCount: number;
-  lastSearchQuery: string;
 }
 
-export function PanelHeader({ papersCount, lastSearchQuery }: PanelHeaderProps) {
+export function PanelHeader({ papersCount }: PanelHeaderProps) {
   return (
-    <div className="references-header">
-      <div className="header-content">
-        <h3>📚 Research References</h3>
-        <div className="header-subtitle">
-          Search and cite arXiv papers with semantic similarity search
+    <div className="panel-header">
+      <h2>📚 References</h2>
+      <div className="panel-stats">
+        <div className="stat-badge">
+          <span className="stat-value">{papersCount}</span>
+          <span>papers found</span>
         </div>
       </div>
-      {papersCount > 0 && (
-        <div className="references-count">
-          <span className="count-number">{papersCount}</span>
-          <span className="count-text">
-            {papersCount === 1 ? 'paper' : 'papers'}
-            {lastSearchQuery && <span className="search-context"> for "{lastSearchQuery}"</span>}
-          </span>
-        </div>
-      )}
     </div>
   );
 } 
