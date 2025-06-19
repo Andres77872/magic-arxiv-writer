@@ -130,45 +130,7 @@ button:disabled {
     box-shadow: none;
 }
 
-/* Global input/textarea styles */
-input, textarea {
-    background-color: var(--input-background-color);
-    color: var(--input-text-color);
-    border: var(--input-border);
-    border-radius: var(--radius-md);
-    padding: var(--space-sm);
-    font-family: inherit;
-    font-size: var(--font-size-md);
-    line-height: var(--line-height-normal);
-    transition: var(--transition-colors), var(--transition-transform);
-    
-    /* Remove input defaults */
-    outline: none;
-    width: 100%;
-}
 
-input:hover, textarea:hover {
-    background-color: var(--input-background-color-hover);
-    box-shadow: var(--input-box-shadow-hover);
-}
-
-input:focus, textarea:focus {
-    background-color: var(--input-background-color-focus);
-    border: var(--input-border-focus);
-    box-shadow: var(--input-box-shadow-focus);
-    transform: translateY(-1px);
-}
-
-input::placeholder, textarea::placeholder {
-    color: var(--input-placeholder-color);
-    opacity: 1;
-}
-
-/* Textarea specific styles */
-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
 
 /* Focus management */
 :focus-visible {
