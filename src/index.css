@@ -77,61 +77,6 @@ a:focus {
     outline-offset: var(--focus-outline-offset);
 }
 
-/* Global button styles */
-button {
-    background-color: var(--button-background-color);
-    color: var(--button-text-color);
-    border: var(--button-border);
-    border-radius: var(--radius-md);
-    padding: var(--space-sm) var(--space-md);
-    font-family: var(--button-font-family);
-    font-size: var(--button-font-size);
-    font-weight: var(--button-font-weight);
-    line-height: var(--button-line-height);
-    cursor: pointer;
-    transition: var(--transition-colors), var(--transition-transform);
-    
-    /* Remove button defaults */
-    border: none;
-    outline: none;
-    
-    /* Better button styling */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    text-align: center;
-    vertical-align: middle;
-    user-select: none;
-}
-
-button:hover {
-    background-color: var(--button-background-color-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--box-shadow-hover);
-}
-
-button:active {
-    background-color: var(--button-background-color-active);
-    transform: translateY(0);
-    box-shadow: var(--box-shadow-active);
-}
-
-button:focus {
-    outline: var(--focus-outline);
-    outline-offset: var(--focus-outline-offset);
-    box-shadow: var(--focus-ring);
-}
-
-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-
-
 /* Focus management */
 :focus-visible {
     outline: var(--focus-outline);
