@@ -68,7 +68,7 @@ export function useAIService() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: 'agt-d8056405-2686-4e05-a5dd-38fc31a4a543',
+                    Authorization: 'DUMMY_TOKEN',
                 },
                 body: JSON.stringify({
                     model,
