@@ -11,6 +11,7 @@ import {
     type ConnectionStatus,
     type NodeExecution
 } from './types';
+import { useAIService, type AIMessage } from '../AIService';
 import './index.css';
 
 interface ChatTurn {
@@ -21,11 +22,12 @@ interface ChatTurn {
 export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
     const [chatHistory, setChatHistory] = useState<ChatMessageType[]>([]);
     const [input, setInput] = useState('');
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('connected');
     const [metricsHistory, setMetricsHistory] = useState<ChatMetrics[]>([]);
     const chatHistoryRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    
+    // Use the AI service hook
+    const aiService = useAIService();
 
 
     useEffect(() => {
@@ -47,14 +49,12 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
     const handleSubmit = useCallback(async (e?: FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
         const instruction = input.trim();
-        if (!instruction || isGenerating) return;
+        if (!instruction || aiService.isGenerating) return;
 
         const userMessage: ChatMessageType = {role: 'user', content: instruction};
         const newHistory = [...chatHistory, userMessage];
         setChatHistory(newHistory);
         setInput('');
-        setIsGenerating(true);
-        setConnectionStatus('connecting');
 
         const metricsIndex = metricsHistory.length;
         const tFetchStart = performance.now();
@@ -73,165 +73,65 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
 
         const oldUserMessages = chatHistory
             .filter((msg) => msg.role === 'user')
-            .map((msg) => ({role: 'user', content: msg.content}));
+            .map((msg) => ({role: 'user' as const, content: msg.content}));
         const lastAssistant = chatHistory.filter((msg) => msg.role === 'assistant').slice(-1)[0];
-        const memoryMessages = [
+        const memoryMessages: AIMessage[] = [
             ...oldUserMessages,
-            ...(lastAssistant ? [{role: 'assistant', content: lastAssistant.content}] : []),
-            {role: 'user', content: `Current document:\n\n${markdown}`},
-            userMessage,
+            ...(lastAssistant ? [{role: 'assistant' as const, content: lastAssistant.content}] : []),
+            {role: 'user' as const, content: `Current document:\n\n${markdown}`},
+            {role: 'user' as const, content: userMessage.content},
         ];
 
         // Prepare placeholder for assistant response - only showing generation summary
         setChatHistory((h) => [...h, {role: 'assistant', content: 'Generating content for your document...'}]);
         const assistantMessageIndex = newHistory.length;
+        let wordCount = 0;
 
-        try {
-            setConnectionStatus('connected');
-            let firstByteTime: number | null = null;
-            let processTime: number | null = null;
-            let updatedContent = '';
-            let wordCount = 0;
+        await aiService.generateCompletion({
+            model: 'agt-d8056405-2686-4e05-a5dd-38fc31a4a543',
+            messages: memoryMessages,
+            onContent: (updatedContent) => {
+                // Update editor with full content for smooth animation
+                onUpdateMarkdown(updatedContent);
 
-            const response = await fetch('https://magic.arz.ai/chat/openai/v1/completion', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'agt-d8056405-2686-4e05-a5dd-38fc31a4a543',
-                },
-                body: JSON.stringify({
-                    model: 'agt-d8056405-2686-4e05-a5dd-38fc31a4a543',
-                    messages: memoryMessages,
-                    stream: true,
-                }),
-            });
+                // Update chat with only generation summary (last ~50 characters + word count)
+                wordCount = updatedContent.split(/\s+/).filter(word => word.length > 0).length;
+                const contentTail = updatedContent.slice(-50).trim();
+                const summary = `<div class="generation-status">Generating content... <span class="word-count-badge">${wordCount} words</span></div><div class="content-preview">"...${contentTail}"</div>`;
 
-            if (!response.ok || !response.body) {
-                console.error('Error from API', await response.text());
-                setConnectionStatus('disconnected');
-                return;
-            }
+                setChatHistory((h) =>
+                    h.map((msg, idx) =>
+                        idx === assistantMessageIndex ? {...msg, content: summary} : msg
+                    )
+                );
+            },
+            onMetrics: (metrics) => {
+                setMetricsHistory((m) => {
+                    const newMetrics = [...m];
+                    newMetrics[metricsIndex] = {
+                        ...newMetrics[metricsIndex],
+                        ...metrics,
+                    };
+                    return newMetrics;
+                });
+            },
+            onComplete: (finalContent) => {
+                // Final summary when done
+                const finalSummary = `<div class="generation-complete">Generated ${wordCount} words of content for your document.</div>`;
+                setChatHistory((h) =>
+                    h.map((msg, idx) =>
+                        idx === assistantMessageIndex ? {...msg, content: finalSummary} : msg
+                    )
+                );
+            },
+            onError: (error) => {
+                console.error('AI Service error:', error);
+                setChatHistory((h) => h.slice(0, -1)); // Remove the empty assistant message
+            },
+        });
 
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let done = false;
-
-            while (!done) {
-                const {value, done: doneReading} = await reader.read();
-                const now = performance.now();
-                if (firstByteTime === null) {
-                    firstByteTime = now - tFetchStart;
-                    setMetricsHistory((m) => {
-                        const newMetrics = [...m];
-                        newMetrics[metricsIndex] = {
-                            ...newMetrics[metricsIndex],
-                            sendTime: firstByteTime!,
-                        };
-                        return newMetrics;
-                    });
-                }
-                done = doneReading;
-                const chunk = decoder.decode(value);
-                const lines = chunk.split('\n').filter((line) => line.trim().startsWith('data:'));
-                for (const line of lines) {
-                    const data = line.replace(/^data: /, '');
-                    if (data === '[DONE]') {
-                        done = true;
-                        break;
-                    }
-                    try {
-                        const parsed = JSON.parse(data);
-                        const meta = parsed.extras?.meta;
-                        if (meta) {
-                            setMetricsHistory((m) => {
-                                const newMetrics = [...m];
-                                const execs = newMetrics[metricsIndex].nodeExecutions.slice();
-                                const idxNode = execs.findIndex((n) => n.node_id === meta.node_id);
-                                const entry = {
-                                    node_id: meta.node_id,
-                                    node_class: meta.node_class,
-                                    start_time: meta.start_time,
-                                    end_time: meta.end_time,
-                                    execution_time: meta.execution_time,
-                                    status: meta.execution_time && meta.execution_time > 0 ? 'completed' : 'running',
-                                };
-                                if (idxNode === -1) {
-                                    execs.push(entry as NodeExecution);
-                                } else {
-                                    execs[idxNode] = entry as NodeExecution;
-                                }
-                                newMetrics[metricsIndex] = {
-                                    ...newMetrics[metricsIndex],
-                                    nodeExecutions: execs,
-                                };
-                                return newMetrics;
-                            });
-                        }
-                        const content = parsed.choices[0].delta.content;
-                        if (content) {
-                            if (processTime === null && firstByteTime !== null) {
-                                processTime = performance.now() - tFetchStart - firstByteTime;
-                                setMetricsHistory((m) => {
-                                    const newMetrics = [...m];
-                                    newMetrics[metricsIndex] = {
-                                        ...newMetrics[metricsIndex],
-                                        processTime: processTime!,
-                                    };
-                                    return newMetrics;
-                                });
-                            }
-                            updatedContent += content;
-                            wordCount = updatedContent.split(/\s+/).filter(word => word.length > 0).length;
-
-                            // Update editor with full content for smooth animation
-                            onUpdateMarkdown(updatedContent);
-
-                            // Update chat with only generation summary (last ~50 characters + word count)
-                            const contentTail = updatedContent.slice(-50).trim();
-                            const summary = `<div class="generation-status">Generating content... <span class="word-count-badge">${wordCount} words</span></div><div class="content-preview">"...${contentTail}"</div>`;
-
-                            setChatHistory((h) =>
-                                h.map((msg, idx) =>
-                                    idx === assistantMessageIndex ? {...msg, content: summary} : msg
-                                )
-                            );
-                        }
-                    } catch (err) {
-                        console.error('Could not parse stream message', err);
-                    }
-                }
-            }
-
-            // Final summary when done
-            const finalSummary = `<div class="generation-complete">Generated ${wordCount} words of content for your document.</div>`;
-            setChatHistory((h) =>
-                h.map((msg, idx) =>
-                    idx === assistantMessageIndex ? {...msg, content: finalSummary} : msg
-                )
-            );
-
-            const tEnd = performance.now();
-            const finalTotalTime = tEnd - tFetchStart;
-            setMetricsHistory((m) => {
-                const newMetrics = [...m];
-                const {sendTime, processTime} = newMetrics[metricsIndex];
-                newMetrics[metricsIndex] = {
-                    ...newMetrics[metricsIndex],
-                    generatingTime: finalTotalTime - (sendTime + processTime),
-                    totalTime: finalTotalTime,
-                    isStreaming: false,
-                };
-                return newMetrics;
-            });
-        } catch (error) {
-            console.error('Request failed:', error);
-            setConnectionStatus('disconnected');
-            setChatHistory((h) => h.slice(0, -1)); // Remove the empty assistant message
-        } finally {
-            setIsGenerating(false);
-            inputRef.current?.focus();
-        }
-    }, [input, isGenerating, chatHistory, markdown, metricsHistory, onUpdateMarkdown]);
+        inputRef.current?.focus();
+    }, [input, aiService, chatHistory, markdown, metricsHistory, onUpdateMarkdown]);
 
     // Group messages into user/assistant turns
     const turns: ChatTurn[] = [];
@@ -249,7 +149,7 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
 
     return (
         <div className="chat-panel">
-            <PanelHeader connectionStatus={connectionStatus}/>
+            <PanelHeader connectionStatus={aiService.connectionStatus}/>
 
             <div className="chat-history" ref={chatHistoryRef}>
                 {turns.length === 0 ? (
@@ -264,7 +164,7 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
                             {turn.assistant && (
                                 <ChatMessage
                                     message={turn.assistant}
-                                    isGenerating={isGenerating && idx === turns.length - 1 && !turn.assistant.content}
+                                    isGenerating={aiService.isGenerating && idx === turns.length - 1 && !turn.assistant.content}
                                     nodeExecutions={metricsHistory[idx]?.nodeExecutions}
                                 />
                             )}
@@ -278,8 +178,8 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
                 value={input}
                 onChange={setInput}
                 onSubmit={handleSubmit}
-                disabled={isGenerating}
-                isLoading={isGenerating}
+                disabled={aiService.isGenerating}
+                isLoading={aiService.isGenerating}
             />
         </div>
     );
