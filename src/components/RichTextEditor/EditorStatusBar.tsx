@@ -1,6 +1,12 @@
-import {type EditorStatusBarProps} from './types';
+import {type Editor} from '@tiptap/react';
 
-export function EditorStatusBar({editor}: EditorStatusBarProps) {
+interface EditorStatusBarProps {
+    editor: Editor;
+    wordCount?: number;
+    characterCount?: number;
+}
+
+export function EditorStatusBar({editor, wordCount, characterCount}: EditorStatusBarProps) {
     const canUndo = editor?.can().undo();
     const canRedo = editor?.can().redo();
 
@@ -21,26 +27,24 @@ export function EditorStatusBar({editor}: EditorStatusBarProps) {
 
     return (
         <div className="editor-status-bar" role="status" aria-label="Editor status">
-            <div className="status-left">
-        <span className="status-item" aria-label={`Current element: ${currentNode}`}>
-          <strong>{currentNode}</strong>
-        </span>
-                {activeFormats.length > 0 && (
-                    <span className="status-item" aria-label={`Active formats: ${activeFormats.join(', ')}`}>
-            {activeFormats.join(' • ')}
-          </span>
+            <div className="status-stats">
+                {wordCount !== undefined && (
+                    <span className="status-stat">
+                        {wordCount} {wordCount === 1 ? 'word' : 'words'}
+                    </span>
                 )}
+                {characterCount !== undefined && (
+                    <span className="status-stat">
+                        {characterCount} {characterCount === 1 ? 'character' : 'characters'}
+                    </span>
+                )}
+                <span className="status-stat">
+                    {currentNode}
+                </span>
             </div>
 
-            <div className="status-right">
-        <span className="keyboard-hint" aria-label="Keyboard shortcuts">
-          <kbd>Ctrl+B</kbd> Bold • <kbd>Ctrl+I</kbd> Italic • <kbd>Ctrl+K</kbd> Code • <kbd>ESC</kbd> Exit Fullscreen
-        </span>
-                {(canUndo || canRedo) && (
-                    <span className="status-item" aria-label="Undo/Redo status">
-            {canUndo && '↶ Undo'} {canUndo && canRedo && ' • '} {canRedo && '↷ Redo'}
-          </span>
-                )}
+            <div className="keyboard-hint">
+                Type <kbd>/</kbd> for commands • <kbd>Ctrl+B</kbd> Bold • <kbd>Ctrl+I</kbd> Italic
             </div>
         </div>
     );
