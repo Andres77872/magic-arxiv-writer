@@ -42,7 +42,7 @@ export function PaperActions({paper, onCite}: PaperActionsProps) {
     return (
         <div className="paper-actions">
             <button
-                className="action-btn primary"
+                className="paper-action-btn primary"
                 onClick={onCite}
                 title="Add citation to document"
             >
@@ -50,7 +50,7 @@ export function PaperActions({paper, onCite}: PaperActionsProps) {
             </button>
 
             <button
-                className="action-btn secondary"
+                className="paper-action-btn secondary"
                 onClick={copyBibTeX}
                 title="Copy BibTeX to clipboard"
             >
@@ -58,7 +58,7 @@ export function PaperActions({paper, onCite}: PaperActionsProps) {
             </button>
 
             <button
-                className="action-btn secondary"
+                className="paper-action-btn secondary"
                 onClick={openArxiv}
                 title="View on arXiv"
             >
@@ -66,7 +66,7 @@ export function PaperActions({paper, onCite}: PaperActionsProps) {
             </button>
 
             <button
-                className="action-btn secondary"
+                className="paper-action-btn secondary"
                 onClick={openPDF}
                 title="Download PDF"
             >

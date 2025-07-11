@@ -35,7 +35,7 @@ export function PaperStats({paper, onSearchRelated}: PaperStatsProps) {
             </div>
 
             <button
-                className="action-btn secondary"
+                className="paper-action-btn secondary"
                 onClick={onSearchRelated}
                 title="Find similar papers"
                 style={{marginLeft: 'auto'}}

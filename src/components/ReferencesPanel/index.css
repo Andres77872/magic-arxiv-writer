@@ -806,7 +806,7 @@
     flex-wrap: wrap;
 }
 
-.action-btn {
+.paper-action-btn {
     display: inline-flex;
     align-items: center;
     gap: var(--gap-xs);
@@ -823,43 +823,43 @@
     transform: translateY(0);
 }
 
-.action-btn:focus {
+.paper-action-btn:focus {
     outline: var(--focus-outline);
     outline-offset: var(--focus-outline-offset);
 }
 
-.action-btn:active {
+.paper-action-btn:active {
     transform: translateY(1px);
 }
 
-.action-btn.primary {
+.paper-action-btn.primary {
     background: var(--accent-color);
     color: var(--color-brighter);
     border-color: var(--accent-color);
     box-shadow: 0 2px 8px rgba(124, 58, 237, 0.2);
 }
 
-.action-btn.primary:hover {
+.paper-action-btn.primary:hover {
     background: var(--accent-color-hover);
     border-color: var(--accent-color-hover);
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
 }
 
-.action-btn.secondary {
+.paper-action-btn.secondary {
     background: var(--background-color-primary);
     color: var(--text-color);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.action-btn.secondary:hover {
+.paper-action-btn.secondary:hover {
     background: var(--background-color-hover);
     border-color: var(--accent-color);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.action-btn::before {
+.paper-action-btn::before {
     content: '';
     position: absolute;
     top: 0;
@@ -870,7 +870,7 @@
     transition: left 0.4s ease-in-out;
 }
 
-.action-btn:hover::before {
+.paper-action-btn:hover::before {
     left: 100%;
 }
 
@@ -1247,7 +1247,7 @@
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
     .reference-card,
-    .action-btn,
+    .paper-action-btn,
     .suggestion-chip,
     .empty-suggestion,
     .score-badge {
@@ -1257,7 +1257,7 @@
 
     .search-input-wrapper::before,
     .suggestion-chip::before,
-    .action-btn::before,
+    .paper-action-btn::before,
     .empty-suggestion::before,
     .score-badge::before {
         animation: none;
@@ -1276,7 +1276,7 @@
         border-width: 2px;
     }
 
-    .action-btn {
+    .paper-action-btn {
         border-width: 2px;
     }
 
@@ -1437,7 +1437,7 @@
         gap: var(--gap-xs);
     }
 
-    .action-btn {
+    .paper-action-btn {
         padding: var(--padding-xs) var(--padding-sm);
         font-size: var(--font-size-xs);
     }
@@ -1509,7 +1509,7 @@
         flex-direction: column;
     }
 
-    .action-btn {
+    .paper-action-btn {
         justify-content: center;
     }
 
