@@ -68,8 +68,6 @@ export function FloatingToolbar({ editor }: FloatingToolbarProps) {
         }
 
         try {
-            let aiResponse = '';
-            
             await generateCompletion({
                 model: model, // Example model ID, adjust as needed
                 messages: [
@@ -82,8 +80,8 @@ export function FloatingToolbar({ editor }: FloatingToolbarProps) {
                         content: prompt
                     }
                 ],
-                onContent: (content) => {
-                    aiResponse = content;
+                onContent: () => {
+                    // Content is handled in onComplete
                 },
                 onComplete: (finalContent) => {
                     // Replace the selected text with the AI response

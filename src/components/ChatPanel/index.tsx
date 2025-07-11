@@ -7,9 +7,7 @@ import {EmptyState} from './EmptyState';
 import {
     type ChatMessage as ChatMessageType,
     type ChatMetrics,
-    type ChatPanelProps,
-    type ConnectionStatus,
-    type NodeExecution
+    type ChatPanelProps
 } from './types';
 import { useAIService, type AIMessage } from '../AIService';
 import './index.css';
@@ -115,7 +113,7 @@ export function ChatPanel({markdown, onUpdateMarkdown}: ChatPanelProps) {
                     return newMetrics;
                 });
             },
-            onComplete: (finalContent) => {
+            onComplete: () => {
                 // Final summary when done
                 const finalSummary = `<div class="generation-complete">Generated ${wordCount} words of content for your document.</div>`;
                 setChatHistory((h) =>

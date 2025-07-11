@@ -73,7 +73,7 @@ const commands: SlashCommandItem[] = [
 
 export function SlashCommand({ editor, position, onClose }: SlashCommandProps) {
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery] = useState('');
     const menuRef = useRef<HTMLDivElement>(null);
 
     const filteredCommands = commands.filter(command =>

@@ -1,6 +1,3 @@
-import React from 'react';
-import type {Editor} from '@tiptap/react';
-
 interface WritingModeIndicatorProps {
     mode?: 'writing' | 'editing' | 'idle';
 }

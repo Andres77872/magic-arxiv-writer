@@ -7,9 +7,6 @@ interface EditorStatusBarProps {
 }
 
 export function EditorStatusBar({editor, wordCount, characterCount}: EditorStatusBarProps) {
-    const canUndo = editor?.can().undo();
-    const canRedo = editor?.can().redo();
-
     const activeFormats = [];
     if (editor?.isActive('bold')) activeFormats.push('Bold');
     if (editor?.isActive('italic')) activeFormats.push('Italic');

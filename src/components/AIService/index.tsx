@@ -58,7 +58,6 @@ export function useAIService() {
         let firstByteTime: number | null = null;
         let processTime: number | null = null;
         let updatedContent = '';
-        let wordCount = 0;
         const nodeExecutions: NodeExecution[] = [];
 
         try {
@@ -144,7 +143,6 @@ export function useAIService() {
                             }
                             
                             updatedContent += content;
-                            wordCount = updatedContent.split(/\s+/).filter(word => word.length > 0).length;
                             
                             setState(prev => ({ ...prev, content: updatedContent }));
                             
