@@ -5,7 +5,6 @@ import './SlashCommand.css';
 export const CommandItem: React.FC<CommandItemProps> = ({
     command,
     isSelected,
-    editor,
     onClick,
     onMouseEnter
 }) => {
