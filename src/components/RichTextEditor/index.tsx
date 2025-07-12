@@ -4,7 +4,7 @@ import Typography from '@tiptap/extension-typography';
 import Placeholder from '@tiptap/extension-placeholder';
 import Focus from '@tiptap/extension-focus';
 import Link from '@tiptap/extension-link';
-import {useEffect, useMemo, useState, useRef, useCallback} from 'react';
+import {useEffect, useMemo, useState, useRef} from 'react';
 import {type RichTextEditorProps} from './types';
 import {LoadingState} from './LoadingState';
 import {EditorContent} from './EditorContent';
@@ -22,7 +22,7 @@ export function RichTextEditor({
                                    placeholder,
                                    height = '100%'
                                }: RichTextEditorProps) {
-    const [isFullscreen, setIsFullscreen] = useState(false);
+
     const [wordCount, setWordCount] = useState(0);
     const [characterCount, setCharacterCount] = useState(0);
     const [showSlashCommand, setShowSlashCommand] = useState(false);
@@ -131,13 +131,7 @@ export function RichTextEditor({
         }
     }, [value, editor, markdownConverter]);
 
-    // Handle fullscreen toggle
-    const toggleFullscreen = useCallback(() => {
-        setIsFullscreen(!isFullscreen);
-        setTimeout(() => {
-            editor?.commands.focus();
-        }, 100);
-    }, [isFullscreen, editor]);
+
 
     // Handle keyboard shortcuts
     useEffect(() => {
@@ -145,8 +139,6 @@ export function RichTextEditor({
             if (event.key === 'Escape') {
                 if (showSlashCommand) {
                     setShowSlashCommand(false);
-                } else if (isFullscreen) {
-                    setIsFullscreen(false);
                 }
             }
             if (event.ctrlKey || event.metaKey) {
@@ -163,19 +155,14 @@ export function RichTextEditor({
                         event.preventDefault();
                         editor?.chain().focus().toggleCode().run();
                         break;
-                    case 'Enter':
-                        if (isFullscreen) {
-                            event.preventDefault();
-                            toggleFullscreen();
-                        }
-                        break;
+
                 }
             }
         };
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [editor, isFullscreen, showSlashCommand, toggleFullscreen]);
+    }, [editor, showSlashCommand]);
 
     if (!editor) {
         return <LoadingState/>;
@@ -184,18 +171,11 @@ export function RichTextEditor({
     return (
         <div
             ref={editorRef}
-            className={`rich-text-editor ${isFullscreen ? 'fullscreen' : ''}`}
-            style={{height: isFullscreen ? '100vh' : height}}
+            className="rich-text-editor"
+            style={{height: height}}
         >
             <div className="editor-top-toolbar">
                 <WritingModeIndicator />
-                <button
-                    onClick={toggleFullscreen}
-                    className="floating-toolbar-button"
-                    title={isFullscreen ? 'Exit Fullscreen (ESC)' : 'Fullscreen (Ctrl+Enter)'}
-                >
-                    {isFullscreen ? '✕' : '⛶'}
-                </button>
             </div>
 
             <div className="editor-content-wrapper">
