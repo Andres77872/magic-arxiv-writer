@@ -7,6 +7,11 @@ export interface SlashCommandItem {
     command: (editor: Editor) => void;
 }
 
+export interface CommandGroup {
+    title: string;
+    items: SlashCommandItem[];
+}
+
 export interface SlashCommandProps {
     editor: Editor;
     position: { top: number; left: number };
@@ -21,10 +26,15 @@ export interface CommandItemProps {
     onMouseEnter: () => void;
 }
 
+export interface CommandGroupHeaderProps {
+    title: string;
+}
+
 export interface CommandListProps {
-    commands: SlashCommandItem[];
+    groups: CommandGroup[];
     selectedIndex: number;
     editor: Editor;
     onSelectCommand: (command: SlashCommandItem) => void;
     onMouseEnter: (index: number) => void;
+    flatCommandsList: SlashCommandItem[]; // For keyboard navigation
 }

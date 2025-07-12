@@ -10,7 +10,7 @@ import {LoadingState} from './LoadingState';
 import {EditorContent} from './EditorContent';
 import {EditorStatusBar} from './EditorStatusBar';
 import {FloatingToolbar} from './FloatingToolbar';
-import {SlashCommand} from './SlashCommand';
+import {SlashCommand} from './SlashCommand/index';
 import {WritingModeIndicator} from './WritingModeIndicator';
 import {createMarkdownConverter} from './utils/markdownConverter';
 import {updateCounts} from './utils/wordCounter';

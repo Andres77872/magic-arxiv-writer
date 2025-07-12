@@ -53,3 +53,30 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* Styling for group headers */
+.slash-command-group-header {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Add margin to first group header to ensure consistent spacing */
+.slash-command-group-header:first-child {
+    margin-top: 0;
+}
+
+/* Add spacing between group sections */
+.slash-command-group {
+    margin-bottom: 0.5rem;
+}
+
+/* Remove margin from last group */
+.slash-command-group:last-child {
+    margin-bottom: 0;
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { type Editor } from '@tiptap/react';
-import { commands } from './commandData';
+import { commands, commandGroups } from './commandData';
 import { CommandList } from './CommandList';
 import type { SlashCommandProps, SlashCommandItem } from './types';
 import './SlashCommand.css';
@@ -10,15 +10,28 @@ export function SlashCommand({ editor, position, onClose }: SlashCommandProps) {
     const [searchQuery] = useState('');
     const menuRef = useRef<HTMLDivElement>(null);
 
+    // Filter commands based on search query
     const filteredCommands = commands.filter(command =>
         command.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         command.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
+    
+    // Filter and transform groups based on search query
+    const filteredGroups = commandGroups
+        .map(group => ({
+            ...group,
+            items: group.items.filter(command =>
+                command.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                command.description.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }))
+        .filter(group => group.items.length > 0); // Only keep groups that have matching items
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'ArrowDown') {
                 event.preventDefault();
+                // We're still using filteredCommands for navigation since it's a flat list
                 setSelectedIndex((prev) => (prev + 1) % filteredCommands.length);
             } else if (event.key === 'ArrowUp') {
                 event.preventDefault();
@@ -73,7 +86,8 @@ export function SlashCommand({ editor, position, onClose }: SlashCommandProps) {
             style={{ top: position.top, left: position.left }}
         >
             <CommandList 
-                commands={filteredCommands}
+                groups={filteredGroups}
+                flatCommandsList={filteredCommands}
                 selectedIndex={selectedIndex}
                 editor={editor}
                 onSelectCommand={handleSelectCommand}
