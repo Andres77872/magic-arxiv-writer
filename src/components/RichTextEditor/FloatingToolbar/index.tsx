@@ -3,17 +3,25 @@ import { BubbleMenu } from '@tiptap/react';
 import { useAIService } from '../../AIService';
 import './FloatingToolbar.css';
 
-// Import types and primitive components
-import type { FloatingToolbarProps, AIAction } from './types';
+// Import types, primitive components, and JSON configuration
+import type { FloatingToolbarProps, AIAction, PromptAction, PromptActionsConfig } from './types';
 import { TextFormatButtons } from './TextFormatButtons';
 import { LinkButtons } from './LinkButtons';
 import { AIMenu } from './AIMenu';
+import promptActionsData from './promptActions.json';
 
 export function FloatingToolbar({ editor }: FloatingToolbarProps) {
     const [showAIMenu, setShowAIMenu] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [promptActions, setPromptActions] = useState<PromptAction[]>([]);
     const aiMenuRef = useRef<HTMLDivElement>(null);
     const { generateCompletion } = useAIService();
+    
+    // Load prompt actions from JSON
+    useEffect(() => {
+        const config = promptActionsData as PromptActionsConfig;
+        setPromptActions(config.actions);
+    }, []);
 
     // Close AI menu when clicking outside
     useEffect(() => {
@@ -46,27 +54,17 @@ export function FloatingToolbar({ editor }: FloatingToolbarProps) {
         setIsProcessing(true);
         setShowAIMenu(false);
 
-        // Prepare the prompt based on the action
-        let prompt = '';
-        let model = '';
-        switch (action) {
-            case 'extend':
-                prompt = `Extend and elaborate on the following text, maintaining the same style and tone:\n\n"${selectedText}"`;
-                model = 'agt-0c80d08b-542c-458b-b697-6ced8be42c5d';
-                break;
-            case 'rewrite':
-                prompt = `Rewrite the following text to make it clearer and more engaging while preserving the original meaning:\n\n"${selectedText}"`;
-                model = 'agt-0c80d08b-542c-458b-b697-6ced8be42c5d';
-                break;
-            case 'references':
-                prompt = `Search for and provide relevant academic references for the following text. Format as a list of citations:\n\n"${selectedText}"`;
-                model = 'agt-0c80d08b-542c-458b-b697-6ced8be42c5d';
-                break;
-            case 'translate':
-                prompt = `Translate the following text to English (or to Spanish if already in English), maintaining academic tone:\n\n"${selectedText}"`;
-                model = 'agt-0c80d08b-542c-458b-b697-6ced8be42c5d';
-                break;
+        // Find the selected action from the loaded JSON
+        const selectedAction = promptActions.find(a => a.id === action);
+        if (!selectedAction) {
+            console.error('Action not found:', action);
+            setIsProcessing(false);
+            return;
         }
+
+        // Prepare the prompt based on the action from JSON
+        const prompt = selectedAction.promptTemplate.replace('{{selectedText}}', selectedText);
+        const model = selectedAction.model;
 
         try {
             await generateCompletion({
@@ -129,6 +127,7 @@ export function FloatingToolbar({ editor }: FloatingToolbarProps) {
                     isProcessing={isProcessing}
                     setShowMenu={setShowAIMenu}
                     handleAIAction={handleAIAction}
+                    promptActions={promptActions}
                 />
             </div>
         </BubbleMenu>
