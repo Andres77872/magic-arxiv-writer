@@ -1,0 +1,48 @@
+/* FloatingToolbar.module.css */
+.container {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 4px;
+    background: var(--surface-overlay);
+    backdrop-filter: var(--backdrop-blur-lg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: var(--space-xs);
+    background: transparent;
+    color: var(--text-color-secondary);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: var(--transition-colors);
+    user-select: none;
+}
+
+.button:hover {
+    background: var(--background-color-hover);
+    color: var(--text-color);
+}
+
+.activeButton {
+    background: var(--accent-color);
+    color: var(--color-brighter);
+}
+
+.separator {
+    width: 1px;
+    height: 20px;
+    background: var(--border-color);
+    margin: 0 4px;
+}
