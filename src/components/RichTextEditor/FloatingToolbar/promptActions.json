@@ -1,0 +1,32 @@
+{
+  "actions": [
+    {
+      "id": "extend",
+      "name": "Extend",
+      "icon": "📝",
+      "model": "agt-0c80d08b-542c-458b-b697-6ced8be42c5d",
+      "promptTemplate": "Extend and elaborate on the following text, maintaining the same style and tone:\n\n\"{{selectedText}}\""
+    },
+    {
+      "id": "rewrite",
+      "name": "Rewrite",
+      "icon": "✍️",
+      "model": "agt-0c80d08b-542c-458b-b697-6ced8be42c5d",
+      "promptTemplate": "Rewrite the following text to make it clearer and more engaging while preserving the original meaning:\n\n\"{{selectedText}}\""
+    },
+    {
+      "id": "references",
+      "name": "Search for references",
+      "icon": "📚",
+      "model": "agt-0c80d08b-542c-458b-b697-6ced8be42c5d",
+      "promptTemplate": "Search for and provide relevant academic references for the following text. Format as a list of citations:\n\n\"{{selectedText}}\""
+    },
+    {
+      "id": "translate",
+      "name": "Translate",
+      "icon": "🌐",
+      "model": "agt-0c80d08b-542c-458b-b697-6ced8be42c5d",
+      "promptTemplate": "Translate the following text to English (or to Spanish if already in English), maintaining academic tone:\n\n\"{{selectedText}}\""
+    }
+  ]
+}
