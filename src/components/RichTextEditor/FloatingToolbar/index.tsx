@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { BubbleMenu } from '@tiptap/react';
 import { useAIService } from '../../AIService';
-import styles from './FloatingToolbar.module.css';
+import './FloatingToolbar.css';
 
 // Import types and primitive components
 import type { FloatingToolbarProps, AIAction } from './types';
@@ -113,7 +113,7 @@ export function FloatingToolbar({ editor }: FloatingToolbarProps) {
                 placement: 'top',
                 maxWidth: '640px',
             }}
-            className={styles.container}
+            className="ft-container"
         >
             {/* Text Formatting Buttons */}
             <TextFormatButtons editor={editor} />

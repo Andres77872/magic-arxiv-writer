@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './FloatingToolbar.module.css';
-import aiStyles from './AIMenu.module.css';
+import './FloatingToolbar.css';
+import './AIMenu.css';
 import type { AIMenuProps } from './types';
 
 export const AIMenu: React.FC<AIMenuProps> = ({
@@ -10,10 +10,10 @@ export const AIMenu: React.FC<AIMenuProps> = ({
     handleAIAction,
 }) => {
     return (
-        <div className={aiStyles.menuContainer}>
+        <div className="ai-menu-container">
             <button
                 onClick={() => setShowMenu(!showMenu)}
-                className={`${styles.button} ${aiStyles.aiButton} ${showMenu ? styles.activeButton : ''} ${isProcessing ? aiStyles.processing : ''}`}
+                className={`ft-button ai-button ${showMenu ? 'ft-active-button' : ''} ${isProcessing ? 'processing' : ''}`}
                 title="AI Assistant"
                 disabled={isProcessing}
             >
@@ -21,38 +21,38 @@ export const AIMenu: React.FC<AIMenuProps> = ({
             </button>
             
             {showMenu && (
-                <div className={aiStyles.dropdownMenu}>
+                <div className="ai-dropdown-menu">
                     <button
-                        className={aiStyles.menuItem}
+                        className="ai-menu-item"
                         onClick={() => handleAIAction('extend')}
                         disabled={isProcessing}
                     >
-                        <span className={aiStyles.menuIcon}>📝</span>
-                        <span className={aiStyles.menuText}>Extend</span>
+                        <span className="ai-menu-icon">📝</span>
+                        <span className="ai-menu-text">Extend</span>
                     </button>
                     <button
-                        className={aiStyles.menuItem}
+                        className="ai-menu-item"
                         onClick={() => handleAIAction('rewrite')}
                         disabled={isProcessing}
                     >
-                        <span className={aiStyles.menuIcon}>✍️</span>
-                        <span className={aiStyles.menuText}>Rewrite</span>
+                        <span className="ai-menu-icon">✍️</span>
+                        <span className="ai-menu-text">Rewrite</span>
                     </button>
                     <button
-                        className={aiStyles.menuItem}
+                        className="ai-menu-item"
                         onClick={() => handleAIAction('references')}
                         disabled={isProcessing}
                     >
-                        <span className={aiStyles.menuIcon}>📚</span>
-                        <span className={aiStyles.menuText}>Search for references</span>
+                        <span className="ai-menu-icon">📚</span>
+                        <span className="ai-menu-text">Search for references</span>
                     </button>
                     <button
-                        className={aiStyles.menuItem}
+                        className="ai-menu-item"
                         onClick={() => handleAIAction('translate')}
                         disabled={isProcessing}
                     >
-                        <span className={aiStyles.menuIcon}>🌐</span>
-                        <span className={aiStyles.menuText}>Translate</span>
+                        <span className="ai-menu-icon">🌐</span>
+                        <span className="ai-menu-text">Translate</span>
                     </button>
                 </div>
             )}

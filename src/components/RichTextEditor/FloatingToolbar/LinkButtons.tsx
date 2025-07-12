@@ -1,11 +1,11 @@
 import React from 'react';
-import styles from './FloatingToolbar.module.css';
+import './FloatingToolbar.css';
 import type { LinkButtonsProps } from './types';
 
 export const LinkButtons: React.FC<LinkButtonsProps> = ({ editor }) => {
     return (
         <>
-            <div className={styles.separator}></div>
+            <div className="ft-separator"></div>
             <button
                 onClick={() => {
                     const url = window.prompt('Enter URL:');
@@ -14,7 +14,7 @@ export const LinkButtons: React.FC<LinkButtonsProps> = ({ editor }) => {
                         editor.chain().focus().setTextSelection({ from, to }).toggleLink({ href: url }).run();
                     }
                 }}
-                className={`${styles.button} ${editor.isActive('link') ? styles.activeButton : ''}`}
+                className={`ft-button ${editor.isActive('link') ? 'ft-active-button' : ''}`}
                 title="Link"
             >
                 🔗
@@ -22,13 +22,13 @@ export const LinkButtons: React.FC<LinkButtonsProps> = ({ editor }) => {
             {editor.isActive('link') && (
                 <button
                     onClick={() => editor.chain().focus().unsetLink().run()}
-                    className={styles.button}
+                    className="ft-button"
                     title="Remove Link"
                 >
                     ❌
                 </button>
             )}
-            <div className={styles.separator}></div>
+            <div className="ft-separator"></div>
         </>
     );
 };
