@@ -97,91 +97,8 @@
     letter-spacing: -2px;
 }
 
-/* Floating Toolbar - Modern bubble menu */
-.floating-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 1px;
-    padding: 4px;
-    background: var(--surface-overlay);
-    backdrop-filter: var(--backdrop-blur-lg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    z-index: 100;
-}
-
-
-
-.floating-toolbar-separator {
-    width: 1px;
-    height: 20px;
-    background: var(--border-color);
-    margin: 0 4px;
-}
-
-/* AI Dropdown Menu */
-.ai-menu-container {
-    position: relative;
-    display: inline-flex;
-}
-
-.ai-button.is-processing {
-    animation: pulse 1s ease-in-out infinite;
-}
-
-.ai-dropdown-menu {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    background: var(--surface-overlay);
-    backdrop-filter: var(--backdrop-blur-lg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-xl);
-    padding: var(--space-xs);
-    min-width: 200px;
-    z-index: 101;
-}
-
-.ai-menu-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    width: 100%;
-    padding: var(--space-sm) var(--space-md);
-    background: transparent;
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: var(--transition-colors);
-    font-size: var(--font-size-sm);
-    color: var(--text-color);
-    text-align: left;
-}
-
-.ai-menu-item:hover {
-    background: var(--background-color-hover);
-}
-
-.ai-menu-item:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.ai-menu-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    font-size: var(--font-size-md);
-}
-
-.ai-menu-text {
-    flex: 1;
-    font-weight: var(--font-weight-regular);
-}
+/* Floating Toolbar and AI Menu styles moved to their respective component CSS files */
+/* See FloatingToolbar.css and AIMenu.css for these styles */
 
 /* Slash Command Menu */
 .slash-command-menu {
@@ -465,14 +382,7 @@
     animation: pulse 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-}
+/* @keyframes pulse moved to AIMenu.css */
 
 /* Status bar - Minimalist */
 .editor-status-bar {
