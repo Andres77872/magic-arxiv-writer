@@ -454,7 +454,7 @@
 
 /* Selection */
 .rich-text-editor-content ::selection {
-    background: var(--accent-soft);
+    background: rgba(88, 166, 255, 0.4); /* Using a more visible blue color with higher opacity */
     color: var(--text-color);
 }
 

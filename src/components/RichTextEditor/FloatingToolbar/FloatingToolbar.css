@@ -46,3 +46,26 @@
     background: var(--border-color);
     margin: 0 4px;
 }
+
+/* Button group styling */
+.ft-button-group {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    background: var(--surface-overlay);
+    border-radius: var(--radius-sm);
+}
+
+.ft-button-group .ft-button:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ft-button-group .ft-button:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.ft-button-group .ft-button:not(:first-child):not(:last-child) {
+    border-radius: 0;
+}
