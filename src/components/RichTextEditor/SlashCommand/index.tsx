@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { type Editor } from '@tiptap/react';
+import { useEffect, useState, useRef } from 'react';
 import { commands, commandGroups } from './commandData';
 import { CommandList } from './CommandList';
 import type { SlashCommandProps, SlashCommandItem } from './types';
