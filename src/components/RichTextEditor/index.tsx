@@ -15,6 +15,7 @@ import {WritingModeIndicator} from './WritingModeIndicator';
 import {createMarkdownConverter} from './utils/markdownConverter';
 import {updateCounts} from './utils/wordCounter';
 import {AIBeatExtension} from './AIBeat/AIBeatExtension';
+import {AIGeneratedMark} from './AIBeat/AIGeneratedMark';
 import './index.css';
 
 export function RichTextEditor({
@@ -80,6 +81,7 @@ export function RichTextEditor({
                 },
             }),
             AIBeatExtension,
+            AIGeneratedMark,
         ],
         content: markdownConverter.markdownToHtml(value),
         onUpdate: ({editor}) => {

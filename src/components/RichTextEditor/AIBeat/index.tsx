@@ -10,6 +10,8 @@ export const AIBeat = (props: NodeViewProps) => {
   const [characterCount, setCharacterCount] = useState(0);
   const [wordCount, setWordCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [previousContent, setPreviousContent] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   const aiService = useAIService();
@@ -48,6 +50,8 @@ export const AIBeat = (props: NodeViewProps) => {
   const handleSend = async () => {
     if (!prompt.trim()) return;
     setIsLoading(true);
+    setIsGenerating(true);
+    setPreviousContent('');
     
     try {
       const previousText = getPreviousText();
@@ -73,28 +77,109 @@ export const AIBeat = (props: NodeViewProps) => {
       // Make sure getPos returns a valid position
       if (typeof pos === 'number') {
         // Start generating content
-        
         await aiService.generateCompletion({
           model: promptTemplate.model,
           messages,
           onContent: (content) => {
-            // We can observe content updates here if needed
-            // but we'll let onComplete handle the final insertion
+            // Stream only the new tokens to the editor
+            const newContent = content.substring(previousContent.length);
+            setPreviousContent(content); // Update the previous content for next comparison
+            
+            if (newContent.length === 0) return; // Skip if there's no new content
+            
+            // Find the position after the AIBeat node and insert/update content
+            // This ensures the generated text appears after the AIBeat component
+            const nodeSize = editor.state.doc.nodeAt(pos)?.nodeSize || 1;
+            const insertPos = pos + nodeSize;
+            
+            // Find all AI-generated nodes after the AIBeat
+            let lastAINodeEnd = insertPos;
+            let foundAIContent = false;
+            
+            // Scan document to find the end of any existing AI-generated content
+            editor.state.doc.nodesBetween(insertPos, editor.state.doc.content.size, (node, nodePos) => {
+              if (node.marks.some(mark => mark.type.name === 'aiGenerated')) {
+                foundAIContent = true;
+                const nodeEnd = nodePos + node.nodeSize;
+                if (nodeEnd > lastAINodeEnd) {
+                  lastAINodeEnd = nodeEnd;
+                }
+                return true;
+              } else if (foundAIContent) {
+                // We've found the end of AI content
+                return false;
+              }
+              return true;
+            });
+            
+            if (foundAIContent) {
+              // If we have AI content, replace it all with the full updated content
+              // This ensures we don't get duplicate/truncated content
+              editor.chain()
+                .deleteRange({ from: insertPos, to: lastAINodeEnd })
+                .setTextSelection(insertPos)
+                .insertContent({
+                  type: 'text',
+                  text: content, // Insert the complete content each time
+                  marks: [{ type: 'aiGenerated' }]
+                })
+                .run();
+            } else {
+              // First insertion - insert new content after the AIBeat node
+              editor.chain()
+                .setTextSelection(insertPos)
+                .insertContent({
+                  type: 'text',
+                  text: content, // Insert the complete content
+                  marks: [{ type: 'aiGenerated' }]
+                })
+                .run();
+            }
           },
           onComplete: (finalContent) => {
-            // Delete this node
-            editor.chain().focus().deleteRange({ from: pos, to: pos + 1 }).run();
+            // Mark generation as complete
+            setIsGenerating(false);
             
-            // Insert the AI response at the position where this node was
-            editor.chain().focus().setTextSelection(pos).insertContent(finalContent).run();
+            // Ensure the final content is properly inserted
+            // This handles any case where the streaming might have missed something
+            const nodeSize = editor.state.doc.nodeAt(pos)?.nodeSize || 1;
+            const insertPos = pos + nodeSize;
+            
+            // Find the end position of the existing AI content (if any)
+            let endPos = insertPos;
+            let foundEnd = false;
+            
+            editor.state.doc.nodesBetween(insertPos, editor.state.doc.content.size, (node, nodePos) => {
+              if (!foundEnd && !node.marks.some(mark => mark.type.name === 'aiGenerated')) {
+                endPos = nodePos;
+                foundEnd = true;
+                return false;
+              }
+              return !foundEnd;
+            });
+            
+            // Replace with the final content to ensure everything is complete
+            if (foundEnd) {
+              editor.chain()
+                .setTextSelection(insertPos)
+                .deleteRange({ from: insertPos, to: endPos })
+                .insertContent({
+                  type: 'text',
+                  text: finalContent,
+                  marks: [{ type: 'aiGenerated' }]
+                })
+                .run();
+            }
           },
           onError: (error) => {
             console.error('Error generating content:', error);
+            setIsGenerating(false);
           }
         });
       }
     } catch (error) {
       console.error('Error in handleSend:', error);
+      setIsGenerating(false);
     } finally {
       setIsLoading(false);
     }
@@ -149,6 +234,7 @@ export const AIBeat = (props: NodeViewProps) => {
           onKeyDown={handleKeyDown}
           placeholder="Ask the AI for help with your paper..."
           autoFocus
+          disabled={isGenerating}
         />
       </div>
       
@@ -164,9 +250,9 @@ export const AIBeat = (props: NodeViewProps) => {
         <button 
           className="ai-beat-send-btn" 
           onClick={handleSend}
-          disabled={!prompt.trim() || isLoading}
+          disabled={!prompt.trim() || isLoading || isGenerating}
         >
-          {isLoading ? 'Generating...' : 'Send'}
+          {isGenerating ? 'Generating...' : isLoading ? 'Processing...' : 'Send'}
         </button>
       </div>
     </NodeViewWrapper>
