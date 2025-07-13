@@ -36,19 +36,24 @@ export function SlashCommand({ editor, position, onClose }: SlashCommandProps) {
                 event.preventDefault();
                 setSelectedIndex((prev) => (prev - 1 + filteredCommands.length) % filteredCommands.length);
             } else if (event.key === 'Enter') {
+                // Prevent default and stop propagation to ensure Enter doesn't create a new line
                 event.preventDefault();
+                event.stopPropagation();
+                
                 if (filteredCommands[selectedIndex]) {
-                    // Remove the slash from the editor
+                    // Execute the selected command and close the menu
                     deleteSlashAndExecuteCommand(filteredCommands[selectedIndex]);
                 }
+                return false; // Extra measure to prevent event bubbling
             } else if (event.key === 'Escape') {
                 event.preventDefault();
                 onClose();
             }
         };
 
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
+        // Use capture phase to ensure our handler runs before editor's handler
+        document.addEventListener('keydown', handleKeyDown, true);
+        return () => document.removeEventListener('keydown', handleKeyDown, true);
     }, [editor, filteredCommands, selectedIndex, onClose]);
 
     useEffect(() => {
