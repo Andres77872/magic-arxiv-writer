@@ -3,6 +3,9 @@ import type { NodeViewProps } from '@tiptap/react';
 import { NodeViewWrapper } from '@tiptap/react';
 import { useAIService } from '../../AIService';
 import type { AIMessage } from '../../AIService';
+import { AIBeatHeader } from './AIBeatHeader';
+import { AIBeatBody } from './AIBeatBody';
+import { AIBeatFooter } from './AIBeatFooter';
 import './AIBeat.css';
 
 export const AIBeat = (props: NodeViewProps) => {
@@ -217,55 +220,26 @@ export const AIBeat = (props: NodeViewProps) => {
 
   return (
     <NodeViewWrapper className="ai-beat-container">
-      <div className="ai-beat-header" data-drag-handle>
-        <div className="ai-beat-title">
-          <span className="ai-beat-icon">✨</span>
-          AI Assistant
-        </div>
-        <button 
-          className="ai-beat-remove-btn" 
-          onClick={handleRemove}
-          aria-label="Remove AI Beat"
-        >
-          ✕
-        </button>
-      </div>
+      <AIBeatHeader handleRemove={handleRemove} />
       
-      <div className="ai-beat-content">
-        <textarea
-          ref={textareaRef}
-          className="ai-beat-textarea"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask the AI for help with your paper..."
-          autoFocus
-          disabled={isGenerating}
-        />
-      </div>
+      <AIBeatBody
+        prompt={prompt}
+        setPrompt={setPrompt}
+        textareaRef={textareaRef}
+        handleKeyDown={handleKeyDown}
+        isGenerating={isGenerating}
+      />
       
-      <div className="ai-beat-footer">
-        <div className="ai-beat-counts">
-          <div className="ai-beat-count-item">
-            <span>Input: {characterCount} chars / {wordCount} words</span>
-          </div>
-          {aiCharCount > 0 && (
-            <div className="ai-beat-count-item">
-              <span>AI Generated: {aiCharCount} chars / {aiWordCount} words</span>
-            </div>
-          )}
-        </div>
-        <div className="ai-beat-send-wrapper">
-          <div className="ai-beat-tooltip">Ctrl+Enter to send</div>
-          <button 
-            className="ai-beat-send-btn" 
-            onClick={handleSend}
-            disabled={!prompt.trim() || isLoading || isGenerating}
-          >
-            {isGenerating ? 'Generating...' : isLoading ? 'Processing...' : 'Send'}
-          </button>
-        </div>
-      </div>
+      <AIBeatFooter
+        characterCount={characterCount}
+        wordCount={wordCount}
+        aiCharCount={aiCharCount}
+        aiWordCount={aiWordCount}
+        handleSend={handleSend}
+        isLoading={isLoading}
+        isGenerating={isGenerating}
+        prompt={prompt}
+      />
     </NodeViewWrapper>
   );
 };
