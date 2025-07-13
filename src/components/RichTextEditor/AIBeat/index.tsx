@@ -9,6 +9,8 @@ export const AIBeat = (props: NodeViewProps) => {
   const [prompt, setPrompt] = useState('');
   const [characterCount, setCharacterCount] = useState(0);
   const [wordCount, setWordCount] = useState(0);
+  const [aiCharCount, setAiCharCount] = useState(0);
+  const [aiWordCount, setAiWordCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [previousContent, setPreviousContent] = useState('');
@@ -140,6 +142,10 @@ export const AIBeat = (props: NodeViewProps) => {
             // Mark generation as complete
             setIsGenerating(false);
             
+            // Calculate and update AI-generated text statistics
+            setAiCharCount(finalContent.length);
+            setAiWordCount(finalContent.trim().split(/\s+/).filter(Boolean).length);
+            
             // Ensure the final content is properly inserted
             // This handles any case where the streaming might have missed something
             const nodeSize = editor.state.doc.nodeAt(pos)?.nodeSize || 1;
@@ -241,19 +247,24 @@ export const AIBeat = (props: NodeViewProps) => {
       <div className="ai-beat-footer">
         <div className="ai-beat-counts">
           <div className="ai-beat-count-item">
-            <span>{characterCount} chars</span>
+            <span>Input: {characterCount} chars / {wordCount} words</span>
           </div>
-          <div className="ai-beat-count-item">
-            <span>{wordCount} words</span>
-          </div>
+          {aiCharCount > 0 && (
+            <div className="ai-beat-count-item">
+              <span>AI Generated: {aiCharCount} chars / {aiWordCount} words</span>
+            </div>
+          )}
         </div>
-        <button 
-          className="ai-beat-send-btn" 
-          onClick={handleSend}
-          disabled={!prompt.trim() || isLoading || isGenerating}
-        >
-          {isGenerating ? 'Generating...' : isLoading ? 'Processing...' : 'Send'}
-        </button>
+        <div className="ai-beat-send-wrapper">
+          <div className="ai-beat-tooltip">Ctrl+Enter to send</div>
+          <button 
+            className="ai-beat-send-btn" 
+            onClick={handleSend}
+            disabled={!prompt.trim() || isLoading || isGenerating}
+          >
+            {isGenerating ? 'Generating...' : isLoading ? 'Processing...' : 'Send'}
+          </button>
+        </div>
       </div>
     </NodeViewWrapper>
   );
