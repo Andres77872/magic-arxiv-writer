@@ -1,0 +1,82 @@
+.slash-command-menu {
+    position: absolute;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0px 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+    z-index: 100;
+    max-height: 400px;
+    overflow-y: auto;
+    width: 320px;
+}
+
+.slash-command-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.slash-command-item:hover,
+.slash-command-item.is-selected {
+    background-color: #f1f5f9;
+}
+
+.slash-command-icon {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background-color: #e2e8f0;
+    border-radius: 0.25rem;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.slash-command-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.slash-command-title {
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.slash-command-description {
+    font-size: 0.75rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Styling for group headers */
+.slash-command-group-header {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Add margin to first group header to ensure consistent spacing */
+.slash-command-group-header:first-child {
+    margin-top: 0;
+}
+
+/* Add spacing between group sections */
+.slash-command-group {
+    margin-bottom: 0.5rem;
+}
+
+/* Remove margin from last group */
+.slash-command-group:last-child {
+    margin-bottom: 0;
+}

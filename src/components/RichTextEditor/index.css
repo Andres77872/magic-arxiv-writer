@@ -1,204 +1,22 @@
-/* Rich Text Editor - Modern Minimalist Design */
+/* Rich Text Editor - Notion-Style Design */
 .rich-text-editor {
     display: flex;
     flex-direction: column;
     height: 100%;
     background: var(--background-color-primary);
-    border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: var(--transition-colors), var(--transition-transform);
-    box-shadow: var(--card-shadow);
-}
-
-.rich-text-editor.fullscreen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    height: 100vh !important;
-    width: 100vw !important;
-    border-radius: 0;
-    border: none;
-    background: var(--background-color-website);
-    box-shadow: none;
-}
-
-.rich-text-editor:focus-within {
-    border-color: var(--accent-color);
-    box-shadow: var(--box-shadow-focus);
-    transform: translateY(-1px);
-}
-
-.rich-text-editor.fullscreen:focus-within {
-    border: none;
-    box-shadow: none;
-    transform: none;
-}
-
-/* Toolbar - Modern design with better grouping */
-.editor-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    background: var(--surface-overlay);
-    backdrop-filter: var(--backdrop-blur-sm);
-    border-bottom: 1px solid var(--border-color);
-    min-height: 56px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.toolbar-section-left {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    flex: 1;
-    min-width: 0;
-}
-
-.toolbar-section-right {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    flex-shrink: 0;
-}
-
-/* Toolbar Groups - Enhanced visual grouping with glass effect */
-.toolbar-group {
-    display: flex;
-    align-items: center;
-    gap: 1px;
-    background: var(--background-color-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 2px;
-    box-shadow: var(--shadow-sm);
-    backdrop-filter: var(--backdrop-blur-sm);
-}
-
-.toolbar-separator {
-    width: 1px;
-    height: 24px;
-    background: var(--border-color);
-    margin: 0 var(--space-xs);
-    flex-shrink: 0;
-    opacity: 0.6;
-}
-
-/* Toolbar Buttons - Modern interactive design */
-.toolbar-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 36px;
-    height: 36px;
-    padding: var(--space-xs);
-    background: transparent;
-    color: var(--text-color-secondary);
-    border: none;
-    border-radius: var(--radius-base);
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    cursor: pointer;
-    transition: var(--transition-colors), var(--transition-transform);
-    user-select: none;
+    transition: var(--transition-colors);
     position: relative;
-    overflow: hidden;
 }
 
-.toolbar-button::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--accent-subtle);
-    opacity: 0;
-    transition: var(--transition-opacity);
-    border-radius: inherit;
-}
 
-.toolbar-button:hover:not(:disabled)::before {
-    opacity: 1;
-}
 
-.toolbar-button:hover:not(:disabled) {
-    background: var(--background-color-hover);
-    color: var(--text-color);
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-1px);
-}
-
-.toolbar-button.active {
-    background: var(--accent-color);
-    color: var(--color-brighter);
-    box-shadow: var(--shadow-base);
-    font-weight: var(--font-weight-semibold);
-}
-
-.toolbar-button.active::before {
-    display: none;
-}
-
-.toolbar-button:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-xs);
-}
-
-.toolbar-button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.toolbar-button:focus {
-    outline: none;
-    box-shadow: var(--focus-ring);
-}
-
-/* Enhanced toolbar icons with better typography */
-.list-icon, .quote-icon, .hr-icon, .break-icon, .undo-icon, .redo-icon, .fullscreen-icon {
-    font-size: var(--font-size-md);
-    line-height: 1;
-    display: inline-block;
-    font-weight: var(--font-weight-medium);
-}
-
-.list-icon {
-    font-weight: var(--font-weight-bold);
-    font-family: var(--font-family-mono);
-}
-
-.quote-icon {
-    font-size: var(--font-size-lg);
-    font-family: serif;
-    font-weight: var(--font-weight-bold);
-}
-
-.hr-icon {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-}
-
-.break-icon, .undo-icon, .redo-icon {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-medium);
-}
-
-.fullscreen-icon {
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-bold);
-}
-
-/* Editor Content - Enhanced reading experience */
+/* Editor Content - Notion-style layout */
 .editor-content-wrapper {
     flex: 1;
     overflow-y: auto;
-    padding: var(--space-xl);
+    padding: 0;
     background: var(--background-color-primary);
     position: relative;
     min-height: 0;
@@ -214,12 +32,131 @@
     color: var(--text-color);
     min-height: 400px;
     word-wrap: break-word;
-    max-width: none;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space-xxl) var(--space-xl);
     letter-spacing: var(--letter-spacing-normal);
 }
 
-.rich-text-editor-content:focus {
-    outline: none;
+/* Block-based styling */
+.editor-block {
+    position: relative;
+    margin: 0;
+    padding: 2px 0;
+    transition: var(--transition-colors);
+    border-radius: var(--radius-sm);
+}
+
+.editor-block:hover {
+    background: var(--background-color-secondary);
+}
+
+.editor-block.is-focused {
+    background: var(--background-color-secondary);
+    box-shadow: inset 3px 0 0 0 var(--accent-color);
+}
+
+.editor-block.is-dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+/* Block handle for dragging */
+.block-handle {
+    position: absolute;
+    left: -30px;
+    top: 4px;
+    width: 20px;
+    height: 20px;
+    cursor: grab;
+    opacity: 0;
+    transition: var(--transition-opacity);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color-tertiary);
+    border-radius: var(--radius-sm);
+}
+
+.editor-block:hover .block-handle {
+    opacity: 1;
+}
+
+.block-handle:hover {
+    background: var(--background-color-hover);
+    color: var(--text-color-secondary);
+}
+
+.block-handle:active {
+    cursor: grabbing;
+}
+
+.block-handle::before {
+    content: '⋮⋮';
+    font-size: 12px;
+    letter-spacing: -2px;
+}
+
+/* Floating Toolbar and AI Menu styles moved to their respective component CSS files */
+/* See FloatingToolbar.css and AIMenu.css for these styles */
+
+/* Slash Command Menu */
+.slash-command-menu {
+    position: absolute;
+    background: var(--surface-overlay);
+    backdrop-filter: var(--backdrop-blur-lg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: var(--space-sm);
+    min-width: 200px;
+    max-width: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 200;
+}
+
+.slash-command-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-colors);
+    font-size: var(--font-size-sm);
+}
+
+.slash-command-item:hover,
+.slash-command-item.is-selected {
+    background: var(--background-color-hover);
+}
+
+.slash-command-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--background-color-tertiary);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    color: var(--accent-color);
+}
+
+.slash-command-content {
+    flex: 1;
+}
+
+.slash-command-title {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-color);
+    margin-bottom: 2px;
+}
+
+.slash-command-description {
+    font-size: var(--font-size-xs);
+    color: var(--text-color-tertiary);
 }
 
 /* Enhanced Placeholder */
@@ -227,26 +164,22 @@
     content: attr(data-placeholder);
     color: var(--text-color-placeholder);
     pointer-events: none;
-    float: left;
-    font-style: italic;
-    opacity: 0.8;
-    font-weight: var(--font-weight-normal);
+    font-style: normal;
+    opacity: 0.6;
 }
 
-/* Typography - Enhanced academic styling */
+/* Typography - Clean Notion-style */
 .rich-text-editor-content p {
-    margin: 0 0 var(--space-lg) 0;
+    margin: 0;
+    padding: 3px 0;
     line-height: var(--line-height-relaxed);
 }
 
 .rich-text-editor-content h1 {
     font-size: var(--font-size-3xl);
     font-weight: var(--font-weight-bold);
-    margin: var(--space-xxl) 0 var(--space-xl) 0;
+    margin: var(--space-xl) 0 var(--space-md) 0;
     line-height: var(--line-height-tight);
-    border-bottom: 2px solid var(--accent-color);
-    padding-bottom: var(--space-md);
-    position: relative;
     letter-spacing: var(--letter-spacing-tight);
 }
 
@@ -254,43 +187,18 @@
     margin-top: 0;
 }
 
-.rich-text-editor-content h1::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 60px;
-    height: 2px;
-    background: var(--accent-color);
-    opacity: 0.4;
-    border-radius: 1px;
-}
-
 .rich-text-editor-content h2 {
     font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-semibold);
-    margin: var(--space-xl) 0 var(--space-lg) 0;
+    margin: var(--space-lg) 0 var(--space-sm) 0;
     line-height: var(--line-height-tight);
-    border-left: 3px solid var(--accent-color);
-    padding-left: var(--space-lg);
-    position: relative;
-    letter-spacing: var(--letter-spacing-tight);
 }
 
 .rich-text-editor-content h3 {
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-semibold);
-    margin: var(--space-lg) 0 var(--space-md) 0;
+    margin: var(--space-md) 0 var(--space-sm) 0;
     line-height: var(--line-height-tight);
-    position: relative;
-}
-
-.rich-text-editor-content h3::before {
-    content: '§';
-    color: var(--accent-color);
-    margin-right: var(--space-sm);
-    opacity: 0.7;
-    font-weight: var(--font-weight-normal);
 }
 
 .rich-text-editor-content h4,
@@ -298,64 +206,78 @@
 .rich-text-editor-content h6 {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-medium);
-    margin: var(--space-lg) 0 var(--space-md) 0;
+    margin: var(--space-md) 0 var(--space-sm) 0;
     line-height: var(--line-height-tight);
 }
 
 /* Enhanced Inline formatting */
 .rich-text-editor-content strong {
     font-weight: var(--font-weight-bold);
-    color: var(--text-color);
 }
 
 .rich-text-editor-content em {
     font-style: italic;
-    color: var(--text-color-secondary);
 }
 
 .rich-text-editor-content s {
     text-decoration: line-through;
-    color: var(--text-color-tertiary);
     opacity: 0.7;
 }
 
 .rich-text-editor-content code.code-inline {
     background: var(--background-color-tertiary);
     color: var(--accent-color-secondary);
-    padding: 3px 6px;
+    padding: 2px 6px;
     border-radius: var(--radius-sm);
     font-family: var(--font-family-mono);
-    font-size: 0.9em;
-    border: 1px solid var(--border-color);
+    font-size: 0.85em;
     font-weight: var(--font-weight-medium);
-    box-shadow: var(--shadow-xs);
 }
 
-/* Enhanced Lists with better visual hierarchy */
+/* Links - Notion style */
+.rich-text-editor-content a,
+.rich-text-editor-content .editor-link {
+    color: var(--accent-color-secondary);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-soft);
+    text-underline-offset: 2px;
+    transition: var(--transition-colors);
+    cursor: pointer;
+}
+
+.rich-text-editor-content a:hover,
+.rich-text-editor-content .editor-link:hover {
+    color: var(--accent-color);
+    text-decoration-color: var(--accent-color);
+}
+
+/* Lists - Notion style */
 .rich-text-editor-content ul,
 .rich-text-editor-content ol {
-    margin: var(--space-lg) 0;
+    margin: 0;
     padding-left: var(--space-xl);
 }
 
 .rich-text-editor-content li {
-    margin: var(--space-md) 0;
+    margin: var(--space-xs) 0;
     line-height: var(--line-height-relaxed);
     position: relative;
+}
+
+.rich-text-editor-content ul {
     list-style: none;
 }
 
 .rich-text-editor-content ul li::before {
     content: '•';
-    color: var(--accent-color);
+    color: var(--text-color-secondary);
     font-weight: var(--font-weight-bold);
     position: absolute;
-    left: -24px;
-    top: 0;
-    font-size: 1.1em;
+    left: -20px;
 }
 
 .rich-text-editor-content ol {
+    list-style: none;
     counter-reset: list-counter;
 }
 
@@ -365,45 +287,23 @@
 
 .rich-text-editor-content ol li::before {
     content: counter(list-counter) '.';
-    color: var(--accent-color);
-    font-weight: var(--font-weight-bold);
+    color: var(--text-color-secondary);
     position: absolute;
-    left: -32px;
-    top: 0;
-    font-family: var(--font-family-mono);
-    min-width: 24px;
-    text-align: right;
+    left: -24px;
+    font-size: 0.9em;
 }
 
-.rich-text-editor-content ul ul,
-.rich-text-editor-content ol ol {
-    margin: var(--space-sm) 0;
-}
-
-/* Enhanced Code blocks with syntax highlighting feel */
+/* Code blocks - Clean design */
 .rich-text-editor-content pre {
     background: var(--background-color-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     padding: var(--space-lg);
-    margin: var(--space-xl) 0;
+    margin: var(--space-md) 0;
     overflow-x: auto;
     font-family: var(--font-family-mono);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-relaxed);
-    position: relative;
-    box-shadow: var(--shadow-base);
-}
-
-.rich-text-editor-content pre::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent-color), var(--accent-color-secondary));
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border: 1px solid var(--border-color);
 }
 
 .rich-text-editor-content pre code {
@@ -413,188 +313,120 @@
     font-family: inherit;
     font-size: inherit;
     color: inherit;
-    box-shadow: none;
 }
 
-/* Enhanced Blockquotes with modern styling */
+/* Blockquotes - Minimal style */
 .rich-text-editor-content blockquote {
-    border-left: 3px solid var(--accent-color);
-    background: var(--accent-subtle);
-    margin: var(--space-xl) 0;
-    padding: var(--space-lg) var(--space-xl);
-    font-style: italic;
+    border-left: 3px solid var(--text-color-tertiary);
+    margin: var(--space-md) 0;
+    padding-left: var(--space-lg);
     color: var(--text-color-secondary);
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    position: relative;
-    box-shadow: var(--shadow-sm);
-}
-
-.rich-text-editor-content blockquote::before {
-    content: '"';
-    font-size: 3em;
-    color: var(--accent-color);
-    position: absolute;
-    top: -10px;
-    left: var(--space-md);
-    opacity: 0.3;
-    font-family: serif;
-    line-height: 1;
-    pointer-events: none;
 }
 
 .rich-text-editor-content blockquote p {
     margin: 0;
-    padding-left: var(--space-lg);
-    position: relative;
-    z-index: 1;
 }
 
-/* Enhanced Horizontal rule */
+/* Horizontal rule - Simple */
 .rich-text-editor-content hr {
     border: none;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-    margin: var(--space-xxl) 0;
-    border-radius: 1px;
-    position: relative;
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--space-xl) 0;
 }
 
-.rich-text-editor-content hr::before {
-    content: '⋄';
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--background-color-primary);
-    color: var(--accent-color);
-    padding: 0 var(--space-sm);
-    font-size: var(--font-size-lg);
-}
-
-/* Selection with modern accent */
+/* Selection */
 .rich-text-editor-content ::selection {
-    background: var(--accent-soft);
+    background: rgba(88, 166, 255, 0.4); /* Using a more visible blue color with higher opacity */
     color: var(--text-color);
 }
 
-/* Stats - Modern pill design */
-.toolbar-stats {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-xs) var(--space-md);
-    background: var(--background-color-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    font-size: var(--font-size-xs);
-    box-shadow: var(--shadow-xs);
-    backdrop-filter: var(--backdrop-blur-sm);
+/* Focus mode */
+.rich-text-editor-content:focus-within .editor-block:not(.is-focused) {
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
 }
 
-.stat-item {
+/* Top toolbar - Minimal when needed */
+.editor-top-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-lg);
+    border-bottom: 1px solid var(--border-color);
+    background: var(--background-color-primary);
+    min-height: 48px;
+}
+
+.editor-top-toolbar.hidden {
+    display: none;
+}
+
+/* Writing mode indicator */
+.writing-mode-indicator {
     display: flex;
     align-items: center;
     gap: var(--space-xs);
-    white-space: nowrap;
-}
-
-.stat-label {
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--background-color-tertiary);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
     color: var(--text-color-secondary);
-    font-weight: var(--font-weight-medium);
 }
 
-.stat-value {
-    color: var(--accent-color);
-    font-weight: var(--font-weight-semibold);
-    font-family: var(--font-family-mono);
-    min-width: 32px;
-    text-align: right;
-    padding: 2px 4px;
-    background: var(--accent-subtle);
-    border-radius: var(--radius-sm);
+.writing-mode-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    animation: pulse 2s ease-in-out infinite;
 }
 
-/* Status bar - Clean and minimal */
+/* @keyframes pulse moved to AIMenu.css */
+
+/* Status bar - Minimalist */
 .editor-status-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: var(--space-xs) var(--space-lg);
-    background: var(--background-color-secondary);
+    background: var(--background-color-primary);
     border-top: 1px solid var(--border-color);
     font-size: var(--font-size-xs);
-    min-height: 40px;
-    flex-shrink: 0;
+    min-height: 32px;
+    color: var(--text-color-tertiary);
 }
 
-.status-left, .status-right {
+.status-stats {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--space-lg);
 }
 
-.status-item {
-    color: var(--text-color-secondary);
-    font-weight: var(--font-weight-medium);
-    white-space: nowrap;
+.status-stat {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
 }
 
-.status-item strong {
-    color: var(--accent-color);
-    font-weight: var(--font-weight-semibold);
-}
-
-.keyboard-hint {
-    color: var(--text-color-tertiary);
-    font-size: var(--font-size-xs);
-    font-style: italic;
-    opacity: 0.8;
-}
-
-/* Enhanced keyboard shortcut styling */
-.keyboard-hint kbd {
-    display: inline-block;
-    padding: 2px 6px;
-    font-size: var(--font-size-xs);
-    font-family: var(--font-family-mono);
-    font-weight: var(--font-weight-medium);
-    line-height: 1;
-    color: var(--text-color-secondary);
-    background: var(--background-color-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    font-style: normal;
-    white-space: nowrap;
-}
-
-/* Loading state - Modern spinner */
+/* Loading state */
 .rich-text-editor-loading {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 300px;
-    background: var(--background-color-primary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
     color: var(--text-color-secondary);
     gap: var(--space-md);
 }
 
 .loading-spinner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid var(--border-color);
-    border-top: 3px solid var(--accent-color);
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border-color);
+    border-top: 2px solid var(--accent-color);
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
@@ -612,14 +444,12 @@
 }
 
 .editor-content-wrapper::-webkit-scrollbar-track {
-    background: var(--background-color-tertiary);
-    border-radius: var(--radius-sm);
+    background: transparent;
 }
 
 .editor-content-wrapper::-webkit-scrollbar-thumb {
     background: var(--background-color-hover);
     border-radius: var(--radius-sm);
-    border: 1px solid var(--background-color-tertiary);
     transition: var(--transition-colors);
 }
 
@@ -627,110 +457,32 @@
     background: var(--accent-color);
 }
 
-/* Responsive Design - Mobile-first approach */
-@media (max-width: 1024px) {
-    .editor-content-wrapper {
-        padding: var(--space-lg);
-    }
-
-    .rich-text-editor-content {
-        font-size: var(--font-size-md);
-        min-height: 300px;
-    }
-}
-
+/* Responsive Design */
 @media (max-width: 768px) {
-    .editor-toolbar {
-        padding: var(--space-xs) var(--space-md);
-        gap: var(--space-xs);
-        min-height: 48px;
-        flex-wrap: wrap;
-    }
-
-    .toolbar-section-left, .toolbar-section-right {
-        gap: var(--space-xs);
-    }
-
-    .toolbar-button {
-        min-width: 32px;
-        height: 32px;
-        font-size: var(--font-size-xs);
-    }
-
-    .toolbar-separator {
-        display: none;
-    }
-
-    .editor-content-wrapper {
-        padding: var(--space-md);
-    }
-
     .rich-text-editor-content {
-        font-size: var(--font-size-sm);
+        padding: var(--space-lg) var(--space-md);
+        font-size: var(--font-size-md);
     }
 
-    .rich-text-editor-content h1 {
-        font-size: var(--font-size-2xl);
-        margin: var(--space-xl) 0 var(--space-lg) 0;
-    }
-
-    .rich-text-editor-content h2 {
-        font-size: var(--font-size-xl);
-    }
-
-    .rich-text-editor-content h3 {
-        font-size: var(--font-size-lg);
-    }
-
-    .keyboard-hint {
+    .block-handle {
         display: none;
     }
 
-    .toolbar-stats {
-        gap: var(--space-xs);
-        padding: var(--space-xs) var(--space-sm);
-    }
-
-    .stat-item {
-        font-size: var(--font-size-xs);
-    }
-
-    .editor-status-bar {
-        padding: var(--space-xs) var(--space-md);
-        min-height: 36px;
+    .slash-command-menu {
+        max-width: 90vw;
     }
 }
 
 @media (max-width: 480px) {
-    .toolbar-section-left, .toolbar-section-right {
-        flex-wrap: wrap;
-        gap: var(--space-xs);
-    }
-
-    .toolbar-group {
-        gap: 1px;
-    }
-
-    .toolbar-button {
-        min-width: 28px;
-        height: 28px;
-    }
-
-    .editor-content-wrapper {
-        padding: var(--space-sm);
-    }
-
     .rich-text-editor-content {
+        padding: var(--space-md) var(--space-sm);
         min-height: 250px;
     }
 
-    .toolbar-stats {
-        flex-direction: column;
-        gap: var(--space-xs);
-        padding: var(--space-xs);
+    .floating-toolbar {
+        gap: 0;
+        padding: 2px;
     }
 
-    .stat-value {
-        min-width: 24px;
-    }
+
 } 

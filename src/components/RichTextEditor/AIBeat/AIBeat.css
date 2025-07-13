@@ -1,0 +1,197 @@
+/* AIBeat Component - Follows the app's design language with more discrete styling */
+
+/* Styling for AI generated content */
+/* Only apply highlighting to pending AI content */
+[data-ai-generated][data-ai-status="pending"] {
+    background-color: rgba(0, 122, 255, 0.15); /* Light blue color matching reference */
+    position: relative;
+    transition: background-color 0.2s ease;
+    padding: 1px 0; /* Ensure highlighting covers entire line height */
+}
+
+[data-ai-generated][data-ai-status="pending"]:hover {
+    background-color: rgba(0, 122, 255, 0.25);
+    cursor: pointer;
+}
+
+/* Accepted AI content has no special styling */
+[data-ai-generated][data-ai-status="accepted"] {
+    /* No background color or special styling for accepted content */
+    padding: 1px 0;
+}
+
+/* Accept/Reject Buttons in Footer */
+.ai-beat-action-btn {
+    font-size: var(--font-size-xs);
+    padding: var(--space-xxs) var(--space-sm);
+    border-radius: var(--border-radius-small);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: var(--font-weight-medium);
+}
+
+.ai-beat-accept-btn {
+    background-color: var(--accent-color); /* Blue from reference */
+    color: white;
+}
+
+.ai-beat-accept-btn:hover {
+    background-color: var(--accent-color-hover);
+}
+
+.ai-beat-deny-btn {
+    background-color: var(--color-messages-error); /* Red from reference */
+    color: white;
+}
+
+.ai-beat-deny-btn:hover {
+    background-color: var(--color-messages-error-hover, #d9342b);
+}
+.ai-beat-container {
+    border: var(--border-standard);
+    border-radius: var(--border-radius-medium);
+    background-color: var(--surface-overlay);
+    margin: var(--space-xs) 0;
+    overflow: hidden;
+    transition: var(--transition-colors);
+    box-shadow: none;
+}
+
+.ai-beat-container:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.ai-beat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-xs) var(--space-sm);
+    background-color: var(--background-color-secondary);
+    border-bottom: var(--border-standard);
+}
+
+.ai-beat-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-color-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.ai-beat-icon {
+    color: var(--accent-color);
+}
+
+.ai-beat-remove-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--border-radius-small);
+    transition: var(--transition-colors);
+    opacity: 0.7;
+}
+
+.ai-beat-remove-btn:hover {
+    background-color: var(--background-color-hover);
+    color: var(--color-messages-error);
+}
+
+.ai-beat-content {
+    padding: var(--space-xs);
+}
+
+.ai-beat-textarea {
+    width: 100%;
+    min-height: 90px;
+    background-color: var(--background-color-primary);
+    border: var(--border-standard);
+    border-radius: var(--border-radius-small);
+    color: var(--text-color);
+    padding: var(--space-sm);
+    resize: vertical;
+    font-family: var(--body-font-family);
+    font-size: var(--body-font-size);
+    line-height: var(--body-line-height);
+    transition: var(--transition-colors);
+}
+
+.ai-beat-textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: var(--input-box-shadow-focus);
+}
+
+.ai-beat-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-xxs) var(--space-sm);
+    border-top: var(--border-standard);
+    background-color: var(--background-color-secondary);
+}
+
+.ai-beat-counts {
+    display: flex;
+    gap: var(--space-sm);
+    color: var(--text-color-tertiary);
+    font-size: var(--font-size-xs);
+    opacity: 0.8;
+}
+
+.ai-beat-count-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.ai-beat-send-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xxs);
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: var(--space-xxs) var(--space-sm);
+    border-radius: var(--border-radius-small);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: var(--transition-colors);
+}
+
+.ai-beat-send-btn:hover {
+    background-color: var(--accent-color-hover);
+}
+
+.ai-beat-send-btn:active {
+    background-color: var(--accent-color-dark);
+}
+
+.ai-beat-send-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.ai-beat-tooltip {
+    color: var(--text-color-tertiary);
+    font-size: var(--font-size-xs);
+    background-color: var(--background-color-secondary);
+    padding: var(--space-xxs) var(--space-xs);
+    border-radius: var(--border-radius-small);
+    white-space: nowrap;
+    opacity: 0.7;
+    transition: var(--transition-colors);
+}
+
+.ai-beat-tooltip:hover {
+    opacity: 1;
+}

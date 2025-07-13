@@ -1,309 +1,146 @@
-# RichTextEditor Component
+# Notion-Style Rich Text Editor
 
-A feature-rich, academic-focused rich text editor built with TipTap and React. This component provides a comprehensive
-writing experience optimized for academic and professional content creation.
+A modern, Notion-inspired rich text editor for React that provides a beautiful writing experience with markdown support.
 
 ## Features
 
-### Core Functionality
+### ✨ Core Features
+- **Block-based editing** - Each paragraph, heading, and element is a distinct block
+- **Slash commands** - Type `/` to insert different block types
+- **Floating toolbar** - Text formatting options appear on selection
+- **Markdown shortcuts** - Full markdown syntax support
+- **Clean, minimal UI** - Inspired by Notion's design philosophy
+- **Fullscreen mode** - Distraction-free writing experience
 
-- **Rich Text Editing**: Full-featured WYSIWYG editor with markdown support
-- **Academic Focus**: Optimized styling for academic papers and professional documents
-- **Fullscreen Mode**: Distraction-free writing experience
-- **Real-time Stats**: Live word and character counting
-- **Keyboard Shortcuts**: Comprehensive keyboard support for power users
-
-### **NEW: Smooth Generation Animations** 🎭
-
-- **Typewriter effect** during AI content generation
-- **Blinking cursor** at the end of generated text
-- **Visual feedback** indicators when content is being streamed
-- **Smooth text appearance** animations for new content
-- **Toolbar progress indicator** during generation
-- **Enhanced chat streaming** with improved visual effects
-
-### Formatting Options
-
-- **Text Formatting**: Bold, italic, strikethrough, inline code
-- **Headings**: H1-H6 with academic styling
-- **Lists**: Bullet and numbered lists with custom styling
-- **Code Blocks**: Syntax-highlighted code blocks
-- **Blockquotes**: Academic-style quotes with visual enhancements
-- **Horizontal Rules**: Section dividers
-
-### Advanced Features
-
-- **Markdown Conversion**: Bidirectional markdown/HTML conversion
-- **Auto-save**: Real-time content updates
-- **Responsive Design**: Mobile-friendly interface
-- **Accessibility**: Full keyboard navigation and screen reader support
-- **Print Optimization**: Clean print layouts
-
-## Component Structure
-
-```
-RichTextEditor/
-├── index.tsx                 # Main component
-├── index.css                 # Main container styles
-├── types.ts                  # TypeScript interfaces
-├── README.md                 # This documentation
-├── LoadingState.tsx          # Loading component
-├── LoadingState.css          # Loading styles
-├── EditorToolbar.tsx         # Main toolbar component
-├── EditorToolbar.css         # Toolbar styles
-├── EditorContent.tsx         # Editor content wrapper
-├── EditorContent.css         # Content and typography styles
-├── EditorStatusBar.tsx       # Status bar component
-├── EditorStatusBar.css       # Status bar styles
-├── ToolbarButton.tsx         # Individual button component
-├── ToolbarButton.css         # Button styles
-├── ToolbarGroup.tsx          # Button group component
-├── ToolbarGroup.css          # Group styles
-├── EditorStats.tsx           # Stats display component
-├── EditorStats.css           # Stats styles
-└── utils/
-    ├── markdownConverter.ts  # Markdown conversion utilities
-    └── wordCounter.ts        # Text counting utilities
-```
+### 🎯 Key Capabilities
+- **Input/Output**: Always works with markdown
+- **Rich visual editing**: WYSIWYG experience while editing
+- **Keyboard shortcuts**: Efficient text formatting
+- **Responsive design**: Works on all devices
+- **Focus mode**: Highlights the current block
 
 ## Usage
-
-### Basic Usage
 
 ```tsx
 import { RichTextEditor } from './components/RichTextEditor';
 
 function MyComponent() {
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState('# Hello World\n\nStart writing...');
 
   return (
     <RichTextEditor
       value={content}
       onChange={setContent}
-      placeholder="Start writing..."
-      height="400px"
+      placeholder="Type "/" for commands..."
+      height="500px"
     />
   );
 }
 ```
 
-### Props
+## Slash Commands
 
-| Prop           | Type                      | Default                                | Description                          |
-|----------------|---------------------------|----------------------------------------|--------------------------------------|
-| `value`        | `string`                  | -                                      | Current markdown content             |
-| `onChange`     | `(value: string) => void` | -                                      | Content change handler               |
-| `placeholder`  | `string`                  | "Start writing your academic paper..." | Placeholder text                     |
-| `height`       | `string`                  | "100%"                                 | Editor height                        |
-| `isGenerating` | `boolean`                 | `false`                                | Enables smooth generation animations |
+Type `/` anywhere in the editor to see available commands:
+
+- `/h1` - Large heading
+- `/h2` - Medium heading  
+- `/h3` - Small heading
+- `/p` - Paragraph
+- `/list` - Bullet list
+- `/numbered` - Numbered list
+- `/quote` - Blockquote
+- `/code` - Code block
+- `/divider` - Horizontal line
 
 ## Keyboard Shortcuts
 
 ### Text Formatting
-
 - `Ctrl/Cmd + B` - Bold
 - `Ctrl/Cmd + I` - Italic
 - `Ctrl/Cmd + K` - Inline code
+- `Ctrl/Cmd + S` - Strikethrough
 
-### Editor Actions
+### Editor Controls
+- `Ctrl/Cmd + Enter` - Toggle fullscreen
+- `Escape` - Exit fullscreen or close menus
+- `Enter` - Create new block
+- `Backspace` (at start) - Merge with previous block
 
-- `Ctrl/Cmd + Z` - Undo
-- `Ctrl/Cmd + Y` - Redo
-- `Escape` - Exit fullscreen (when in fullscreen)
+### Markdown Shortcuts
+- `# ` - Heading 1
+- `## ` - Heading 2
+- `### ` - Heading 3
+- `**text**` - Bold
+- `*text*` - Italic
+- `` `code` `` - Inline code
+- ` ``` ` - Code block
+- `- ` - Bullet list
+- `1. ` - Numbered list
+- `> ` - Quote
+- `---` - Divider
 
-### Heading Shortcuts
+## Component Architecture
 
-- `Ctrl/Cmd + Alt + 1` - H1
-- `Ctrl/Cmd + Alt + 2` - H2
-- `Ctrl/Cmd + Alt + 3` - H3
+```
+RichTextEditor/
+├── index.tsx              # Main editor component
+├── FloatingToolbar.tsx    # Bubble menu for text selection
+├── SlashCommand.tsx       # Slash command menu
+├── BlockWrapper.tsx       # Block-level interactions
+├── WritingModeIndicator.tsx # Status indicator
+├── EditorStatusBar.tsx    # Word count & status
+├── MarkdownHelper.tsx     # Markdown guide
+└── utils/
+    ├── markdownConverter.ts # MD <-> HTML conversion
+    └── wordCounter.ts       # Text statistics
+```
 
 ## Styling
 
-### CSS Variables
-
-The component uses CSS custom properties for theming:
+The editor uses CSS variables from your design system for consistent theming:
 
 ```css
---background-color-primary    /* Main background */
---background-color-secondary  /* Secondary elements */
---background-color-tertiary   /* Toolbar background */
---text-color                  /* Primary text */
---text-color-secondary        /* Secondary text */
---accent-color               /* Brand accent */
---border-color               /* Borders */
---border-radius-small        /* Small radius */
---font-family-base           /* Main font */
---font-family-mono           /* Monospace font */
+/* Key variables used */
+--background-color-primary
+--text-color
+--accent-color
+--border-color
+--font-family-base
+--space-* (spacing system)
+--radius-* (border radius)
+--shadow-* (shadows)
 ```
 
-### Customization
+## Props
 
-Each component has its own CSS file allowing for granular customization:
-
-```css
-/* Customize toolbar buttons */
-.toolbar-button {
-  /* Your custom styles */
-}
-
-/* Customize editor content */
-.rich-text-editor-content {
-  /* Your custom styles */
-}
-```
-
-## Academic Features
-
-### Typography
-
-- Professional heading hierarchy
-- Optimized line spacing for readability
-- Academic citation styling
-- Print-optimized layouts
-
-### Enhanced Elements
-
-- **Code blocks**: Syntax highlighting with language indicators
-- **Blockquotes**: Visual quote marks and academic styling
-- **Lists**: Custom bullet points and numbering
-- **Horizontal rules**: Decorative section dividers
-
-### Writing Tools
-
-- Real-time word and character counting
-- Status bar showing current formatting
-- Distraction-free fullscreen mode
-- Keyboard-first workflow
-
-## Technical Details
-
-### Dependencies
-
-- `@tiptap/react` - Core editor framework
-- `@tiptap/starter-kit` - Basic editing features
-- `@tiptap/extension-typography` - Typography enhancements
-- `@tiptap/extension-placeholder` - Placeholder support
-- `turndown` - HTML to Markdown conversion
-
-### Performance
-
-- Lazy loading of editor instance
-- Optimized re-renders with useMemo
-- Efficient markdown conversion
-- Minimal DOM manipulation
-
-### Accessibility
-
-- Full keyboard navigation
-- Screen reader support
-- High contrast mode support
-- Focus management
-- ARIA labels and roles
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | `''` | Markdown content |
+| `onChange` | `(value: string) => void` | Required | Content change handler |
+| `placeholder` | `string` | `'Type "/" for commands...'` | Placeholder text |
+| `height` | `string \| number` | `'100%'` | Editor height |
 
 ## Browser Support
 
-- Modern browsers (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
-- Mobile browsers (iOS 14+, Android 10+)
-- Progressive enhancement for older browsers
-
-## Contributing
-
-When adding new features:
-
-1. **Component Structure**: Follow the established pattern with separate files for components and styles
-2. **Type Safety**: Add appropriate TypeScript interfaces to `types.ts`
-3. **Styling**: Use CSS custom properties for consistency
-4. **Testing**: Ensure keyboard accessibility and screen reader compatibility
-5. **Documentation**: Update this README with new features
-
-## Examples
-
-### Custom Placeholder
-
-```tsx
-<RichTextEditor
-  value={content}
-  onChange={setContent}
-  placeholder="Write your research paper..."
-/>
-```
-
-### Fixed Height
-
-```tsx
-<RichTextEditor
-  value={content}
-  onChange={setContent}
-  height="600px"
-/>
-```
-
-### Integration with Form
-
-```tsx
-function PaperForm() {
-  const [title, setTitle] = useState('');
-  const [abstract, setAbstract] = useState('');
-  const [content, setContent] = useState('');
-
-  return (
-    <form>
-      <input 
-        value={title} 
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Paper title..."
-      />
-      
-      <RichTextEditor
-        value={abstract}
-        onChange={setAbstract}
-        placeholder="Write your abstract..."
-        height="200px"
-      />
-      
-      <RichTextEditor
-        value={content}
-        onChange={setContent}
-        placeholder="Write your paper content..."
-        height="600px"
-      />
-    </form>
-  );
-}
-```
-
-## CSS Classes for Styling
-
-### Generation States
-
-- `.rich-text-editor.generating` - Applied when content is being generated
-- `.editor-content-wrapper.generating` - Applied to content wrapper during generation
-- `.editor-toolbar.generating` - Applied to toolbar during generation
-- `.message-text.streaming` - Applied to chat messages being streamed
-
-### Animation Classes
-
-- `.generation-cursor` - The blinking cursor indicator
-- `.cursor-blink` - The actual cursor character with blink animation
-- `.stream-cursor` - Inline streaming cursor in chat messages
-
-## Accessibility
-
-- All animations respect `prefers-reduced-motion`
-- ARIA labels and semantic HTML structure
-- Keyboard navigation support
-- Focus management and visual indicators
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+- Mobile browsers
 
 ## Dependencies
 
-- `@tiptap/react` - Core editor
+- `@tiptap/react` - Editor framework
 - `@tiptap/starter-kit` - Basic extensions
-- `@tiptap/extension-typography` - Smart typography
-- `@tiptap/extension-placeholder` - Placeholder support
+- `@tiptap/extension-*` - Additional features
+- `turndown` - HTML to Markdown conversion
 
-## Performance
+## Future Enhancements
 
-- Efficient re-rendering with React.memo on child components
-- Debounced content updates
-- Optimized animation performance with CSS transforms
-- Minimal DOM manipulation during streaming 
+- [ ] Drag & drop blocks
+- [ ] Collaborative editing
+- [ ] Custom block types
+- [ ] Image uploads
+- [ ] Tables
+- [ ] Nested blocks
+- [ ] Block templates
+- [ ] Export options (PDF, HTML) 

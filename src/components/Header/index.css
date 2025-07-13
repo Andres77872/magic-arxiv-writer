@@ -1,0 +1,247 @@
+/* Header - Clean and functional with glass effect */
+.app-header {
+    background: var(--surface-overlay);
+    backdrop-filter: var(--backdrop-blur-base);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--space-md) var(--space-lg);
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+    gap: var(--space-lg);
+}
+
+.header-title {
+    flex: 1;
+    min-width: 0;
+}
+
+.header-title h1 {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    letter-spacing: var(--letter-spacing-tight);
+}
+
+.header-title p {
+    margin: var(--space-xs) 0 0 0;
+    font-size: var(--font-size-sm);
+    color: var(--text-color-secondary);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-snug);
+}
+
+.header-links {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.header-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    color: var(--text-color-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--background-color-secondary);
+    transition: var(--transition-colors), var(--transition-transform);
+    backdrop-filter: var(--backdrop-blur-sm);
+}
+
+.header-link:hover {
+    color: var(--accent-color);
+    background: var(--accent-subtle);
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.header-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+    align-items: center;
+}
+
+/* User Menu - Clean user display */
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.user-welcome {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--accent-subtle);
+    color: var(--text-color);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    border: 1px solid rgba(46, 160, 67, 0.2);
+}
+
+/* Action Buttons - Modern design with subtle animations */
+.action-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-family: var(--button-font-family);
+    font-size: var(--button-font-size);
+    font-weight: var(--button-font-weight);
+    line-height: var(--button-line-height);
+    cursor: pointer;
+    transition: var(--transition-colors), var(--transition-transform);
+    text-decoration: none;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.action-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent-subtle);
+    opacity: 0;
+    transition: var(--transition-opacity);
+}
+
+.action-button:hover::before {
+    opacity: 1;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+.action-button:active {
+    transform: translateY(0);
+    box-shadow: var(--box-shadow-active);
+}
+
+.action-button.primary {
+    background: var(--accent-color);
+    color: var(--color-brighter);
+    border-color: var(--accent-color);
+}
+
+.action-button.primary:hover {
+    background: var(--accent-color-hover);
+    border-color: var(--accent-color-hover);
+}
+
+.action-button.secondary {
+    background: var(--background-color-tertiary);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.action-button.secondary:hover {
+    background: var(--background-color-hover);
+    color: var(--text-color);
+    border-color: var(--border-color-lighter);
+}
+
+/* Responsive Design for Header */
+@media (max-width: 1200px) {
+    .header-content {
+        gap: var(--space-md);
+    }
+}
+
+@media (max-width: 1024px) {
+    .header-content {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+    }
+
+    .header-links {
+        justify-content: center;
+        gap: var(--space-sm);
+    }
+
+    .header-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .user-menu {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-header {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .header-title h1 {
+        font-size: var(--font-size-lg);
+    }
+
+    .header-title p {
+        font-size: var(--font-size-xs);
+    }
+
+    .header-links {
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+    }
+
+    .header-link {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--font-size-xs);
+    }
+
+    .user-welcome {
+        font-size: var(--font-size-xs);
+        padding: var(--space-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .action-button {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--font-size-xs);
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+
+    .action-button {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .user-menu {
+        width: 100%;
+        justify-content: space-between;
+    }
+} 

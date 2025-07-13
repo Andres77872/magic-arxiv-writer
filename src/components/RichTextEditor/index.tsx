@@ -2,14 +2,20 @@ import {useEditor} from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Typography from '@tiptap/extension-typography';
 import Placeholder from '@tiptap/extension-placeholder';
-import {useEffect, useMemo, useState} from 'react';
+import Focus from '@tiptap/extension-focus';
+import Link from '@tiptap/extension-link';
+import {useEffect, useMemo, useState, useRef} from 'react';
 import {type RichTextEditorProps} from './types';
 import {LoadingState} from './LoadingState';
-import {EditorToolbar} from './EditorToolbar';
 import {EditorContent} from './EditorContent';
 import {EditorStatusBar} from './EditorStatusBar';
+import {FloatingToolbar} from './FloatingToolbar';
+import {SlashCommand} from './SlashCommand/index';
+import {WritingModeIndicator} from './WritingModeIndicator';
 import {createMarkdownConverter} from './utils/markdownConverter';
 import {updateCounts} from './utils/wordCounter';
+import {AIBeatExtension} from './AIBeat/AIBeatExtension';
+import {AIGeneratedMark} from './AIBeat/AIGeneratedMark';
 import './index.css';
 
 export function RichTextEditor({
@@ -18,9 +24,12 @@ export function RichTextEditor({
                                    placeholder,
                                    height = '100%'
                                }: RichTextEditorProps) {
-    const [isFullscreen, setIsFullscreen] = useState(false);
+
     const [wordCount, setWordCount] = useState(0);
     const [characterCount, setCharacterCount] = useState(0);
+    const [showSlashCommand, setShowSlashCommand] = useState(false);
+    const [slashCommandPos, setSlashCommandPos] = useState({ top: 0, left: 0 });
+    const editorRef = useRef<HTMLDivElement>(null);
 
     // Initialize markdown converter service
     const markdownConverter = useMemo(() => createMarkdownConverter(), []);
@@ -58,9 +67,21 @@ export function RichTextEditor({
             }),
             Typography,
             Placeholder.configure({
-                placeholder: placeholder || 'Start writing your academic paper...',
+                placeholder: placeholder || 'Type "/" for commands...',
                 emptyEditorClass: 'is-editor-empty',
             }),
+            Focus.configure({
+                className: 'is-focused',
+                mode: 'all',
+            }),
+            Link.configure({
+                openOnClick: false,
+                HTMLAttributes: {
+                    class: 'editor-link',
+                },
+            }),
+            AIBeatExtension,
+            AIGeneratedMark,
         ],
         content: markdownConverter.markdownToHtml(value),
         onUpdate: ({editor}) => {
@@ -71,6 +92,25 @@ export function RichTextEditor({
             const counts = updateCounts(html);
             setWordCount(counts.wordCount);
             setCharacterCount(counts.characterCount);
+
+            // Check for slash command
+            const { selection } = editor.state;
+            const { $from } = selection;
+            const textBefore = $from.nodeBefore?.text || '';
+            
+            if (textBefore.endsWith('/')) {
+                const coords = editor.view.coordsAtPos(selection.from);
+                if (editorRef.current) {
+                    const editorRect = editorRef.current.getBoundingClientRect();
+                    setSlashCommandPos({
+                        top: coords.top - editorRect.top + 20,
+                        left: coords.left - editorRect.left,
+                    });
+                    setShowSlashCommand(true);
+                }
+            } else {
+                setShowSlashCommand(false);
+            }
         },
         onCreate: ({editor}) => {
             const counts = updateCounts(editor.getHTML());
@@ -95,19 +135,15 @@ export function RichTextEditor({
         }
     }, [value, editor, markdownConverter]);
 
-    // Handle fullscreen toggle
-    const toggleFullscreen = () => {
-        setIsFullscreen(!isFullscreen);
-        setTimeout(() => {
-            editor?.commands.focus();
-        }, 100);
-    };
+
 
     // Handle keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && isFullscreen) {
-                setIsFullscreen(false);
+            if (event.key === 'Escape') {
+                if (showSlashCommand) {
+                    setShowSlashCommand(false);
+                }
             }
             if (event.ctrlKey || event.metaKey) {
                 switch (event.key) {
@@ -123,13 +159,14 @@ export function RichTextEditor({
                         event.preventDefault();
                         editor?.chain().focus().toggleCode().run();
                         break;
+
                 }
             }
         };
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [editor, isFullscreen]);
+    }, [editor, showSlashCommand]);
 
     if (!editor) {
         return <LoadingState/>;
@@ -137,20 +174,32 @@ export function RichTextEditor({
 
     return (
         <div
-            className={`rich-text-editor ${isFullscreen ? 'fullscreen' : ''}`}
-            style={{height: isFullscreen ? '100vh' : height}}
+            ref={editorRef}
+            className="rich-text-editor"
+            style={{height: height}}
         >
-            <EditorToolbar
+            <div className="editor-top-toolbar">
+                <WritingModeIndicator />
+            </div>
+
+            <div className="editor-content-wrapper">
+                <EditorContent editor={editor}/>
+                <FloatingToolbar editor={editor}/>
+                
+                {showSlashCommand && (
+                    <SlashCommand
+                        editor={editor}
+                        position={slashCommandPos}
+                        onClose={() => setShowSlashCommand(false)}
+                    />
+                )}
+            </div>
+
+            <EditorStatusBar 
                 editor={editor}
-                isFullscreen={isFullscreen}
-                onToggleFullscreen={toggleFullscreen}
                 wordCount={wordCount}
                 characterCount={characterCount}
             />
-
-            <EditorContent editor={editor}/>
-
-            <EditorStatusBar editor={editor}/>
         </div>
     );
 } 
