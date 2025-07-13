@@ -14,6 +14,7 @@ import {SlashCommand} from './SlashCommand/index';
 import {WritingModeIndicator} from './WritingModeIndicator';
 import {createMarkdownConverter} from './utils/markdownConverter';
 import {updateCounts} from './utils/wordCounter';
+import {AIBeatExtension} from './AIBeat/AIBeatExtension';
 import './index.css';
 
 export function RichTextEditor({
@@ -78,6 +79,7 @@ export function RichTextEditor({
                     class: 'editor-link',
                 },
             }),
+            AIBeatExtension,
         ],
         content: markdownConverter.markdownToHtml(value),
         onUpdate: ({editor}) => {

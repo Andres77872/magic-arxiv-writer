@@ -1,0 +1,127 @@
+/* AIBeat Component - Follows the app's design language with more discrete styling */
+.ai-beat-container {
+    border: var(--border-standard);
+    border-radius: var(--border-radius-medium);
+    background-color: var(--surface-overlay);
+    margin: var(--space-xs) 0;
+    overflow: hidden;
+    transition: var(--transition-colors);
+    box-shadow: none;
+}
+
+.ai-beat-container:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.ai-beat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-xs) var(--space-sm);
+    background-color: var(--background-color-secondary);
+    border-bottom: var(--border-standard);
+}
+
+.ai-beat-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-color-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.ai-beat-icon {
+    color: var(--accent-color);
+}
+
+.ai-beat-remove-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--border-radius-small);
+    transition: var(--transition-colors);
+    opacity: 0.7;
+}
+
+.ai-beat-remove-btn:hover {
+    background-color: var(--background-color-hover);
+    color: var(--color-messages-error);
+}
+
+.ai-beat-content {
+    padding: var(--space-xs);
+}
+
+.ai-beat-textarea {
+    width: 100%;
+    min-height: 90px;
+    background-color: var(--background-color-primary);
+    border: var(--border-standard);
+    border-radius: var(--border-radius-small);
+    color: var(--text-color);
+    padding: var(--space-sm);
+    resize: vertical;
+    font-family: var(--body-font-family);
+    font-size: var(--body-font-size);
+    line-height: var(--body-line-height);
+    transition: var(--transition-colors);
+}
+
+.ai-beat-textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: var(--input-box-shadow-focus);
+}
+
+.ai-beat-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-xxs) var(--space-sm);
+    border-top: var(--border-standard);
+    background-color: var(--background-color-secondary);
+}
+
+.ai-beat-counts {
+    display: flex;
+    gap: var(--space-sm);
+    color: var(--text-color-tertiary);
+    font-size: var(--font-size-xs);
+    opacity: 0.8;
+}
+
+.ai-beat-count-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.ai-beat-send-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xxs);
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: var(--space-xxs) var(--space-sm);
+    border-radius: var(--border-radius-small);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: var(--transition-colors);
+}
+
+.ai-beat-send-btn:hover {
+    background-color: var(--accent-color-hover);
+}
+
+.ai-beat-send-btn:active {
+    background-color: var(--accent-color-dark);
+}

@@ -74,11 +74,11 @@ const aiCommands: SlashCommandItem[] = [
         description: 'Add AI generated content',
         icon: '✨',
         command: (editor: Editor) => {
-            // Placeholder for AI content generation logic
-            // This would typically integrate with an AI service
-            const aiPlaceholder = '\n[AI content will be generated here]\n';
-            editor.chain().focus().insertContent(aiPlaceholder).run();
-            // In a real implementation, you would trigger an AI content generation flow here
+            // Insert an AIBeat node at the current cursor position
+            editor.chain().focus().insertContent({
+                type: 'aiBeat',
+                attrs: { id: `ai-beat-${Date.now()}` },
+            }).run();
         },
     },
 ];
