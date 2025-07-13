@@ -10,6 +10,9 @@ interface AIBeatFooterProps {
   isLoading: boolean;
   isGenerating: boolean;
   prompt: string;
+  showAcceptReject: boolean;
+  onAccept?: () => void;
+  onDeny?: () => void;
 }
 
 export const AIBeatFooter: React.FC<AIBeatFooterProps> = ({
@@ -20,7 +23,10 @@ export const AIBeatFooter: React.FC<AIBeatFooterProps> = ({
   handleSend,
   isLoading,
   isGenerating,
-  prompt
+  prompt,
+  showAcceptReject,
+  onAccept,
+  onDeny
 }) => {
   return (
     <div className="ai-beat-footer">
@@ -43,6 +49,24 @@ export const AIBeatFooter: React.FC<AIBeatFooterProps> = ({
         >
           {isGenerating ? 'Generating...' : isLoading ? 'Processing...' : 'Send'}
         </button>
+        {showAcceptReject && (
+          <>
+            <button 
+              className="ai-beat-action-btn ai-beat-deny-btn" 
+              onClick={onDeny}
+              title="Delete generated content"
+            >
+              Delete
+            </button>
+            <button 
+              className="ai-beat-action-btn ai-beat-accept-btn" 
+              onClick={onAccept}
+              title="Accept generated content"
+            >
+              Accept
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

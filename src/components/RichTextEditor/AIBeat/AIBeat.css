@@ -1,4 +1,53 @@
 /* AIBeat Component - Follows the app's design language with more discrete styling */
+
+/* Styling for AI generated content */
+/* Only apply highlighting to pending AI content */
+[data-ai-generated][data-ai-status="pending"] {
+    background-color: rgba(0, 122, 255, 0.15); /* Light blue color matching reference */
+    position: relative;
+    transition: background-color 0.2s ease;
+    padding: 1px 0; /* Ensure highlighting covers entire line height */
+}
+
+[data-ai-generated][data-ai-status="pending"]:hover {
+    background-color: rgba(0, 122, 255, 0.25);
+    cursor: pointer;
+}
+
+/* Accepted AI content has no special styling */
+[data-ai-generated][data-ai-status="accepted"] {
+    /* No background color or special styling for accepted content */
+    padding: 1px 0;
+}
+
+/* Accept/Reject Buttons in Footer */
+.ai-beat-action-btn {
+    font-size: var(--font-size-xs);
+    padding: var(--space-xxs) var(--space-sm);
+    border-radius: var(--border-radius-small);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: var(--font-weight-medium);
+}
+
+.ai-beat-accept-btn {
+    background-color: var(--accent-color); /* Blue from reference */
+    color: white;
+}
+
+.ai-beat-accept-btn:hover {
+    background-color: var(--accent-color-hover);
+}
+
+.ai-beat-deny-btn {
+    background-color: var(--color-messages-error); /* Red from reference */
+    color: white;
+}
+
+.ai-beat-deny-btn:hover {
+    background-color: var(--color-messages-error-hover, #d9342b);
+}
 .ai-beat-container {
     border: var(--border-standard);
     border-radius: var(--border-radius-medium);
@@ -129,7 +178,7 @@
 .ai-beat-send-wrapper {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-xs);
 }
 
 .ai-beat-tooltip {

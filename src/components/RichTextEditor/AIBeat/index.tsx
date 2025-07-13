@@ -6,7 +6,15 @@ import type { AIMessage } from '../../AIService';
 import { AIBeatHeader } from './AIBeatHeader';
 import { AIBeatBody } from './AIBeatBody';
 import { AIBeatFooter } from './AIBeatFooter';
+import { acceptAIContent, denyAIContent, removeAIHighlighting } from './AIGeneratedMark';
 import './AIBeat.css';
+
+// Type definition for content confirmation
+interface ContentConfirmation {
+  isShown: boolean;
+  position: { x: number; y: number };
+  range: { from: number; to: number } | null;
+}
 
 export const AIBeat = (props: NodeViewProps) => {
   const [prompt, setPrompt] = useState('');
@@ -17,6 +25,14 @@ export const AIBeat = (props: NodeViewProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [previousContent, setPreviousContent] = useState('');
+  const [confirmation, setConfirmation] = useState<ContentConfirmation>({
+    isShown: false,
+    position: { x: 0, y: 0 },
+    range: null
+  });
+  
+  // State to track if there's pending AI-generated content
+  const [hasPendingContent, setHasPendingContent] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   const aiService = useAIService();
@@ -27,6 +43,75 @@ export const AIBeat = (props: NodeViewProps) => {
       textareaRef.current.focus();
     }
   }, []);
+
+  // Detect AI-generated content in the document
+  useEffect(() => {
+    // Check for pending AI-generated content whenever editor state changes
+    if (!props.editor) return;
+    
+    const checkForPendingContent = () => {
+      const { state } = props.editor;
+      let foundPendingContent = false;
+      
+      state.doc.descendants((node, pos) => {
+        if (foundPendingContent) return false; // Stop once we find pending content
+        
+        if (node.isText) {
+          // Check if this node has pending AI mark
+          const hasPendingAIMark = node.marks.some(mark => 
+            mark.type.name === 'aiGenerated' && 
+            mark.attrs.status === 'pending');
+            
+          if (hasPendingAIMark) {
+            foundPendingContent = true;
+            // Set the range for the content
+            setConfirmation({
+              isShown: true,
+              position: { x: 0, y: 0 },
+              range: { from: pos, to: pos + node.nodeSize }
+            });
+            return false;
+          }
+        }
+        return true;
+      });
+      
+      setHasPendingContent(foundPendingContent);
+      
+      // If no pending content found, make sure confirmation is not shown
+      if (!foundPendingContent && confirmation.isShown) {
+        setConfirmation({
+          isShown: false,
+          position: { x: 0, y: 0 },
+          range: null
+        });
+      }
+    };
+    
+    // Initial check
+    checkForPendingContent();
+    
+    // Set up event listeners to update status
+    const handleTransactionUpdate = () => {
+      checkForPendingContent();
+    };
+    
+    // Handle content editing to automatically accept content when edited
+    const handleContentEdited = () => {
+      if (confirmation.isShown && confirmation.range) {
+        // User edited content, automatically accept it
+        handleAcceptContent();
+      }
+    };
+    
+    props.editor.on('transaction', handleTransactionUpdate);
+    document.addEventListener('contentEdited', handleContentEdited as EventListener);
+    
+    return () => {
+      props.editor.off('transaction', handleTransactionUpdate);
+      document.removeEventListener('contentEdited', handleContentEdited as EventListener);
+    };
+  }, [props.editor, confirmation.isShown]);
 
   // Update character and word counts when prompt changes
   useEffect(() => {
@@ -142,42 +227,61 @@ export const AIBeat = (props: NodeViewProps) => {
             }
           },
           onComplete: (finalContent) => {
-            // Mark generation as complete
             setIsGenerating(false);
             
             // Calculate and update AI-generated text statistics
             setAiCharCount(finalContent.length);
             setAiWordCount(finalContent.trim().split(/\s+/).filter(Boolean).length);
             
-            // Ensure the final content is properly inserted
-            // This handles any case where the streaming might have missed something
+            // Get current content to check if we need to avoid duplication
             const nodeSize = editor.state.doc.nodeAt(pos)?.nodeSize || 1;
             const insertPos = pos + nodeSize;
             
-            // Find the end position of the existing AI content (if any)
+            // Find any existing AI-generated content
+            let existingContent = "";
             let endPos = insertPos;
             let foundEnd = false;
             
+            // Check if AI-generated content already exists after our position
             editor.state.doc.nodesBetween(insertPos, editor.state.doc.content.size, (node, nodePos) => {
-              if (!foundEnd && !node.marks.some(mark => mark.type.name === 'aiGenerated')) {
-                endPos = nodePos;
-                foundEnd = true;
-                return false;
+              if (!foundEnd) {
+                if (node.isText && node.marks.some(mark => mark.type.name === 'aiGenerated')) {
+                  // Accumulate existing content
+                  existingContent += node.text || "";
+                } else if (existingContent) {
+                  // We've found the end of AI-generated content
+                  endPos = nodePos;
+                  foundEnd = true;
+                  return false;
+                }
               }
               return !foundEnd;
             });
             
-            // Replace with the final content to ensure everything is complete
-            if (foundEnd) {
-              editor.chain()
-                .setTextSelection(insertPos)
-                .deleteRange({ from: insertPos, to: endPos })
-                .insertContent({
-                  type: 'text',
-                  text: finalContent,
-                  marks: [{ type: 'aiGenerated' }]
-                })
-                .run();
+            // Only insert content if there's no matching content already there
+            // This prevents duplication when streaming ends
+            if (!existingContent || existingContent.trim() !== finalContent.trim()) {
+              // If we have existing content, replace it to avoid duplication
+              if (existingContent) {
+                editor.chain()
+                  .setTextSelection(insertPos)
+                  .deleteRange({ from: insertPos, to: endPos })
+                  .insertContent({
+                    type: 'text',
+                    text: finalContent,
+                    marks: [{ type: 'aiGenerated' }]
+                  })
+                  .run();
+              } else {
+                // No existing content, just insert new content
+                editor.chain()
+                  .insertContentAt(insertPos, {
+                    type: 'text',
+                    text: finalContent,
+                    marks: [{ type: 'aiGenerated' }]
+                  })
+                  .run();
+              }
             }
           },
           onError: (error) => {
@@ -218,28 +322,60 @@ export const AIBeat = (props: NodeViewProps) => {
     }
   };
 
+  // Handle accepting AI content
+  const handleAcceptContent = () => {
+    if (confirmation.range && props.editor) {
+      acceptAIContent(props.editor, confirmation.range);
+      // Make sure all AI content highlighting is removed
+      removeAIHighlighting(props.editor);
+      setConfirmation({
+        isShown: false,
+        position: { x: 0, y: 0 },
+        range: null
+      });
+    }
+  };
+
+  // Handle denying AI content
+  const handleDenyContent = () => {
+    if (confirmation.range && props.editor) {
+      denyAIContent(props.editor, confirmation.range);
+      setConfirmation({
+        isShown: false,
+        position: { x: 0, y: 0 },
+        range: null
+      });
+    }
+  };
+
   return (
-    <NodeViewWrapper className="ai-beat-container">
-      <AIBeatHeader handleRemove={handleRemove} />
-      
-      <AIBeatBody
-        prompt={prompt}
-        setPrompt={setPrompt}
-        textareaRef={textareaRef}
-        handleKeyDown={handleKeyDown}
-        isGenerating={isGenerating}
-      />
-      
-      <AIBeatFooter
-        characterCount={characterCount}
-        wordCount={wordCount}
-        aiCharCount={aiCharCount}
-        aiWordCount={aiWordCount}
-        handleSend={handleSend}
-        isLoading={isLoading}
-        isGenerating={isGenerating}
-        prompt={prompt}
-      />
-    </NodeViewWrapper>
+    <>
+      <NodeViewWrapper className="ai-beat-container">
+        <AIBeatHeader handleRemove={handleRemove} />
+        
+        <AIBeatBody
+          prompt={prompt}
+          setPrompt={setPrompt}
+          textareaRef={textareaRef}
+          handleKeyDown={handleKeyDown}
+          isGenerating={isGenerating}
+        />
+        
+        <AIBeatFooter
+          characterCount={characterCount}
+          wordCount={wordCount}
+          aiCharCount={aiCharCount}
+          aiWordCount={aiWordCount}
+          handleSend={handleSend}
+          isLoading={isLoading}
+          isGenerating={isGenerating}
+          prompt={prompt}
+          showAcceptReject={hasPendingContent}
+          onAccept={handleAcceptContent}
+          onDeny={handleDenyContent}
+        />
+      </NodeViewWrapper>
+
+    </>
   );
 };
